@@ -1,5 +1,6 @@
 /* global YT */
 import React from 'react';
+import loadModules from './esriModules';
 
 
 export const getIDFromUrl = url => {
@@ -31,6 +32,7 @@ const Video = ({ GPS_Track_ID, Date_Time, URL, pointsLayer, mapView }) => {
   const playerDiv = React.useRef();
   const pointsLookup = React.useRef({});
   const intervalId = React.useRef();
+  const graphic = React.useRef();
 
   const onPlayerStateChange = React.useCallback(event => {
     if (intervalId.current) {
@@ -43,15 +45,26 @@ const Video = ({ GPS_Track_ID, Date_Time, URL, pointsLayer, mapView }) => {
         const position = pointsLookup.current[Math.round(player.getCurrentTime())];
         if (position) {
           console.log('updateVideoPosition', position);
-          mapView.center = position.toJSON();
+          mapView.goTo(position);
+          graphic.current.geometry = position;
         }
       }, 1000);
     }
   }, [mapView]);
 
   React.useEffect(() => {
+    let player;
     const giddyUp = async () => {
-      new YT.Player(playerDiv.current, {
+      const { Graphic } = await loadModules();
+      graphic.current = new Graphic({
+        symbol: {
+          type: 'simple-marker',
+          color: [0, 250, 154, 1]
+        }
+      });
+      mapView.graphics.add(graphic.current);
+
+      player = new YT.Player(playerDiv.current, {
         height: '200',
         width: '100%',
         videoId: getIDFromUrl(URL),
@@ -76,7 +89,19 @@ const Video = ({ GPS_Track_ID, Date_Time, URL, pointsLayer, mapView }) => {
     };
 
     giddyUp();
-  }, [URL, pointsLayer, GPS_Track_ID, onPlayerStateChange]);
+
+    return () => {
+      if (graphic.current) {
+        mapView.graphics.remove(graphic.current);
+      }
+
+      if (intervalId.current) {
+        window.clearInterval(intervalId.current);
+      }
+
+      player.destroy();
+    };
+  }, [URL, pointsLayer, GPS_Track_ID, onPlayerStateChange, mapView]);
 
   return (
     <div>
