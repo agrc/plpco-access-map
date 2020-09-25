@@ -27,7 +27,7 @@ const Feature = ({ feature, mapView }) => {
 
   React.useEffect(() => {
     if (featureWidget.current) {
-      console.log('set feature');
+      console.log('set feature', feature);
 
       featureWidget.current.graphic = feature;
     }

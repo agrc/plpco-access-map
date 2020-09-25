@@ -6,20 +6,23 @@ export default async () => {
     'esri/config',
     'esri/WebMap',
     'esri/views/MapView',
-    'esri/widgets/Feature'
+    'esri/widgets/Feature',
+    'esri/tasks/QueryTask'
   ];
 
   const [
     esriConfig,
     WebMap,
     MapView,
-    Feature
+    Feature,
+    QueryTask
   ] = await loadModules(requires, { version: '4.16', css: true });
 
   return {
     esriConfig,
     WebMap,
     MapView,
-    Feature
+    Feature,
+    QueryTask
   };
 }
