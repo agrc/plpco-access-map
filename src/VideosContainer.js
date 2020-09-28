@@ -44,6 +44,7 @@ const VideosContainer = ({ rdId, mapView, table, points }) => {
     <div>
       <h3>{rdId}</h3>
       { videos.map((video, index) => <Video key={index} {...video} pointsLayer={points} mapView={mapView} />) }
+      { (rdId && videos.length === 0) ? "No videos were found for this road." : null }
     </div>
   );
 };
