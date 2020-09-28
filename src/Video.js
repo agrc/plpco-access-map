@@ -27,12 +27,21 @@ export const parsePoints = features => {
 
   return lookup;
 };
+const symbol = {
+  type: 'picture-marker',
+  url: `${process.env.PUBLIC_URL}/marker.svg`,
+  width: 30,
+  height: 30,
+  angle: 0
+};
 
 const Video = ({ GPS_Track_ID, Date_Time, URL, pointsLayer, mapView }) => {
   const playerDiv = React.useRef();
   const pointsLookup = React.useRef({});
   const intervalId = React.useRef();
   const graphic = React.useRef();
+  const [ videoAngle, setVideoAngle ] = React.useState(0)
+  const [ angleOfSegment, setAngleOfSegment ] = React.useState(0);
 
   const onPlayerStateChange = React.useCallback(event => {
     if (intervalId.current) {
@@ -42,9 +51,17 @@ const Video = ({ GPS_Track_ID, Date_Time, URL, pointsLayer, mapView }) => {
     if (event.data === YT.PlayerState.PLAYING) {
       const player = event.target;
       intervalId.current = window.setInterval(() => {
-        const position = pointsLookup.current[Math.round(player.getCurrentTime())];
+        const currentTime = Math.round(player.getCurrentTime()).toString();
+        const position = pointsLookup.current[currentTime];
+
         if (position) {
-          console.log('updateVideoPosition', position);
+          const keys = Object.keys(pointsLookup.current);
+          const lastPosition = pointsLookup.current[keys[keys.indexOf(currentTime) - 1]]
+          const nextPosition = pointsLookup.current[keys[keys.indexOf(currentTime) + 1]];
+          const yDiff = nextPosition.y - lastPosition.y;
+          const xDiff = nextPosition.x - lastPosition.x;
+          setAngleOfSegment(90 - (Math.atan2(yDiff, xDiff) * 180) / Math.PI);
+
           mapView.goTo(position);
           graphic.current.geometry = position;
         }
@@ -53,15 +70,29 @@ const Video = ({ GPS_Track_ID, Date_Time, URL, pointsLayer, mapView }) => {
   }, [mapView]);
 
   React.useEffect(() => {
+    if (graphic.current) {
+      graphic.current.symbol = {
+        ...symbol,
+        angle: angleOfSegment - videoAngle
+      };
+    }
+  }, [videoAngle, angleOfSegment]);
+
+  React.useEffect(() => {
     let player;
+    const updateVideoAngle = () => {
+      if (player && player.getSphericalProperties) {
+        const properties = player.getSphericalProperties();
+
+        setVideoAngle(properties.yaw);
+      }
+
+      window.requestAnimationFrame(updateVideoAngle);
+    };
+
     const giddyUp = async () => {
       const { Graphic } = await loadModules();
-      graphic.current = new Graphic({
-        symbol: {
-          type: 'simple-marker',
-          color: [0, 250, 154, 1]
-        }
-      });
+      graphic.current = new Graphic({ symbol });
       mapView.graphics.add(graphic.current);
 
       player = new YT.Player(playerDiv.current, {
@@ -72,6 +103,8 @@ const Video = ({ GPS_Track_ID, Date_Time, URL, pointsLayer, mapView }) => {
           onStateChange: onPlayerStateChange
         }
       });
+
+      updateVideoAngle();
 
       const results = await pointsLayer.queryFeatures({
         where: `GPS_Track_ID = '${GPS_Track_ID}'`,
