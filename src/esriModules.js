@@ -8,7 +8,8 @@ export default async () => {
     'esri/views/MapView',
     'esri/widgets/Feature',
     'esri/tasks/QueryTask',
-    'esri/Graphic'
+    'esri/Graphic',
+    'esri/widgets/Legend'
   ];
 
   const [
@@ -17,7 +18,8 @@ export default async () => {
     MapView,
     Feature,
     QueryTask,
-    Graphic
+    Graphic,
+    Legend
   ] = await loadModules(requires, { version: '4.16', css: true });
 
   return {
@@ -26,6 +28,7 @@ export default async () => {
     MapView,
     Feature,
     QueryTask,
-    Graphic
+    Graphic,
+    Legend
   };
 }

@@ -14,5 +14,8 @@ html, body, #root, .app {
   }
   .esri-view {
     flex: 1;
+    .esri-widget {
+      background-color: #ffffffb0;
+    }
   }
 }

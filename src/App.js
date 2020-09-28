@@ -17,7 +17,7 @@ function App() {
     const initMap = async () => {
       console.log('initMap');
 
-      const { esriConfig, MapView, WebMap } = await getModules();
+      const { esriConfig, MapView, WebMap, Legend } = await getModules();
 
       esriConfig.portalUrl = 'https://maps.publiclands.utah.gov/portal';
 
@@ -33,9 +33,15 @@ function App() {
         popup: null
       });
 
+      const legend = new Legend({
+        view,
+        container: document.createElement('div')
+      });
+      view.ui.add(legend, { position: 'bottom-right' });
+
       await view.when();
 
-      featureLayer.current = view.map.layers.find(layer => layer.title === 'RS2477_Centerline_Secure - RS2477 Centerline');
+      featureLayer.current = view.map.layers.find(layer => layer.title === 'RS2477 Centerlines');
       const layerView = await view.whenLayerView(featureLayer.current);
 
       const table = view.map.tables[0];
