@@ -91,8 +91,8 @@ function App() {
   return (
     <div className="app">
       <div className="side-bar">
-        <Feature feature={selectedFeature} mapView={mapView} />
         <VideosContainer rdId={rdId} mapView={mapView} {...videoDataSources} />
+        <Feature feature={selectedFeature} mapView={mapView} />
       </div>
       <div ref={mapContainer}></div>
     </div>
