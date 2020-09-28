@@ -35,6 +35,8 @@ const VideosContainer = ({ rdId, mapView, table, points }) => {
 
     if (rdId) {
       giddyUp();
+    } else {
+      setVideos([]);
     }
   }, [rdId]);
 
