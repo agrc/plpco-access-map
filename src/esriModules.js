@@ -4,31 +4,34 @@ import { loadModules } from 'esri-loader';
 export default async () => {
   const requires = [
     'esri/config',
-    'esri/WebMap',
-    'esri/views/MapView',
-    'esri/widgets/Feature',
-    'esri/tasks/QueryTask',
     'esri/Graphic',
+    'esri/tasks/QueryTask',
+    'esri/tasks/support/Query',
+    'esri/views/MapView',
+    'esri/WebMap',
+    'esri/widgets/Feature',
     'esri/widgets/Legend'
   ];
 
   const [
     esriConfig,
-    WebMap,
-    MapView,
-    Feature,
-    QueryTask,
     Graphic,
+    QueryTask,
+    Query,
+    MapView,
+    WebMap,
+    Feature,
     Legend
   ] = await loadModules(requires, { version: '4.16', css: true });
 
   return {
     esriConfig,
-    WebMap,
-    MapView,
-    Feature,
-    QueryTask,
     Graphic,
+    QueryTask,
+    Query,
+    MapView,
+    WebMap,
+    Feature,
     Legend
   };
 }

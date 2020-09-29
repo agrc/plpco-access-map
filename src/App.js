@@ -3,7 +3,11 @@ import './App.scss';
 import getModules from './esriModules';
 import Feature from './Feature';
 import VideosContainer from './VideosContainer';
+import { Sherlock, MapServiceProvider } from '@agrc/sherlock';
 
+
+const FEATURE_SERVICE_URL = 'https://maps.publiclands.utah.gov/server/rest/services/RS2477/RS2477_Centerline_Secure/MapServer/0';
+const SEARCH_FIELD = 'RD_ID';
 
 function App() {
   const mapContainer = React.useRef();
@@ -12,12 +16,16 @@ function App() {
   const [ videoDataSources, setVideoDataSources ] = React.useState({ table: null, points: null });
   const [ rdId, setRdId ] = React.useState();
   const featureLayer = React.useRef();
+  const [ sherlockConfig, setSherlockConfig ] = React.useState();
+  const highlightedHandle = React.useRef();
+  const layerView = React.useRef();
 
   React.useEffect(() => {
     const initMap = async () => {
       console.log('initMap');
 
-      const { esriConfig, MapView, WebMap, Legend } = await getModules();
+      const esriModules = await getModules();
+      const { esriConfig, MapView, WebMap, Legend } = esriModules;
 
       esriConfig.portalUrl = 'https://maps.publiclands.utah.gov/portal';
 
@@ -33,40 +41,55 @@ function App() {
         popup: null
       });
 
+      await view.when();
+
       const legend = new Legend({
         view,
         container: document.createElement('div')
       });
-      view.ui.add(legend, { position: 'bottom-right' });
-
-      await view.when();
+      view.ui.add(legend, 'bottom-right');
 
       featureLayer.current = view.map.layers.find(layer => layer.title === 'RS2477 Centerlines');
-      const layerView = await view.whenLayerView(featureLayer.current);
+      layerView.current = await view.whenLayerView(featureLayer.current);
 
       const table = view.map.tables[0];
       const points = view.map.layers.find(layer => layer.title === 'Video_Routes - Video Route');
       setVideoDataSources({ table, points });
 
-      let highlightedHandle;
       view.on('click', async event => {
-        if (highlightedHandle) {
-          highlightedHandle.remove();
-          setSelectedFeature(null);
-        }
+        setSelectedFeature(null);
 
         const test = await view.hitTest(event);
 
         if (test.results.length) {
-          const graphic = test.results[0].graphic;
-
-          highlightedHandle = layerView.highlight(graphic);
-
           setSelectedFeature(test.results[0].graphic);
         }
       });
 
       setMapView(view);
+
+      const onSherlockMatch = async matches => {
+        setSelectedFeature(null);
+
+        if (matches.length) {
+          view.goTo({
+            target: matches
+          });
+
+          const graphic = matches[0];
+          graphic.popupTemplate = layerView.current.layer.popupTemplate;
+          setSelectedFeature(graphic);
+        }
+      };
+
+      setSherlockConfig({
+        provider: new MapServiceProvider(FEATURE_SERVICE_URL, SEARCH_FIELD, esriModules, { outFields: ['*'] }),
+        placeHolder: 'search by RDID...',
+        onSherlockMatch,
+        modules: esriModules,
+        mapView: view,
+        mapViewPlacement: 'top-right'
+      });
     };
 
     initMap();
@@ -87,8 +110,14 @@ function App() {
       }
     };
 
+    if (highlightedHandle.current) {
+      highlightedHandle.current.remove();
+    }
+
     if (selectedFeature) {
       getRdId();
+
+      highlightedHandle.current = layerView.current.highlight(selectedFeature.attributes.OBJECTID);
     } else {
       setRdId(null);
     }
@@ -100,7 +129,9 @@ function App() {
         <VideosContainer rdId={rdId} mapView={mapView} {...videoDataSources} />
         <Feature feature={selectedFeature} mapView={mapView} />
       </div>
-      <div ref={mapContainer}></div>
+      <div ref={mapContainer}>
+        { (sherlockConfig) ? <Sherlock {...sherlockConfig} /> : null }
+      </div>
     </div>
   );
 }
