@@ -88,7 +88,7 @@ function App() {
         onSherlockMatch,
         modules: esriModules,
         mapView: view,
-        mapViewPlacement: 'top-right'
+        position: 'top-right'
       });
     };
 
