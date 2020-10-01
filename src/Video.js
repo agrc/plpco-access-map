@@ -106,18 +106,35 @@ const Video = ({ GPS_Track_ID, Date_Time, URL, pointsLayer, mapView }) => {
 
       updateVideoAngle();
 
-      const results = await pointsLayer.queryFeatures({
-        where: `GPS_Track_ID = '${GPS_Track_ID}'`,
-        outFields: '*',
-        returnGeometry: true,
-        orderByFields: 'Date_Time ASC',
-        outSpatialReference: {
-          wkid: 3857
-        }
-      });
+      const queryForPoints = async (start=null, num=null) => {
+        console.log('queryForPoints', start, num);
 
-      if (results.features.length) {
-        pointsLookup.current = parsePoints(results.features);
+        const results = await pointsLayer.queryFeatures({
+          where: `GPS_Track_ID = '${GPS_Track_ID}'`,
+          outFields: '*',
+          returnGeometry: true,
+          orderByFields: 'Date_Time ASC',
+          outSpatialReference: {
+            wkid: 3857
+          },
+          start,
+          num
+        });
+
+        if (results.exceededTransferLimit) {
+
+          return results.features.concat(await queryForPoints(start + results.features.length + 1, results.features.length));
+        }
+
+        return results.features;
+      }
+
+      const features = await queryForPoints(null);
+
+      if (features.length) {
+        console.log('final features length', features.length);
+
+        pointsLookup.current = parsePoints(features);
       }
     };
 
