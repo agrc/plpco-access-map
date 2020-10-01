@@ -56,11 +56,14 @@ const Video = ({ GPS_Track_ID, Date_Time, URL, pointsLayer, mapView }) => {
 
         if (position) {
           const keys = Object.keys(pointsLookup.current);
-          const lastPosition = pointsLookup.current[keys[keys.indexOf(currentTime) - 1]]
+          const lastPosition = pointsLookup.current[keys[keys.indexOf(currentTime) - 1]];
           const nextPosition = pointsLookup.current[keys[keys.indexOf(currentTime) + 1]];
-          const yDiff = nextPosition.y - lastPosition.y;
-          const xDiff = nextPosition.x - lastPosition.x;
-          setAngleOfSegment(90 - (Math.atan2(yDiff, xDiff) * 180) / Math.PI);
+
+          if (lastPosition && nextPosition) {
+            const yDiff = nextPosition.y - lastPosition.y;
+            const xDiff = nextPosition.x - lastPosition.x;
+            setAngleOfSegment(90 - (Math.atan2(yDiff, xDiff) * 180) / Math.PI);
+          }
 
           mapView.goTo(position);
           graphic.current.geometry = position;
