@@ -2,6 +2,7 @@
   "name": "plpco-video-widget",
   "version": "0.1.0",
   "private": true,
+  "homepage": ".",
   "dependencies": {
     "@agrc/sherlock": "^2.1.1",
     "@testing-library/jest-dom": "^4.2.4",
@@ -20,7 +21,8 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "storybook": "start-storybook -p 6006 -s public",
-    "build-storybook": "build-storybook -s public"
+    "build-storybook": "build-storybook -s public",
+    "deploy": "npm run build && wonkavision clean && wonkavision zip && wonkavision ship ./deploy/deploy.zip wwwroot/plpco-videos && wonkavision unzip wwwroot/plpco-videos"
   },
   "eslintConfig": {
     "extends": "react-app"
