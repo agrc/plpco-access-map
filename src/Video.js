@@ -126,9 +126,7 @@ const Video = ({ GPS_Track_ID, Date_Time, URL, pointsLayer, mapView }) => {
           outFields: '*',
           returnGeometry: true,
           orderByFields: 'Date_Time ASC',
-          outSpatialReference: {
-            wkid: 3857
-          },
+          outSpatialReference: mapView.spatialReference,
           start,
           num
         });

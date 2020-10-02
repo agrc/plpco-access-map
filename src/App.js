@@ -4,10 +4,17 @@ import getModules from './esriModules';
 import Feature from './Feature';
 import VideosContainer from './VideosContainer';
 import { Sherlock, MapServiceProvider } from '@agrc/sherlock';
+import queryString from 'query-string';
 
 
 const FEATURE_SERVICE_URL = 'https://maps.publiclands.utah.gov/server/rest/services/RS2477/RS2477_Centerline_Secure/MapServer/0';
 const SEARCH_FIELD = 'RD_ID';
+
+const getRdIdFromUrl = () => {
+  const parameters = queryString.parse(document.location.search);
+
+  return parameters.rdid;
+};
 
 function App() {
   const mapContainer = React.useRef();
@@ -72,11 +79,9 @@ function App() {
         setSelectedFeature(null);
 
         if (matches.length) {
-          view.goTo({
-            target: matches
-          });
-
           const graphic = matches[0];
+          view.goTo(graphic);
+
           graphic.popupTemplate = layerView.current.layer.popupTemplate;
           setSelectedFeature(graphic);
         }
@@ -90,6 +95,22 @@ function App() {
         mapView: view,
         position: 'top-right'
       });
+
+      const rdIdFromUrl = getRdIdFromUrl();
+      if (rdIdFromUrl) {
+        const featureSet = await featureLayer.current.queryFeatures({
+          where: `UPPER(RD_ID) = UPPER('${rdIdFromUrl}')`,
+          returnGeometry: true,
+          outFields: '*',
+          outSpatialReference: view.spatialReference,
+        });
+
+        if (featureSet.features.length) {
+          onSherlockMatch(featureSet.features);
+        } else {
+          console.error(`No feature found for RD_ID: ${rdIdFromUrl}`);
+        }
+      }
     };
 
     initMap();
@@ -97,6 +118,13 @@ function App() {
 
   React.useEffect(() => {
     const getRdId = async () => {
+      if (selectedFeature.attributes.RD_ID) {
+        setRdId(selectedFeature.attributes.RD_ID);
+
+        return;
+      }
+
+      // query for RD_ID for features that come from map click (they only include the OBJECTID)
       const featureSet = await featureLayer.current.queryFeatures({
         where: `OBJECTID = ${selectedFeature.attributes.OBJECTID}`,
         returnGeometry: false,
