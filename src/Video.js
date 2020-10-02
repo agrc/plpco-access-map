@@ -165,7 +165,9 @@ const Video = ({ GPS_Track_ID, Date_Time, URL, pointsLayer, mapView }) => {
         window.cancelAnimationFrame(requestAnimationId.current);
       }
 
-      player.current.destroy();
+      if (player.current) {
+        player.current.destroy();
+      }
     };
   }, [URL, pointsLayer, GPS_Track_ID, onPlayerStateChange, mapView, updateVideoAngle]);
 
