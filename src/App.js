@@ -8,7 +8,7 @@ import queryString from 'query-string';
 
 
 const FEATURE_SERVICE_URL = 'https://maps.publiclands.utah.gov/server/rest/services/RS2477/RS2477_Centerline_Secure/MapServer/0';
-const SEARCH_FIELD = 'RD_ID';
+const SEARCH_FIELD = 'S_Name';
 
 const getRdIdFromUrl = () => {
   const parameters = queryString.parse(document.location.search);
@@ -89,7 +89,7 @@ function App() {
 
       setSherlockConfig({
         provider: new MapServiceProvider(FEATURE_SERVICE_URL, SEARCH_FIELD, esriModules, { outFields: ['*'] }),
-        placeHolder: 'search by RDID...',
+        placeHolder: 'search by street name...',
         onSherlockMatch,
         modules: esriModules,
         mapView: view,
