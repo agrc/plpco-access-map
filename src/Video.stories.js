@@ -15,7 +15,12 @@ const mockProps = {
   Video_FileName: "402",
   Road_Condition: null,
   URL: "https://youtu.be/F6ONE_NnSRA",
-  Notes: "When this Redo uploaded, delete the report/data on 9/7/2017."
+  Notes: "When this Redo uploaded, delete the report/data on 9/7/2017.",
+  mapView: { graphics: { add: () => {} } }
 };
 
-export const DefaultVideo = () => <Video {...mockProps} />
+export const DefaultVideo = () => (
+  <div style={{ width: '350px', border: 'solid 1px gray' }}>
+    <Video {...mockProps} />
+  </div>
+);

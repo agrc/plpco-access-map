@@ -1,6 +1,7 @@
 /* global YT */
 import React from 'react';
 import loadModules from './esriModules';
+import './Video.scss';
 
 
 export const getIDFromUrl = url => {
@@ -42,6 +43,22 @@ const Video = ({ GPS_Track_ID, Date_Time, URL, pointsLayer, mapView }) => {
   const graphic = React.useRef();
   const [ videoAngle, setVideoAngle ] = React.useState(0)
   const [ angleOfSegment, setAngleOfSegment ] = React.useState(0);
+  const player = React.useRef();
+  const requestAnimationId = React.useRef();
+
+  const updateVideoAngle = React.useCallback((oldPlayerId) => {
+    if (oldPlayerId) {
+      window.cancelAnimationFrame(oldPlayerId);
+    }
+
+    if (player.current && player.current.getSphericalProperties) {
+      const properties = player.current.getSphericalProperties();
+
+      setVideoAngle(properties.yaw);
+    }
+
+    requestAnimationId.current = window.requestAnimationFrame(updateVideoAngle);
+  }, []);
 
   const onPlayerStateChange = React.useCallback(event => {
     if (intervalId.current) {
@@ -49,9 +66,14 @@ const Video = ({ GPS_Track_ID, Date_Time, URL, pointsLayer, mapView }) => {
     }
 
     if (event.data === YT.PlayerState.PLAYING) {
-      const player = event.target;
+      console.log('playing');
+
+      player.current = event.target;
+
+      updateVideoAngle(requestAnimationId.current);
+
       intervalId.current = window.setInterval(() => {
-        const currentTime = Math.round(player.getCurrentTime()).toString();
+        const currentTime = Math.round(player.current.getCurrentTime()).toString();
         const position = pointsLookup.current[currentTime];
 
         if (position) {
@@ -70,7 +92,7 @@ const Video = ({ GPS_Track_ID, Date_Time, URL, pointsLayer, mapView }) => {
         }
       }, 1000);
     }
-  }, [mapView]);
+  }, [mapView, updateVideoAngle]);
 
   React.useEffect(() => {
     if (graphic.current) {
@@ -82,23 +104,12 @@ const Video = ({ GPS_Track_ID, Date_Time, URL, pointsLayer, mapView }) => {
   }, [videoAngle, angleOfSegment]);
 
   React.useEffect(() => {
-    let player;
-    const updateVideoAngle = () => {
-      if (player && player.getSphericalProperties) {
-        const properties = player.getSphericalProperties();
-
-        setVideoAngle(properties.yaw);
-      }
-
-      window.requestAnimationFrame(updateVideoAngle);
-    };
-
     const giddyUp = async () => {
       const { Graphic } = await loadModules();
       graphic.current = new Graphic({ symbol });
       mapView.graphics.add(graphic.current);
 
-      player = new YT.Player(playerDiv.current, {
+      new YT.Player(playerDiv.current, {
         height: '200',
         width: '100%',
         videoId: getIDFromUrl(URL),
@@ -106,8 +117,6 @@ const Video = ({ GPS_Track_ID, Date_Time, URL, pointsLayer, mapView }) => {
           onStateChange: onPlayerStateChange
         }
       });
-
-      updateVideoAngle();
 
       const queryForPoints = async (start=null, num=null) => {
         console.log('queryForPoints', start, num);
@@ -152,13 +161,66 @@ const Video = ({ GPS_Track_ID, Date_Time, URL, pointsLayer, mapView }) => {
         window.clearInterval(intervalId.current);
       }
 
-      player.destroy();
+      if (requestAnimationId.current) {
+        window.cancelAnimationFrame(requestAnimationId.current);
+      }
+
+      player.current.destroy();
     };
-  }, [URL, pointsLayer, GPS_Track_ID, onPlayerStateChange, mapView]);
+  }, [URL, pointsLayer, GPS_Track_ID, onPlayerStateChange, mapView, updateVideoAngle]);
+
+  const popOut = () => {
+    console.log('popOut');
+    player.current.pauseVideo();
+
+    const popupWindow = window.open('', 'roadsVideo', 'width=640,height=390,location=0');
+
+    const id = getIDFromUrl(URL);
+    const iframe = popupWindow.document.createElement('iframe');
+    iframe.style = 'border: none;';
+    iframe.src = `https://www.youtube.com/embed/${id}?enablejsapi=1`;
+    popupWindow.document.body.appendChild(iframe);
+
+    const popupPlayer = new YT.Player(iframe, {
+      events: {
+        onStateChange: onPlayerStateChange,
+        onReady: (event) => {
+          event.target.seekTo(player.current.getCurrentTime(), true);
+        }
+      }
+    });
+
+    popupWindow.document.body.style.margin = 0;
+    popupWindow.addEventListener('unload', () => {
+        window.clearInterval(intervalId.current);
+        popupPlayer.destroy();
+        window.cancelAnimationFrame(requestAnimationId);
+    });
+
+    // close popup window if the main window is closed or reloaded
+    window.addEventListener('unload', () => {
+      popupWindow.close();
+    });
+
+    // need to wait a bit for the window to finish laying out
+    // otherwise the iframe has 0 height
+    window.setTimeout(() => {
+      iframe.width = '100%';
+      iframe.height = '100%';
+    }, 500);
+  };
 
   return (
-    <div>
-      {new Date(Date_Time).toLocaleDateString()}
+    <div className="video">
+      <div className="header">
+        { // ref: https://icons.getbootstrap.com/icons/box-arrow-up-right/
+        }
+        <svg onClick={popOut} width="0.9em" height="0.9em" viewBox="0 0 16 16" className="bi bi-box-arrow-up-right" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+          <path fillRule="evenodd" d="M8.636 3.5a.5.5 0 0 0-.5-.5H1.5A1.5 1.5 0 0 0 0 4.5v10A1.5 1.5 0 0 0 1.5 16h10a1.5 1.5 0 0 0 1.5-1.5V7.864a.5.5 0 0 0-1 0V14.5a.5.5 0 0 1-.5.5h-10a.5.5 0 0 1-.5-.5v-10a.5.5 0 0 1 .5-.5h6.636a.5.5 0 0 0 .5-.5z"/>
+          <path fillRule="evenodd" d="M16 .5a.5.5 0 0 0-.5-.5h-5a.5.5 0 0 0 0 1h3.793L6.146 9.146a.5.5 0 1 0 .708.708L15 1.707V5.5a.5.5 0 0 0 1 0v-5z"/>
+        </svg>
+        <span>{new Date(Date_Time).toLocaleDateString()}</span>
+      </div>
       <div ref={playerDiv}></div>
     </div>
   );

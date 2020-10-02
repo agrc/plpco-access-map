@@ -1,0 +1,13 @@
+.video {
+  .header {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    svg {
+      position: absolute;
+      left: 0.5em;
+      cursor: pointer;
+    }
+  }
+}
