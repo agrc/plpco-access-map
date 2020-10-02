@@ -9,11 +9,12 @@ import queryString from 'query-string';
 
 const FEATURE_SERVICE_URL = 'https://maps.publiclands.utah.gov/server/rest/services/RS2477/RS2477_Centerline_Secure/MapServer/0';
 const SEARCH_FIELD = 'S_Name';
+const URL_PARAM = 'rdid';
 
 const getRdIdFromUrl = () => {
-  const parameters = queryString.parse(document.location.search);
+  const parameters = queryString.parse(document.location.hash);
 
-  return parameters.rdid;
+  return parameters[URL_PARAM];
 };
 
 function App() {
@@ -26,6 +27,12 @@ function App() {
   const [ sherlockConfig, setSherlockConfig ] = React.useState();
   const highlightedHandle = React.useRef();
   const layerView = React.useRef();
+
+  React.useEffect(() => {
+    if (rdId && getRdIdFromUrl() !== rdId) {
+      document.location.hash = queryString.stringify({ [URL_PARAM]: rdId });
+    }
+  }, [rdId]);
 
   React.useEffect(() => {
     const initMap = async () => {
