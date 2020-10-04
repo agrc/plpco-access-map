@@ -95,7 +95,10 @@ function App() {
       };
 
       setSherlockConfig({
-        provider: new MapServiceProvider(FEATURE_SERVICE_URL, SEARCH_FIELD, esriModules, { outFields: ['*'] }),
+        provider: new MapServiceProvider(FEATURE_SERVICE_URL, SEARCH_FIELD, esriModules, {
+          outFields: ['*'],
+          contextField: 'County'
+        }),
         placeHolder: 'search by street name...',
         onSherlockMatch,
         modules: esriModules,
