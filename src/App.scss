@@ -1,4 +1,4 @@
-$sideBarWidth: 350px;
+$sideBarWidth: 450px;
 
 html, body, #root, .app {
   width: 100%;
@@ -8,9 +8,20 @@ html, body, #root, .app {
 .app {
   display: flex;
   .side-bar {
+    h3 {
+      padding-left: 0.5rem;
+    }
     width: $sideBarWidth;
     height: 100%;
     overflow-y: auto;
+    .esri-feature {
+      .esri-feature__title {
+        padding-left: 0.5rem;
+      }
+      .esri-feature__content-element {
+        padding: 0;
+      }
+    }
   }
   .esri-view {
     flex: 1;

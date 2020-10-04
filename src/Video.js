@@ -110,7 +110,7 @@ const Video = ({ GPS_Track_ID, Date_Time, URL, pointsLayer, mapView }) => {
       mapView.graphics.add(graphic.current);
 
       new YT.Player(playerDiv.current, {
-        height: '200',
+        height: '250',
         width: '100%',
         videoId: getIDFromUrl(URL),
         events: {
