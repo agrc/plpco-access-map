@@ -158,7 +158,7 @@ const Video = ({ GPS_Track_ID, Date_Time, URL, pointsLayer, mapView, testWarning
       if (features.length) {
         pointsLookup.current = parsePoints(features);
       } else {
-        setWarningMessage('No video point locations found!');
+        setWarningMessage(`No points found for GPS_Track_ID: ${GPS_Track_ID}`);
       }
     };
 
