@@ -27,6 +27,8 @@ function App() {
   const [ sherlockConfig, setSherlockConfig ] = React.useState();
   const highlightedHandle = React.useRef();
   const layerView = React.useRef();
+  const [ relatedRecords, setRelatedRecords ] = React.useState();
+  const tableIdsLookup = React.useRef({});
 
   React.useEffect(() => {
     if (rdId && getRdIdFromUrl() !== rdId) {
@@ -66,6 +68,9 @@ function App() {
       featureLayer.current = view.map.layers.find(layer => layer.title === 'RS2477 Centerlines');
       layerView.current = await view.whenLayerView(featureLayer.current);
 
+      view.map.tables.forEach(table => {
+        tableIdsLookup.current[table.url.split('/').pop()] = table;
+      });
       const table = view.map.tables.find(table => table.title === 'Video Report');
       const points = view.map.layers.find(layer => layer.title === 'Video_Routes - Video Route');
       setVideoDataSources({ table, points });
@@ -148,16 +153,41 @@ function App() {
       }
     };
 
+    const getRelatedRecords = async () => {
+      const records = [];
+      const oid = selectedFeature.attributes.OBJECTID;
+
+      for (const relationship of featureLayer.current.relationships) {
+        const result = await featureLayer.current.queryRelatedFeatures({
+          outFields: '*',
+          relationshipId: relationship.id,
+          objectIds: [oid]
+        });
+
+        if (result[oid]) {
+          records.push({
+            name: relationship.name,
+            features: result[oid].features,
+            table: tableIdsLookup.current[relationship.relatedTableId]
+          });
+        }
+      };
+
+      setRelatedRecords(records);
+    };
+
     if (highlightedHandle.current) {
       highlightedHandle.current.remove();
     }
 
     if (selectedFeature) {
       getRdId();
+      getRelatedRecords();
 
       highlightedHandle.current = layerView.current.highlight(selectedFeature.attributes.OBJECTID);
     } else {
       setRdId(null);
+      setRelatedRecords(null);
     }
   }, [selectedFeature]);
 
@@ -165,7 +195,7 @@ function App() {
     <div className="app">
       <div className="side-bar">
         <VideosContainer rdId={rdId} mapView={mapView} {...videoDataSources} />
-        <Feature feature={selectedFeature} mapView={mapView} />
+        <Feature feature={selectedFeature} mapView={mapView} relatedRecords={relatedRecords} />
       </div>
       <div ref={mapContainer}>
         { (sherlockConfig) ? <Sherlock {...sherlockConfig} /> : null }

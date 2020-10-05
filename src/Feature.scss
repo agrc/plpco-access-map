@@ -1,5 +1,14 @@
-.esri-feature {
-  .esri-feature__title {
-    padding-left: 0.5rem;
+.feature {
+  padding: 0.5rem;
+  .esri-feature__content-element {
+    padding: 0;
+  }
+  .btn.btn-link {
+    margin-left: 0;
+    padding-left: 0;
+    &:focus {
+      box-shadow: none;
+      text-decoration: none;
+    }
   }
 }
