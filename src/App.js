@@ -66,7 +66,7 @@ function App() {
       featureLayer.current = view.map.layers.find(layer => layer.title === 'RS2477 Centerlines');
       layerView.current = await view.whenLayerView(featureLayer.current);
 
-      const table = view.map.tables[0];
+      const table = view.map.tables.find(table => table.title === 'Video Report');
       const points = view.map.layers.find(layer => layer.title === 'Video_Routes - Video Route');
       setVideoDataSources({ table, points });
 
