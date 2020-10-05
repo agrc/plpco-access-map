@@ -5,6 +5,9 @@ import './Video.scss';
 
 
 export const getIDFromUrl = url => {
+  // check for valid URL
+  new URL(url);
+
   if (url.indexOf('=') > 0) {
     return url.split('=').pop();
   }
@@ -36,7 +39,7 @@ const symbol = {
   angle: 0
 };
 
-const Video = ({ GPS_Track_ID, Date_Time, URL, pointsLayer, mapView }) => {
+const Video = ({ GPS_Track_ID, Date_Time, URL, pointsLayer, mapView, testWarningMessage }) => {
   const playerDiv = React.useRef();
   const pointsLookup = React.useRef({});
   const intervalId = React.useRef();
@@ -45,6 +48,8 @@ const Video = ({ GPS_Track_ID, Date_Time, URL, pointsLayer, mapView }) => {
   const [ angleOfSegment, setAngleOfSegment ] = React.useState(0);
   const player = React.useRef();
   const requestAnimationId = React.useRef();
+  const [ errorMessage, setErrorMessage ] = React.useState();
+  const [ warningMessage, setWarningMessage ] = React.useState(testWarningMessage);
 
   const updateVideoAngle = React.useCallback((oldPlayerId) => {
     if (oldPlayerId) {
@@ -109,10 +114,19 @@ const Video = ({ GPS_Track_ID, Date_Time, URL, pointsLayer, mapView }) => {
       graphic.current = new Graphic({ symbol });
       mapView.graphics.add(graphic.current);
 
+      let videoId;
+      try {
+        videoId = getIDFromUrl(URL);
+      } catch (e) {
+        setErrorMessage(`Invalid Video URL: ${URL}`);
+
+        return;
+      }
+
       new YT.Player(playerDiv.current, {
         height: '250',
         width: '100%',
-        videoId: getIDFromUrl(URL),
+        videoId,
         events: {
           onStateChange: onPlayerStateChange
         }
@@ -142,9 +156,9 @@ const Video = ({ GPS_Track_ID, Date_Time, URL, pointsLayer, mapView }) => {
       const features = await queryForPoints(null);
 
       if (features.length) {
-        console.log('final features length', features.length);
-
         pointsLookup.current = parsePoints(features);
+      } else {
+        setWarningMessage('No video point locations found!');
       }
     };
 
@@ -167,7 +181,7 @@ const Video = ({ GPS_Track_ID, Date_Time, URL, pointsLayer, mapView }) => {
         player.current.destroy();
       }
     };
-  }, [URL, pointsLayer, GPS_Track_ID, onPlayerStateChange, mapView, updateVideoAngle]);
+  }, [URL, pointsLayer, GPS_Track_ID, onPlayerStateChange, mapView, updateVideoAngle, setErrorMessage, setWarningMessage]);
 
   const popOut = () => {
     console.log('popOut');
@@ -212,16 +226,19 @@ const Video = ({ GPS_Track_ID, Date_Time, URL, pointsLayer, mapView }) => {
 
   return (
     <div className="video">
-      <div className="header">
-        { // ref: https://icons.getbootstrap.com/icons/box-arrow-up-right/
+        <div className="header">
+          { // ref: https://icons.getbootstrap.com/icons/box-arrow-up-right/
+          }
+          <svg onClick={popOut} width="0.9em" height="0.9em" viewBox="0 0 16 16" className="bi bi-box-arrow-up-right" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+            <path fillRule="evenodd" d="M8.636 3.5a.5.5 0 0 0-.5-.5H1.5A1.5 1.5 0 0 0 0 4.5v10A1.5 1.5 0 0 0 1.5 16h10a1.5 1.5 0 0 0 1.5-1.5V7.864a.5.5 0 0 0-1 0V14.5a.5.5 0 0 1-.5.5h-10a.5.5 0 0 1-.5-.5v-10a.5.5 0 0 1 .5-.5h6.636a.5.5 0 0 0 .5-.5z"/>
+            <path fillRule="evenodd" d="M16 .5a.5.5 0 0 0-.5-.5h-5a.5.5 0 0 0 0 1h3.793L6.146 9.146a.5.5 0 1 0 .708.708L15 1.707V5.5a.5.5 0 0 0 1 0v-5z"/>
+          </svg>
+          <span>{new Date(Date_Time).toLocaleDateString()}</span>
+        </div>
+        { (errorMessage) ? <div className="alert alert-danger">{errorMessage}</div> :
+          <div ref={playerDiv}></div>
         }
-        <svg onClick={popOut} width="0.9em" height="0.9em" viewBox="0 0 16 16" className="bi bi-box-arrow-up-right" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-          <path fillRule="evenodd" d="M8.636 3.5a.5.5 0 0 0-.5-.5H1.5A1.5 1.5 0 0 0 0 4.5v10A1.5 1.5 0 0 0 1.5 16h10a1.5 1.5 0 0 0 1.5-1.5V7.864a.5.5 0 0 0-1 0V14.5a.5.5 0 0 1-.5.5h-10a.5.5 0 0 1-.5-.5v-10a.5.5 0 0 1 .5-.5h6.636a.5.5 0 0 0 .5-.5z"/>
-          <path fillRule="evenodd" d="M16 .5a.5.5 0 0 0-.5-.5h-5a.5.5 0 0 0 0 1h3.793L6.146 9.146a.5.5 0 1 0 .708.708L15 1.707V5.5a.5.5 0 0 0 1 0v-5z"/>
-        </svg>
-        <span>{new Date(Date_Time).toLocaleDateString()}</span>
-      </div>
-      <div ref={playerDiv}></div>
+        { (warningMessage) ? <div className="alert alert-warning">{warningMessage}</div> : null }
     </div>
   );
 };

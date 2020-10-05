@@ -1,5 +1,6 @@
 import React from 'react';
 import Video from './Video';
+import './VideosContainer.scss';
 
 export default {
   title: 'Video',
@@ -20,7 +21,19 @@ const mockProps = {
 };
 
 export const DefaultVideo = () => (
-  <div style={{ width: '350px', border: 'solid 1px gray' }}>
+  <div className="videos-container" style={{ width: '450px', border: 'solid 1px gray' }}>
     <Video {...mockProps} />
+  </div>
+);
+
+export const InvalidUrl = () => (
+  <div className="videos-container" style={{ width: '450px', border: 'solid 1px gray' }}>
+    <Video {...{...mockProps, URL: '<Null>'}} />
+  </div>
+);
+
+export const WarningMessage = () => (
+  <div className="videos-container" style={{ width: '450px', border: 'solid 1px gray' }}>
+    <Video {...{...mockProps, testWarningMessage: 'No video point locations found!'}} />
   </div>
 );

@@ -1,6 +1,7 @@
 import React from 'react';
 import loadModules from './esriModules';
 import Video from './Video';
+import './VideosContainer.scss';
 
 
 const VideosContainer = ({ rdId, mapView, table, points }) => {
@@ -41,10 +42,11 @@ const VideosContainer = ({ rdId, mapView, table, points }) => {
   }, [rdId]);
 
   return (
-    <div>
+    <div className="videos-container">
       <h3>{rdId}</h3>
       { videos.map((video, index) => <Video key={index} {...video} pointsLayer={points} mapView={mapView} />) }
-      { (rdId && videos.length === 0) ? "No videos were found for this road." : null }
+      { (rdId && videos.length === 0) ?
+        <div className="alert alert-danger">No videos were found for this road.</div> : null }
     </div>
   );
 };
