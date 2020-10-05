@@ -1,5 +1,6 @@
 import React from 'react';
 import loadModules from './esriModules';
+import './Feature.scss';
 
 
 const Feature = ({ feature, mapView }) => {

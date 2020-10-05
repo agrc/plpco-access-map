@@ -8,20 +8,13 @@ html, body, #root, .app {
 .app {
   display: flex;
   .side-bar {
+    border-right: 1px solid rgba(110,110,110,0.3);
     h3 {
       padding-left: 0.5rem;
     }
     width: $sideBarWidth;
     height: 100%;
     overflow-y: auto;
-    .esri-feature {
-      .esri-feature__title {
-        padding-left: 0.5rem;
-      }
-      .esri-feature__content-element {
-        padding: 0;
-      }
-    }
   }
   .esri-view {
     flex: 1;
