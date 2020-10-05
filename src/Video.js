@@ -136,7 +136,7 @@ const Video = ({ GPS_Track_ID, Date_Time, URL, pointsLayer, mapView, testWarning
         console.log('queryForPoints', start, num);
 
         const results = await pointsLayer.queryFeatures({
-          where: `GPS_Track_ID = '${GPS_Track_ID}'`,
+          where: `UPPER(GPS_Track_ID) = UPPER('${GPS_Track_ID}')`,
           outFields: '*',
           returnGeometry: true,
           orderByFields: 'Date_Time ASC',

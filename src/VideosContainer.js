@@ -26,7 +26,7 @@ const VideosContainer = ({ rdId, mapView, table, points }) => {
     const giddyUp = async () => {
       const results = await tableQueryTask.current.execute({
         outFields: '*',
-        where: `RD_ID = '${rdId}' AND URL IS NOT NULL`
+        where: `UPPER(RD_ID) = UPPER('${rdId}') AND URL IS NOT NULL`
       });
 
       if (results.features.length) {
