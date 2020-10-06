@@ -2,6 +2,22 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.1.0](https://github.com/agrc/plpco-video-widget/compare/v1.0.0...v1.1.0) (2020-10-06)
+
+
+### Features
+
+* add related records ([13b8ca1](https://github.com/agrc/plpco-video-widget/commit/13b8ca1967e5b67ce24c4375ca2f24886ee3ad0a))
+* implement github actions ([ebc649b](https://github.com/agrc/plpco-video-widget/commit/ebc649bb99677f79f798ad8560b08e7944cd61e1))
+
+
+### Bug Fixes
+
+* add missing package to jest config ([2ac1b56](https://github.com/agrc/plpco-video-widget/commit/2ac1b56050c31915b4a8bc7b2d3e82a43dd72e71))
+* feature widget layout tweaks ([2a0cf35](https://github.com/agrc/plpco-video-widget/commit/2a0cf3599db7f98df4affdefa2cda6335db21e3b))
+* make queries case-insensitive ([7d1d0c6](https://github.com/agrc/plpco-video-widget/commit/7d1d0c675af9c7bdf6272b45dadf713b8e42198c))
+* search for video table by name ([530c325](https://github.com/agrc/plpco-video-widget/commit/530c32588ea8d90b6eb411ca2b202512aa9b991b))
+
 ## 1.0.0 (2020-10-05)
 
 
