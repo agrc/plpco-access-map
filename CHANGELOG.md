@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.2.0](https://github.com/agrc/plpco-video-widget/compare/v1.1.0...v1.2.0) (2020-10-22)
+
+
+### Features
+
+* add base map gallery widget ([0a521f4](https://github.com/agrc/plpco-video-widget/commit/0a521f4932f152deb64adfc1b655b3332af39e61)), closes [#2](https://github.com/agrc/plpco-video-widget/issues/2)
+
 ## [1.1.0](https://github.com/agrc/plpco-video-widget/compare/v1.0.0...v1.1.0) (2020-10-06)
 
 
