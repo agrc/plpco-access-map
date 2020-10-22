@@ -41,7 +41,7 @@ function App() {
       console.log('initMap');
 
       const esriModules = await getModules();
-      const { esriConfig, MapView, WebMap, Legend } = esriModules;
+      const { esriConfig, MapView, WebMap, Legend, BasemapGallery, Expand } = esriModules;
 
       esriConfig.portalUrl = 'https://maps.publiclands.utah.gov/portal';
 
@@ -58,6 +58,13 @@ function App() {
       });
 
       await view.when();
+
+      const basemapGallery = new BasemapGallery({ view });
+      const expand = new Expand({
+        view,
+        content: basemapGallery
+      })
+      view.ui.add(expand, 'top-left');
 
       const legend = new Legend({
         view,

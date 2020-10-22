@@ -11,7 +11,9 @@ export default async () => {
     'esri/WebMap',
     'esri/widgets/Feature',
     'esri/widgets/Legend',
-    'esri/PopupTemplate'
+    'esri/PopupTemplate',
+    'esri/widgets/BasemapGallery',
+    'esri/widgets/Expand'
   ];
 
   const [
@@ -23,7 +25,9 @@ export default async () => {
     WebMap,
     Feature,
     Legend,
-    PopupTemplate
+    PopupTemplate,
+    BasemapGallery,
+    Expand
   ] = await loadModules(requires, { version: '4.16', css: true });
 
   return {
@@ -35,6 +39,8 @@ export default async () => {
     WebMap,
     Feature,
     Legend,
-    PopupTemplate
+    PopupTemplate,
+    BasemapGallery,
+    Expand
   };
 }
