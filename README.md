@@ -2,8 +2,13 @@
 
 A custom Esri JS app that shows road videos for RS2477 roads.
 
-[Production](https://maps.publiclands.utah.gov/custom/videos/#rdid=RD279908)  
-[Test](https://test.mapserv.utah.gov/plpco-videos/)  
+Production URLs:
+
+* [Public](https://maps.publiclands.utah.gov/roadviewer/public)
+* [Secure](https://maps.publiclands.utah.gov/roadviewer/secure)
+* [Bellwether](https://maps.publiclands.utah.gov/roadviewer/bellwether)
+
+[Test URL](https://test.mapserv.utah.gov/plpco-videos/)  
 
 ## Web Map Requirements
 
@@ -16,6 +21,11 @@ A custom Esri JS app that shows road videos for RS2477 roads.
 ### Tables
 
 `Video Report`
+
+### Testing
+
+* Example RDID for related records: `RD279908`
+* Example RDID for video: `RD110251`
 
 ## Releasing
 
