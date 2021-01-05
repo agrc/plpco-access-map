@@ -190,7 +190,10 @@ function App() {
 
     if (selectedFeature) {
       getRdId();
-      getRelatedRecords();
+
+      if (config.showRelatedRecords) {
+        getRelatedRecords();
+      }
 
       highlightedHandle.current = layerView.current.highlight(selectedFeature.attributes.OBJECTID);
     } else {
