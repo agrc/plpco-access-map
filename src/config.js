@@ -8,7 +8,7 @@ const deployConfigs = {
     showRelatedTables: true
   },
   BELLWETHER: {
-    webMapId: '??',
+    webMapId: '2eaf07b9fc8e44a0a2f0b3f9ce982bdb',
     showRelatedTables: true
   }
 };
