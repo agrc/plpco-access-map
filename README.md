@@ -31,5 +31,8 @@ Production URLs:
 
 1. Create .env file with appropriate values.
 1. `npm run release`
-1. `npm run deploy-[prod|stage]` depending on which app you would like to deploy
-1. (if prod) copy zip files from `/deploy` to the server
+1. Production:
+    1. `npm run build-prod`
+    1. Copy zip files from `/deploy` to the web server.
+1. Stage:
+    1. `npm run deploy-stage`
