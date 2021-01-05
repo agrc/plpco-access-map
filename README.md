@@ -4,9 +4,9 @@ A custom Esri JS app that shows road videos for RS2477 roads.
 
 Production URLs:
 
-* [Public](https://maps.publiclands.utah.gov/roadviewer/public)
-* [Secure](https://maps.publiclands.utah.gov/roadviewer/secure)
-* [Bellwether](https://maps.publiclands.utah.gov/roadviewer/bellwether)
+* [Public](https://maps.publiclands.utah.gov/roadview/viewer)
+* [Secure](https://maps.publiclands.utah.gov/roadview/internal)
+* [Bellwether](https://maps.publiclands.utah.gov/roadview/bellwether)
 
 [Test URL](https://test.mapserv.utah.gov/plpco-videos/)  
 
