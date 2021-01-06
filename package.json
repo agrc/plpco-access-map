@@ -18,14 +18,16 @@
     "react-scripts": "3.4.3"
   },
   "scripts": {
-    "start": "react-scripts start",
+    "start": "REACT_APP_DEPLOY=DEV react-scripts start",
     "build": "react-scripts build",
-    "test": "react-scripts test",
+    "test": "REACT_APP_DEPLOY=DEV react-scripts test",
     "eject": "react-scripts eject",
     "storybook": "start-storybook -p 6006 -s public",
     "build-storybook": "build-storybook -s public",
     "release": "standard-version",
-    "deploy": "npm run build && wonkavision clean && wonkavision zip && wonkavision ship ./deploy/deploy.zip wwwroot/plpco-videos && wonkavision unzip wwwroot/plpco-videos"
+    "deploy-stage": "REACT_APP_DEPLOY=VIEWER npm run build && wonkavision clean && wonkavision zip && wonkavision ship ./deploy/deploy.zip wwwroot/plpco-videos/viewer && wonkavision unzip wwwroot/plpco-videos/viewer",
+    "build-zip": "npm run build && wonkavision zip ./build ./deploy $REACT_APP_DEPLOY.zip",
+    "build-prod": "wonkavision clean && REACT_APP_DEPLOY=VIEWER npm run build-zip && REACT_APP_DEPLOY=INTERNAL npm run build-zip && REACT_APP_DEPLOY=BELLWETHER npm run build-zip"
   },
   "eslintConfig": {
     "extends": "react-app"

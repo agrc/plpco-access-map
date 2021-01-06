@@ -5,6 +5,7 @@ import Feature from './Feature';
 import VideosContainer from './VideosContainer';
 import { Sherlock, MapServiceProvider } from '@agrc/sherlock';
 import queryString from 'query-string';
+import config from './config';
 
 
 const FEATURE_SERVICE_URL = 'https://maps.publiclands.utah.gov/server/rest/services/RS2477/RS2477_Centerline_Secure/MapServer/0';
@@ -47,7 +48,7 @@ function App() {
 
       const webMap = new WebMap({
         portalItem: {
-          id: 'ef84ebe3975d4431b0821f2feda538ad'
+          id: config.webMapId
         }
       });
 
@@ -189,7 +190,10 @@ function App() {
 
     if (selectedFeature) {
       getRdId();
-      getRelatedRecords();
+
+      if (config.showRelatedRecords) {
+        getRelatedRecords();
+      }
 
       highlightedHandle.current = layerView.current.highlight(selectedFeature.attributes.OBJECTID);
     } else {

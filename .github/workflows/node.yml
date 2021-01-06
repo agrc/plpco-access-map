@@ -4,9 +4,9 @@ on: push
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
-
+    env:
+      REACT_APP_DEPLOY: DEV
     steps:
     - uses: actions/checkout@v2
     - name: Use Node.js
