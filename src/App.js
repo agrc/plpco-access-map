@@ -11,6 +11,10 @@ import config from './config';
 const FEATURE_SERVICE_URL = 'https://maps.publiclands.utah.gov/server/rest/services/RS2477/RS2477_Centerline_Secure/MapServer/0';
 const SEARCH_FIELD = 'S_Name';
 const URL_PARAM = 'rdid';
+const END_POINTS_LAYER_NAME = 'Video End Point';
+const ROADS_LAYER_NAME = 'RS2477 Centerlines';
+const VIDEO_REPORT_TABLE_NAME = 'Video Report';
+const VIDEO_ROUTES_LAYER_NAME = 'Video_Routes - Video Route';
 
 const getRdIdFromUrl = () => {
   const parameters = queryString.parse(document.location.hash);
@@ -21,13 +25,15 @@ const getRdIdFromUrl = () => {
 function App() {
   const mapContainer = React.useRef();
   const [ mapView, setMapView ] = React.useState();
-  const [ selectedFeature, setSelectedFeature ] = React.useState();
+  const [ selectedRoadFeature, setSelectedRoadFeature ] = React.useState();
+  const [ selectedEndPointFeature, setSelectedEndPointFeature ] = React.useState();
   const [ videoDataSources, setVideoDataSources ] = React.useState({ table: null, points: null });
   const [ rdId, setRdId ] = React.useState();
   const featureLayer = React.useRef();
   const [ sherlockConfig, setSherlockConfig ] = React.useState();
   const highlightedHandle = React.useRef();
-  const layerView = React.useRef();
+  const roadsLayerView = React.useRef();
+  const endPointsLayerView = React.useRef();
   const [ relatedRecords, setRelatedRecords ] = React.useState();
   const tableIdsLookup = React.useRef({});
 
@@ -73,37 +79,47 @@ function App() {
       });
       view.ui.add(legend, 'bottom-right');
 
-      featureLayer.current = view.map.layers.find(layer => layer.title === 'RS2477 Centerlines');
-      layerView.current = await view.whenLayerView(featureLayer.current);
+      featureLayer.current = view.map.layers.find(layer => layer.title === ROADS_LAYER_NAME);
+      roadsLayerView.current = await view.whenLayerView(featureLayer.current);
+
+      const endPointsLayer = view.map.layers.find(layer => layer.title === END_POINTS_LAYER_NAME)
+      endPointsLayerView.current = await view.whenLayerView(endPointsLayer);
 
       view.map.tables.forEach(table => {
         tableIdsLookup.current[table.url.split('/').pop()] = table;
       });
-      const table = view.map.tables.find(table => table.title === 'Video Report');
-      const points = view.map.layers.find(layer => layer.title === 'Video_Routes - Video Route');
+      const table = view.map.tables.find(table => table.title === VIDEO_REPORT_TABLE_NAME);
+      const points = view.map.layers.find(layer => layer.title === VIDEO_ROUTES_LAYER_NAME);
       setVideoDataSources({ table, points });
 
       view.on('click', async event => {
-        setSelectedFeature(null);
+        setSelectedRoadFeature(null);
+        setSelectedEndPointFeature(null);
 
         const test = await view.hitTest(event);
 
         if (test.results.length) {
-          setSelectedFeature(test.results[0].graphic);
+          const selectedGraphic = test.results[0].graphic;
+
+          if (selectedGraphic.layer.title === END_POINTS_LAYER_NAME) {
+            setSelectedEndPointFeature(selectedGraphic);
+          } else {
+            setSelectedRoadFeature(selectedGraphic);
+          }
         }
       });
 
       setMapView(view);
 
       const onSherlockMatch = async matches => {
-        setSelectedFeature(null);
+        setSelectedRoadFeature(null);
 
         if (matches.length) {
           const graphic = matches[0];
           view.goTo(graphic);
 
-          graphic.popupTemplate = layerView.current.layer.popupTemplate;
-          setSelectedFeature(graphic);
+          graphic.popupTemplate = roadsLayerView.current.layer.popupTemplate;
+          setSelectedRoadFeature(graphic);
         }
       };
 
@@ -141,15 +157,15 @@ function App() {
 
   React.useEffect(() => {
     const getRdId = async () => {
-      if (selectedFeature.attributes.RD_ID) {
-        setRdId(selectedFeature.attributes.RD_ID);
+      if (selectedRoadFeature.attributes.RD_ID) {
+        setRdId(selectedRoadFeature.attributes.RD_ID);
 
         return;
       }
 
       // query for RD_ID for features that come from map click (they only include the OBJECTID)
       const featureSet = await featureLayer.current.queryFeatures({
-        where: `OBJECTID = ${selectedFeature.attributes.OBJECTID}`,
+        where: `OBJECTID = ${selectedRoadFeature.attributes.OBJECTID}`,
         returnGeometry: false,
         outFields: '*'
       });
@@ -163,7 +179,7 @@ function App() {
 
     const getRelatedRecords = async () => {
       const records = [];
-      const oid = selectedFeature.attributes.OBJECTID;
+      const oid = selectedRoadFeature.attributes.OBJECTID;
 
       for (const relationship of featureLayer.current.relationships) {
         const result = await featureLayer.current.queryRelatedFeatures({
@@ -188,25 +204,37 @@ function App() {
       highlightedHandle.current.remove();
     }
 
-    if (selectedFeature) {
+    if (selectedRoadFeature) {
       getRdId();
 
       if (config.showRelatedRecords) {
         getRelatedRecords();
       }
 
-      highlightedHandle.current = layerView.current.highlight(selectedFeature.attributes.OBJECTID);
+      highlightedHandle.current = roadsLayerView.current.highlight(selectedRoadFeature.attributes.OBJECTID);
     } else {
       setRdId(null);
       setRelatedRecords(null);
     }
-  }, [selectedFeature]);
+  }, [selectedRoadFeature]);
+
+  React.useEffect(() => {
+    if (highlightedHandle.current) {
+      highlightedHandle.current.remove();
+    }
+
+    if (selectedEndPointFeature) {
+      console.log(`end point selected ${selectedEndPointFeature.attributes.OBJECTID}`);
+
+      highlightedHandle.current = endPointsLayerView.current.highlight(selectedEndPointFeature.attributes.OBJECTID);
+    }
+  }, [selectedEndPointFeature]);
 
   return (
     <div className="app">
       <div className="side-bar">
         <VideosContainer rdId={rdId} mapView={mapView} {...videoDataSources} />
-        <Feature feature={selectedFeature} mapView={mapView} relatedRecords={relatedRecords} />
+        <Feature feature={selectedRoadFeature} mapView={mapView} relatedRecords={relatedRecords} />
       </div>
       <div ref={mapContainer}>
         { (sherlockConfig) ? <Sherlock {...sherlockConfig} /> : null }
