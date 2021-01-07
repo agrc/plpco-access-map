@@ -2,6 +2,22 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.3.0](https://github.com/agrc/plpco-video-widget/compare/v1.2.0...v1.3.0) (2021-01-07)
+
+
+### Features
+
+* add config and build pipeline for separate apps ([dff4955](https://github.com/agrc/plpco-video-widget/commit/dff49554ace1c045c273f566c7c1737d1b3feab1)), closes [#4](https://github.com/agrc/plpco-video-widget/issues/4)
+* implement show related records config prop ([972f179](https://github.com/agrc/plpco-video-widget/commit/972f179dcbd82f12a1f77b6b894cfd7584827bb5)), closes [#4](https://github.com/agrc/plpco-video-widget/issues/4)
+* select end points on map click ([a8f2c91](https://github.com/agrc/plpco-video-widget/commit/a8f2c91599db4ccc4bbdafa5fbd0dc6f2b1a3a4e)), closes [#3](https://github.com/agrc/plpco-video-widget/issues/3)
+* show end point photo ([7e6a39a](https://github.com/agrc/plpco-video-widget/commit/7e6a39a32faa04616961479d9186cfe822f71a5c)), closes [#3](https://github.com/agrc/plpco-video-widget/issues/3)
+
+
+### Bug Fixes
+
+* fix urls to match original request ([e4694fd](https://github.com/agrc/plpco-video-widget/commit/e4694fdf640fe7bad44c8a22478634e130e42a47)), closes [#4](https://github.com/agrc/plpco-video-widget/issues/4)
+* show click prompt instructions after clicking on no features ([a8d3a75](https://github.com/agrc/plpco-video-widget/commit/a8d3a752d1f065f708ad06336f7ed28e1c5a1955))
+
 ## [1.2.0](https://github.com/agrc/plpco-video-widget/compare/v1.1.0...v1.2.0) (2020-10-22)
 
 
