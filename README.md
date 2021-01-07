@@ -18,6 +18,8 @@ Production URLs:
 
 `Video_Routes - Video Route` - polyline feature layer
 
+`Video End Point` - point feature layer
+
 ### Tables
 
 `Video Report`
