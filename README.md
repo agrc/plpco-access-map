@@ -8,7 +8,7 @@ Production URLs:
 * [Secure](https://maps.publiclands.utah.gov/roadview/internal)
 * [Bellwether](https://maps.publiclands.utah.gov/roadview/bellwether)
 
-[Test URL](https://test.mapserv.utah.gov/plpco-videos/)  
+[Test URL](https://test.mapserv.utah.gov/plpco-videos/)
 
 ## Web Map Requirements
 

@@ -84,8 +84,10 @@ function App() {
       roadsFeatureLayer.current = view.map.layers.find(layer => layer.title === ROADS_LAYER_NAME);
       roadsLayerView.current = await view.whenLayerView(roadsFeatureLayer.current);
 
-      endPointsFeatureLayer.current = view.map.layers.find(layer => layer.title === END_POINTS_LAYER_NAME)
-      endPointsLayerView.current = await view.whenLayerView(endPointsFeatureLayer.current);
+      if (config.showEndPointPhotos) {
+        endPointsFeatureLayer.current = view.map.layers.find(layer => layer.title === END_POINTS_LAYER_NAME)
+        endPointsLayerView.current = await view.whenLayerView(endPointsFeatureLayer.current);
+      }
 
       view.map.tables.forEach(table => {
         tableIdsLookup.current[table.url.split('/').pop()] = table;
@@ -103,10 +105,10 @@ function App() {
         if (test.results.length) {
           const selectedGraphic = test.results[0].graphic;
 
-          if (selectedGraphic.layer.title === END_POINTS_LAYER_NAME) {
-            setSelectedEndPointFeature(selectedGraphic);
-          } else {
+          if (selectedGraphic.layer.title === ROADS_LAYER_NAME) {
             setSelectedRoadFeature(selectedGraphic);
+          } else {
+            setSelectedEndPointFeature(selectedGraphic);
           }
         }
       });
