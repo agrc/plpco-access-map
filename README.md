@@ -12,17 +12,14 @@ Production URLs:
 
 ## Web Map Requirements
 
-### Layers
+### Layers and Tables
 
-`RS2477 Centerlines` - polyline feature layer
-
-`Video_Routes - Video Route` - polyline feature layer
-
-`Video End Point` - point feature layer
-
-### Tables
-
-`Video Report`
+| name | type | required fields
+| ---- | ---- | ----
+| `RS2477 Centerlines` | polyline feature layer | `OBJECTID` `RD_ID` `S_Name`
+| `Video_Routes - Video Route` | polyline feature layer | `Date_Time` `GPS_Track_ID`
+| `Video End Point` | point feature layer with photo attachments | `OBJECTID`
+| `Video Report` | table | `RD_ID`
 
 ### Testing
 
