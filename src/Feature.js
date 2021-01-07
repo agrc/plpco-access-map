@@ -55,6 +55,8 @@ const RelatedRecordContainer = ({ relatedRecordInfo }) => {
   );
 };
 
+const emptyGraphic = { popupTemplate: { content: 'click on a road or end point for more information' } };
+
 const Feature = ({ feature, mapView, relatedRecords }) => {
   const node = React.useRef();
   const featureWidget = React.useRef();
@@ -69,7 +71,7 @@ const Feature = ({ feature, mapView, relatedRecords }) => {
       featureWidget.current = new Feature({
         container: node.current,
         map: mapView.map,
-        graphic: { popupTemplate: { content: 'click on a road for more information' } },
+        graphic: emptyGraphic,
         spatialReference: mapView.spatialReference
       });
     };
@@ -81,7 +83,11 @@ const Feature = ({ feature, mapView, relatedRecords }) => {
 
   React.useEffect(() => {
     if (featureWidget.current) {
-      featureWidget.current.graphic = feature;
+      if (feature) {
+        featureWidget.current.graphic = feature;
+      } else {
+        featureWidget.current.graphic = emptyGraphic;
+      }
     }
   }, [feature]);
 
