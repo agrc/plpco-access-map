@@ -6,6 +6,7 @@ import VideosContainer from './VideosContainer';
 import { Sherlock, MapServiceProvider } from '@agrc/sherlock';
 import queryString from 'query-string';
 import config from './config';
+import EndPointPhoto from './EndPointPhoto';
 
 
 const FEATURE_SERVICE_URL = 'https://maps.publiclands.utah.gov/server/rest/services/RS2477/RS2477_Centerline_Secure/MapServer/0';
@@ -29,7 +30,8 @@ function App() {
   const [ selectedEndPointFeature, setSelectedEndPointFeature ] = React.useState();
   const [ videoDataSources, setVideoDataSources ] = React.useState({ table: null, points: null });
   const [ rdId, setRdId ] = React.useState();
-  const featureLayer = React.useRef();
+  const roadsFeatureLayer = React.useRef();
+  const endPointsFeatureLayer = React.useRef();
   const [ sherlockConfig, setSherlockConfig ] = React.useState();
   const highlightedHandle = React.useRef();
   const roadsLayerView = React.useRef();
@@ -79,11 +81,11 @@ function App() {
       });
       view.ui.add(legend, 'bottom-right');
 
-      featureLayer.current = view.map.layers.find(layer => layer.title === ROADS_LAYER_NAME);
-      roadsLayerView.current = await view.whenLayerView(featureLayer.current);
+      roadsFeatureLayer.current = view.map.layers.find(layer => layer.title === ROADS_LAYER_NAME);
+      roadsLayerView.current = await view.whenLayerView(roadsFeatureLayer.current);
 
-      const endPointsLayer = view.map.layers.find(layer => layer.title === END_POINTS_LAYER_NAME)
-      endPointsLayerView.current = await view.whenLayerView(endPointsLayer);
+      endPointsFeatureLayer.current = view.map.layers.find(layer => layer.title === END_POINTS_LAYER_NAME)
+      endPointsLayerView.current = await view.whenLayerView(endPointsFeatureLayer.current);
 
       view.map.tables.forEach(table => {
         tableIdsLookup.current[table.url.split('/').pop()] = table;
@@ -137,7 +139,7 @@ function App() {
 
       const rdIdFromUrl = getRdIdFromUrl();
       if (rdIdFromUrl) {
-        const featureSet = await featureLayer.current.queryFeatures({
+        const featureSet = await roadsFeatureLayer.current.queryFeatures({
           where: `UPPER(RD_ID) = UPPER('${rdIdFromUrl}')`,
           returnGeometry: true,
           outFields: '*',
@@ -164,7 +166,7 @@ function App() {
       }
 
       // query for RD_ID for features that come from map click (they only include the OBJECTID)
-      const featureSet = await featureLayer.current.queryFeatures({
+      const featureSet = await roadsFeatureLayer.current.queryFeatures({
         where: `OBJECTID = ${selectedRoadFeature.attributes.OBJECTID}`,
         returnGeometry: false,
         outFields: '*'
@@ -181,8 +183,8 @@ function App() {
       const records = [];
       const oid = selectedRoadFeature.attributes.OBJECTID;
 
-      for (const relationship of featureLayer.current.relationships) {
-        const result = await featureLayer.current.queryRelatedFeatures({
+      for (const relationship of roadsFeatureLayer.current.relationships) {
+        const result = await roadsFeatureLayer.current.queryRelatedFeatures({
           outFields: '*',
           relationshipId: relationship.id,
           objectIds: [oid]
@@ -197,7 +199,9 @@ function App() {
         }
       };
 
-      setRelatedRecords(records);
+      if (selectedRoadFeature) {
+        setRelatedRecords(records);
+      }
     };
 
     if (highlightedHandle.current) {
@@ -234,7 +238,8 @@ function App() {
     <div className="app">
       <div className="side-bar">
         <VideosContainer rdId={rdId} mapView={mapView} {...videoDataSources} />
-        <Feature feature={selectedRoadFeature} mapView={mapView} relatedRecords={relatedRecords} />
+        <EndPointPhoto oid={selectedEndPointFeature?.attributes.OBJECTID} featureLayer={endPointsFeatureLayer.current} />
+        <Feature feature={selectedRoadFeature || selectedEndPointFeature} mapView={mapView} relatedRecords={relatedRecords} />
       </div>
       <div ref={mapContainer}>
         { (sherlockConfig) ? <Sherlock {...sherlockConfig} /> : null }
