@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.4.0](https://github.com/agrc/plpco-video-widget/compare/v1.3.0...v1.4.0) (2021-01-07)
+
+
+### Features
+
+* implement showEndPointPhotos config ([d690035](https://github.com/agrc/plpco-video-widget/commit/d69003586185c1fa1b23d2c574b8f7ce4e66fe12))
+
 ## [1.3.0](https://github.com/agrc/plpco-video-widget/compare/v1.2.0...v1.3.0) (2021-01-07)
 
 
