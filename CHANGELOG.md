@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.5.0](https://github.com/agrc/plpco-video-widget/compare/v1.4.0...v1.5.0) (2021-01-08)
+
+
+### Features
+
+* make field names configurable ([abe7c0f](https://github.com/agrc/plpco-video-widget/commit/abe7c0fdd2727e3a7ec2263d002e21d76af92209))
+
 ## [1.4.0](https://github.com/agrc/plpco-video-widget/compare/v1.3.0...v1.4.0) (2021-01-07)
 
 
