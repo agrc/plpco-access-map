@@ -47,14 +47,14 @@ const deployConfigs = {
   },
   BELLWETHER: {
     webMapId: '2eaf07b9fc8e44a0a2f0b3f9ce982bdb',
-    showRelatedRecords: true,
-    showEndPointPhotos: true,
+    showRelatedRecords: false,
+    showEndPointPhotos: false,
     fieldNames: {
       roads: {
-        OBJECTID: 'OBJECTID',
-        RD_ID: 'RD_ID',
-        S_Name: 'S_Name',
-        County: 'County'
+        OBJECTID: 'objectid',
+        RD_ID: 'rd_id',
+        S_Name: 's_name',
+        County: 'county'
       },
       videoRoutePoints: {
         Date_Time: 'Date_Time',
@@ -71,7 +71,7 @@ const deployConfigs = {
 };
 
 // DEV is set when running `npm start`
-deployConfigs.DEV = deployConfigs.INTERNAL;
+deployConfigs.DEV = deployConfigs.BELLWETHER;
 
 if (!process.env.REACT_APP_DEPLOY) {
   throw new Error('DEPLOY environment variable must be defined!');
