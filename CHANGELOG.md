@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.5.1](https://github.com/agrc/plpco-video-widget/compare/v1.5.0...v1.5.1) (2021-01-08)
+
+
+### Bug Fixes
+
+* make bellwether configs match viewer ([cb58fab](https://github.com/agrc/plpco-video-widget/commit/cb58fab5ce5099ba9ee98ffc3a18b4e29a0d2863))
+
 ## [1.5.0](https://github.com/agrc/plpco-video-widget/compare/v1.4.0...v1.5.0) (2021-01-08)
 
 
