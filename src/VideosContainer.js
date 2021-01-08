@@ -2,6 +2,7 @@ import React from 'react';
 import loadModules from './esriModules';
 import Video from './Video';
 import './VideosContainer.scss';
+import config from './config';
 
 
 const VideosContainer = ({ rdId, mapView, table, points }) => {
@@ -26,7 +27,7 @@ const VideosContainer = ({ rdId, mapView, table, points }) => {
     const giddyUp = async () => {
       const results = await tableQueryTask.current.execute({
         outFields: '*',
-        where: `UPPER(RD_ID) = UPPER('${rdId}') AND URL IS NOT NULL`
+        where: `UPPER(${config.fieldNames.videoReports.RD_ID}) = UPPER('${rdId}') AND URL IS NOT NULL`
       });
 
       if (results.features.length) {

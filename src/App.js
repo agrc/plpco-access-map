@@ -9,8 +9,6 @@ import config from './config';
 import EndPointPhoto from './EndPointPhoto';
 
 
-const FEATURE_SERVICE_URL = 'https://maps.publiclands.utah.gov/server/rest/services/RS2477/RS2477_Centerline_Secure/MapServer/0';
-const SEARCH_FIELD = 'S_Name';
 const URL_PARAM = 'rdid';
 const END_POINTS_LAYER_NAME = 'Video End Point';
 const ROADS_LAYER_NAME = 'RS2477 Centerlines';
@@ -99,6 +97,7 @@ function App() {
       view.on('click', async event => {
         setSelectedRoadFeature(null);
         setSelectedEndPointFeature(null);
+        setRelatedRecords(null);
 
         const test = await view.hitTest(event);
 
@@ -128,9 +127,9 @@ function App() {
       };
 
       setSherlockConfig({
-        provider: new MapServiceProvider(FEATURE_SERVICE_URL, SEARCH_FIELD, esriModules, {
+        provider: new MapServiceProvider(`${roadsFeatureLayer.current.url}/0`, config.fieldNames.roads.S_Name, esriModules, {
           outFields: ['*'],
-          contextField: 'County'
+          contextField: config.fieldNames.roads.County
         }),
         placeHolder: 'search by street name...',
         onSherlockMatch,
@@ -142,7 +141,7 @@ function App() {
       const rdIdFromUrl = getRdIdFromUrl();
       if (rdIdFromUrl) {
         const featureSet = await roadsFeatureLayer.current.queryFeatures({
-          where: `UPPER(RD_ID) = UPPER('${rdIdFromUrl}')`,
+          where: `UPPER(${config.fieldNames.roads.RD_ID}) = UPPER('${rdIdFromUrl}')`,
           returnGeometry: true,
           outFields: '*',
           outSpatialReference: view.spatialReference,
@@ -161,21 +160,21 @@ function App() {
 
   React.useEffect(() => {
     const getRdId = async () => {
-      if (selectedRoadFeature.attributes.RD_ID) {
-        setRdId(selectedRoadFeature.attributes.RD_ID);
+      if (selectedRoadFeature.attributes[config.fieldNames.roads.RD_ID]) {
+        setRdId(selectedRoadFeature.attributes[config.fieldNames.roads.RD_ID]);
 
         return;
       }
 
       // query for RD_ID for features that come from map click (they only include the OBJECTID)
       const featureSet = await roadsFeatureLayer.current.queryFeatures({
-        where: `OBJECTID = ${selectedRoadFeature.attributes.OBJECTID}`,
+        where: `${config.fieldNames.roads.OBJECTID} = ${selectedRoadFeature.attributes[config.fieldNames.roads.OBJECTID]}`,
         returnGeometry: false,
         outFields: '*'
       });
 
       if (featureSet.features.length) {
-        setRdId(featureSet.features[0].attributes.RD_ID);
+        setRdId(featureSet.features[0].attributes[config.fieldNames.roads.RD_ID]);
       } else {
         setRdId(null);
       }
@@ -183,7 +182,7 @@ function App() {
 
     const getRelatedRecords = async () => {
       const records = [];
-      const oid = selectedRoadFeature.attributes.OBJECTID;
+      const oid = selectedRoadFeature.attributes[config.fieldNames.roads.OBJECTID];
 
       for (const relationship of roadsFeatureLayer.current.relationships) {
         const result = await roadsFeatureLayer.current.queryRelatedFeatures({
@@ -217,7 +216,7 @@ function App() {
         getRelatedRecords();
       }
 
-      highlightedHandle.current = roadsLayerView.current.highlight(selectedRoadFeature.attributes.OBJECTID);
+      highlightedHandle.current = roadsLayerView.current.highlight(selectedRoadFeature.attributes[config.fieldNames.roads.OBJECTID]);
     } else {
       setRdId(null);
       setRelatedRecords(null);
@@ -230,9 +229,10 @@ function App() {
     }
 
     if (selectedEndPointFeature) {
-      console.log(`end point selected ${selectedEndPointFeature.attributes.OBJECTID}`);
+      const oid = selectedEndPointFeature.attributes[config.fieldNames.endPointPhotos.OBJECTID];
+      console.log(`end point selected ${oid}`);
 
-      highlightedHandle.current = endPointsLayerView.current.highlight(selectedEndPointFeature.attributes.OBJECTID);
+      highlightedHandle.current = endPointsLayerView.current.highlight(oid);
     }
   }, [selectedEndPointFeature]);
 
@@ -240,8 +240,10 @@ function App() {
     <div className="app">
       <div className="side-bar">
         <VideosContainer rdId={rdId} mapView={mapView} {...videoDataSources} />
-        <EndPointPhoto oid={selectedEndPointFeature?.attributes.OBJECTID} featureLayer={endPointsFeatureLayer.current} />
-        <Feature feature={selectedRoadFeature || selectedEndPointFeature} mapView={mapView} relatedRecords={relatedRecords} />
+        <EndPointPhoto oid={selectedEndPointFeature?.attributes[config.fieldNames.endPointPhotos.OBJECTID]}
+          featureLayer={endPointsFeatureLayer.current} />
+        <Feature feature={selectedRoadFeature || selectedEndPointFeature}
+          mapView={mapView} relatedRecords={relatedRecords} />
       </div>
       <div ref={mapContainer}>
         { (sherlockConfig) ? <Sherlock {...sherlockConfig} /> : null }

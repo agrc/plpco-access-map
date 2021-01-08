@@ -2,6 +2,7 @@
 import React from 'react';
 import loadModules from './esriModules';
 import './Video.scss';
+import config from './config';
 
 
 export const getIDFromUrl = url => {
@@ -19,7 +20,7 @@ export const parsePoints = features => {
   const lookup = {};
   let start;
   features.forEach(point => {
-    const date = new Date(point.attributes.Date_Time);
+    const date = new Date(point.attributes[config.fieldNames.videoRoutePoints.Date_Time]);
     const seconds = Math.round(date.getTime() / 1000);
     if (start) {
       lookup[seconds - start] = point.geometry;
@@ -136,10 +137,10 @@ const Video = ({ GPS_Track_ID, Date_Time, URL, pointsLayer, mapView, testWarning
         console.log('queryForPoints', start, num);
 
         const results = await pointsLayer.queryFeatures({
-          where: `UPPER(GPS_Track_ID) = UPPER('${GPS_Track_ID}')`,
+          where: `UPPER(${config.fieldNames.videoRoutePoints.GPS_Track_ID}) = UPPER('${GPS_Track_ID}')`,
           outFields: '*',
           returnGeometry: true,
-          orderByFields: 'Date_Time ASC',
+          orderByFields: `${config.fieldNames.videoRoutePoints.Date_Time} ASC`,
           outSpatialReference: mapView.spatialReference,
           start,
           num
