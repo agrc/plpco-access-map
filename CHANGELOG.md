@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.6.0-0](https://github.com/agrc/plpco-video-widget/compare/v1.5.1...v1.6.0-0) (2021-01-09)
+
+
+### Features
+
+* add a sidebar toggle button ([7572c58](https://github.com/agrc/plpco-video-widget/commit/7572c58ff3073af9b26f44aec61d0a60bac80e13)), closes [#6](https://github.com/agrc/plpco-video-widget/issues/6)
+* add toggle button for legend widget ([35d2d94](https://github.com/agrc/plpco-video-widget/commit/35d2d941b8569d9232d07664d2c2fddda6234675)), closes [#7](https://github.com/agrc/plpco-video-widget/issues/7)
+
 ### [1.5.1](https://github.com/agrc/plpco-video-widget/compare/v1.5.0...v1.5.1) (2021-01-08)
 
 
