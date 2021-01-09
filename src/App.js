@@ -9,6 +9,8 @@ import config from './config';
 import EndPointPhoto from './EndPointPhoto';
 import SidebarToggler from './SidebarToggler';
 import clsx from 'clsx';
+import ReactDOM from 'react-dom';
+import WidgetToggle from './WidgetToggle';
 
 
 const URL_PARAM = 'rdid';
@@ -80,7 +82,10 @@ function App() {
         view,
         container: document.createElement('div')
       });
-      view.ui.add(legend, 'bottom-right');
+      const toggleContainer = document.createElement('div');
+      ReactDOM.render(<WidgetToggle widget={legend}/>, toggleContainer);
+
+      view.ui.add(toggleContainer, 'bottom-right');
 
       roadsFeatureLayer.current = view.map.layers.find(layer => layer.title === ROADS_LAYER_NAME);
       roadsLayerView.current = await view.whenLayerView(roadsFeatureLayer.current);

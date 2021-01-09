@@ -1,0 +1,9 @@
+.widget-toggle {
+  &>button.btn {
+    top: 0;
+    right: 0;
+    &.open {
+      position: absolute;
+    }
+  }
+}
