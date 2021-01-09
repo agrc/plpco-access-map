@@ -71,7 +71,7 @@ const deployConfigs = {
 };
 
 // DEV is set when running `npm start`
-deployConfigs.DEV = deployConfigs.BELLWETHER;
+deployConfigs.DEV = deployConfigs.INTERNAL;
 
 if (!process.env.REACT_APP_DEPLOY) {
   throw new Error('DEPLOY environment variable must be defined!');
