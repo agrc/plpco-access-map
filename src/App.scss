@@ -1,4 +1,4 @@
-$sideBarWidth: 450px;
+@import 'variables';
 
 html, body, #root, .app {
   width: 100%;
@@ -12,9 +12,12 @@ html, body, #root, .app {
     h3 {
       padding-left: 0.5rem;
     }
-    width: $sideBarWidth;
     height: 100%;
     overflow-y: auto;
+    width: 0;
+    &.open {
+      width: $sideBarWidth;
+    }
   }
   .esri-view {
     flex: 1;

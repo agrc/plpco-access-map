@@ -7,6 +7,8 @@ import { Sherlock, MapServiceProvider } from '@agrc/sherlock';
 import queryString from 'query-string';
 import config from './config';
 import EndPointPhoto from './EndPointPhoto';
+import SidebarToggler from './SidebarToggler';
+import clsx from 'clsx';
 
 
 const URL_PARAM = 'rdid';
@@ -36,6 +38,7 @@ function App() {
   const endPointsLayerView = React.useRef();
   const [ relatedRecords, setRelatedRecords ] = React.useState();
   const tableIdsLookup = React.useRef({});
+  const [ sidebarOpen, setSidebarOpen ] = React.useState(true);
 
   React.useEffect(() => {
     if (rdId && getRdIdFromUrl() !== rdId) {
@@ -236,9 +239,13 @@ function App() {
     }
   }, [selectedEndPointFeature]);
 
+  const toggleSidebar = () => {
+    setSidebarOpen(!sidebarOpen);
+  };
+
   return (
     <div className="app">
-      <div className="side-bar">
+      <div className={clsx('side-bar', sidebarOpen && 'open')}>
         <VideosContainer rdId={rdId} mapView={mapView} {...videoDataSources} />
         <EndPointPhoto oid={selectedEndPointFeature?.attributes[config.fieldNames.endPointPhotos.OBJECTID]}
           featureLayer={endPointsFeatureLayer.current} />
@@ -246,6 +253,7 @@ function App() {
           mapView={mapView} relatedRecords={relatedRecords} />
       </div>
       <div ref={mapContainer}>
+        <SidebarToggler sidebarOpen={sidebarOpen} toggleSidebar={toggleSidebar} />
         { (sherlockConfig) ? <Sherlock {...sherlockConfig} /> : null }
       </div>
     </div>
