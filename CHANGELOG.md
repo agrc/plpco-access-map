@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.6.0](https://github.com/agrc/plpco-video-widget/compare/v1.6.0-0...v1.6.0) (2021-01-11)
+
+
+### Bug Fixes
+
+* fix unzip folder path for stage ([9f2bdb2](https://github.com/agrc/plpco-video-widget/commit/9f2bdb2dd4016b8f4ee6975b8ce38c4ff8a6da4b))
+
 ## [1.6.0-0](https://github.com/agrc/plpco-video-widget/compare/v1.5.1...v1.6.0-0) (2021-01-09)
 
 
