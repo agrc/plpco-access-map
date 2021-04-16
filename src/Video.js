@@ -126,6 +126,8 @@ const Video = ({ GPS_Track_ID, Date_Time, URL, pointsLayer, mapView, testWarning
         return;
       }
 
+      if (isMobile) return;
+
       new YT.Player(playerDiv.current, {
         height: '250',
         width: '100%',
@@ -184,7 +186,7 @@ const Video = ({ GPS_Track_ID, Date_Time, URL, pointsLayer, mapView, testWarning
         player.current.destroy();
       }
     };
-  }, [URL, pointsLayer, GPS_Track_ID, onPlayerStateChange, mapView, updateVideoAngle, setErrorMessage, setWarningMessage]);
+  }, [URL, pointsLayer, GPS_Track_ID, onPlayerStateChange, mapView, updateVideoAngle, setErrorMessage, setWarningMessage, isMobile]);
 
   const popOut = () => {
     console.log('popOut');
@@ -244,7 +246,8 @@ const Video = ({ GPS_Track_ID, Date_Time, URL, pointsLayer, mapView, testWarning
           <span>{new Date(Date_Time).toLocaleDateString()}</span>
         </div>
         { (errorMessage) ? <div className="alert alert-danger">{errorMessage}</div> :
-          <div ref={playerDiv}></div>
+          isMobile ? <a href={URL} className="btn btn-primary btn-lg" target="_blank" rel="noopener noreferrer">Watch Video on YouTube</a> :
+            <div ref={playerDiv}></div>
         }
         { (warningMessage) ? <div className="alert alert-warning">{warningMessage}</div> : null }
     </div>
