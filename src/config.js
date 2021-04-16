@@ -70,11 +70,15 @@ const deployConfigs = {
   }
 };
 
+const defaultConfigs = {
+  maxMobileWidth: 600
+};
+
 // DEV is set when running `npm start`
-deployConfigs.DEV = deployConfigs.INTERNAL;
+deployConfigs.DEV = deployConfigs.VIEWER;
 
 if (!process.env.REACT_APP_DEPLOY) {
   throw new Error('DEPLOY environment variable must be defined!');
 }
 
-export default deployConfigs[process.env.REACT_APP_DEPLOY];
+export default {...defaultConfigs, ...deployConfigs[process.env.REACT_APP_DEPLOY]};

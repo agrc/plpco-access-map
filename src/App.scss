@@ -7,6 +7,9 @@ html, body, #root, .app {
 }
 .app {
   display: flex;
+  @media (max-width: $smallScreenWidth) {
+    display: block;
+  }
   .side-bar {
     border-right: 1px solid rgba(110,110,110,0.3);
     h3 {
@@ -22,10 +25,19 @@ html, body, #root, .app {
       &.open {
         width: 100%;
       }
+      z-index: 1;
+      position: absolute;
+      background-color: white;
     }
   }
   .esri-view {
     flex: 1;
+    @media (max-width: $smallScreenWidth) {
+      position: absolute;
+      height: 100%;
+      width: 100%;
+      top: 0;
+    }
     .esri-widget {
       background-color: #ffffffb0;
     }
