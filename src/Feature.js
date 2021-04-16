@@ -55,7 +55,7 @@ const RelatedRecordContainer = ({ relatedRecordInfo }) => {
   );
 };
 
-const emptyGraphic = { popupTemplate: { content: 'click on a road or end point for more information' } };
+const emptyGraphic = { popupTemplate: { content: 'Click on a road or end point for more information.' } };
 
 const Feature = ({ feature, mapView, relatedRecords }) => {
   const node = React.useRef();
