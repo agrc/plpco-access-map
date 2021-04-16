@@ -18,6 +18,11 @@ html, body, #root, .app {
     &.open {
       width: $sideBarWidth;
     }
+    @media (max-width: $smallScreenWidth) {
+      &.open {
+        width: 100%;
+      }
+    }
   }
   .esri-view {
     flex: 1;

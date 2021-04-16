@@ -12,6 +12,12 @@
     box-shadow: none !important;
   }
   &.open {
+    @media (max-width: $smallScreenWidth) {
+      right: 0;
+      left: auto;
+      border-bottom-right-radius: 0;
+      border-bottom-left-radius: 0.25rem;
+    }
     left: $sideBarWidth - 1px;
   }
   svg {
