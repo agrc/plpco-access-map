@@ -69,6 +69,8 @@ function App() {
         popup: null
       });
 
+      setMapView(view);
+
       await view.when();
 
       const basemapGallery = new BasemapGallery({ view });
@@ -119,8 +121,6 @@ function App() {
           }
         }
       });
-
-      setMapView(view);
 
       const onSherlockMatch = async matches => {
         setSelectedRoadFeature(null);
