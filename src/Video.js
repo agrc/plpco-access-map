@@ -3,6 +3,7 @@ import React from 'react';
 import loadModules from './esriModules';
 import './Video.scss';
 import config from './config';
+import { useWindowWidth } from '@react-hook/window-size';
 
 
 export const getIDFromUrl = url => {
@@ -186,7 +187,10 @@ const Video = ({ GPS_Track_ID, Date_Time, URL, pointsLayer, mapView, testWarning
 
   const popOut = () => {
     console.log('popOut');
-    player.current.pauseVideo();
+
+    if (player.current) {
+      player.current.pauseVideo();
+    }
 
     const popupWindow = window.open('', 'roadsVideo', 'width=640,height=390,location=0');
 
@@ -200,7 +204,9 @@ const Video = ({ GPS_Track_ID, Date_Time, URL, pointsLayer, mapView, testWarning
       events: {
         onStateChange: onPlayerStateChange,
         onReady: (event) => {
-          event.target.seekTo(player.current.getCurrentTime(), true);
+          if (player.current) {
+            event.target.seekTo(player.current.getCurrentTime(), true);
+          }
         }
       }
     });
