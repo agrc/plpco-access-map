@@ -225,6 +225,7 @@ function App() {
       }
 
       highlightedHandle.current = roadsLayerView.current.highlight(selectedRoadFeature.attributes[config.fieldNames.roads.OBJECTID]);
+      setSidebarOpen(true);
     } else {
       setRdId(null);
       setRelatedRecords(null);
@@ -241,6 +242,7 @@ function App() {
       console.log(`end point selected ${oid}`);
 
       highlightedHandle.current = endPointsLayerView.current.highlight(oid);
+      setSidebarOpen(true);
     }
   }, [selectedEndPointFeature]);
 
