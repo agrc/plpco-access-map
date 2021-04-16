@@ -52,6 +52,8 @@ const Video = ({ GPS_Track_ID, Date_Time, URL, pointsLayer, mapView, testWarning
   const requestAnimationId = React.useRef();
   const [ errorMessage, setErrorMessage ] = React.useState();
   const [ warningMessage, setWarningMessage ] = React.useState(testWarningMessage);
+  const windowWidth = useWindowWidth();
+  const isMobile = windowWidth < config.maxMobileWidth;
 
   const updateVideoAngle = React.useCallback((oldPlayerId) => {
     if (oldPlayerId) {
@@ -236,10 +238,10 @@ const Video = ({ GPS_Track_ID, Date_Time, URL, pointsLayer, mapView, testWarning
         <div className="header">
           { // ref: https://icons.getbootstrap.com/icons/box-arrow-up-right/
           }
-          <svg onClick={popOut} width="0.9em" height="0.9em" viewBox="0 0 16 16" className="bi bi-box-arrow-up-right" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+          { !isMobile ? <svg onClick={popOut} width="0.9em" height="0.9em" viewBox="0 0 16 16" className="bi bi-box-arrow-up-right" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
             <path fillRule="evenodd" d="M8.636 3.5a.5.5 0 0 0-.5-.5H1.5A1.5 1.5 0 0 0 0 4.5v10A1.5 1.5 0 0 0 1.5 16h10a1.5 1.5 0 0 0 1.5-1.5V7.864a.5.5 0 0 0-1 0V14.5a.5.5 0 0 1-.5.5h-10a.5.5 0 0 1-.5-.5v-10a.5.5 0 0 1 .5-.5h6.636a.5.5 0 0 0 .5-.5z"/>
             <path fillRule="evenodd" d="M16 .5a.5.5 0 0 0-.5-.5h-5a.5.5 0 0 0 0 1h3.793L6.146 9.146a.5.5 0 1 0 .708.708L15 1.707V5.5a.5.5 0 0 0 1 0v-5z"/>
-          </svg>
+          </svg> : null }
           <span>{new Date(Date_Time).toLocaleDateString()}</span>
         </div>
         { (errorMessage) ? <div className="alert alert-danger">{errorMessage}</div> :
