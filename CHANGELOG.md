@@ -2,6 +2,24 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.7.0-0](https://github.com/agrc/plpco-video-widget/compare/v1.6.0...v1.7.0-0) (2021-04-16)
+
+
+### Features
+
+* auto-open side panel on feature selection ([ef92af2](https://github.com/agrc/plpco-video-widget/commit/ef92af2576cdcd37eeef1ee8eaf1e3bfd7da25b6))
+* give smaller screens a better layout ([7ee0fbf](https://github.com/agrc/plpco-video-widget/commit/7ee0fbf24fbd2b4a3c1d30c02d60fa94007ae8b3)), closes [#12](https://github.com/agrc/plpco-video-widget/issues/12)
+
+
+### Bug Fixes
+
+* hide video popout on mobile ([9724b56](https://github.com/agrc/plpco-video-widget/commit/9724b56c25d676c6c1f4364387afa8d06003efb8))
+* load map on mobile even when it's not visible ([d69d0a7](https://github.com/agrc/plpco-video-widget/commit/d69d0a735b22191ce3c6c6d0276128642fdab93c))
+* make sure that player is available for popout ([747c003](https://github.com/agrc/plpco-video-widget/commit/747c00390d1e8f854bedc153e50526584bc6decc))
+* prevent blank initial load on mobile ([5ebe07b](https://github.com/agrc/plpco-video-widget/commit/5ebe07b96c6768fd0f5a86ea48ad70c955b12cfb))
+* punctuation ([ce0797b](https://github.com/agrc/plpco-video-widget/commit/ce0797b447ff9cf4e74603d77a487dd9095af566))
+* show map by default on mobile ([d23dddc](https://github.com/agrc/plpco-video-widget/commit/d23dddc48fd8468266d65ca2b914dc0fd5f9883e))
+
 ## [1.6.0](https://github.com/agrc/plpco-video-widget/compare/v1.6.0-0...v1.6.0) (2021-01-11)
 
 
