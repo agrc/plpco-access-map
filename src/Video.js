@@ -3,7 +3,7 @@ import React from 'react';
 import loadModules from './esriModules';
 import './Video.scss';
 import config from './config';
-import { useWindowWidth } from '@react-hook/window-size';
+import useIsMobile from './useIsMobile';
 
 
 export const getIDFromUrl = url => {
@@ -52,8 +52,7 @@ const Video = ({ GPS_Track_ID, Date_Time, URL, pointsLayer, mapView, testWarning
   const requestAnimationId = React.useRef();
   const [ errorMessage, setErrorMessage ] = React.useState();
   const [ warningMessage, setWarningMessage ] = React.useState(testWarningMessage);
-  const windowWidth = useWindowWidth();
-  const isMobile = windowWidth < config.maxMobileWidth;
+  const isMobile = useIsMobile();
 
   const updateVideoAngle = React.useCallback((oldPlayerId) => {
     if (oldPlayerId) {
