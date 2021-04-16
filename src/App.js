@@ -11,6 +11,7 @@ import SidebarToggler from './SidebarToggler';
 import clsx from 'clsx';
 import ReactDOM from 'react-dom';
 import WidgetToggle from './WidgetToggle';
+import useIsMobile from './useIsMobile';
 
 
 const URL_PARAM = 'rdid';
@@ -40,7 +41,8 @@ function App() {
   const endPointsLayerView = React.useRef();
   const [ relatedRecords, setRelatedRecords ] = React.useState();
   const tableIdsLookup = React.useRef({});
-  const [ sidebarOpen, setSidebarOpen ] = React.useState(true);
+  const isMobile = useIsMobile();
+  const [ sidebarOpen, setSidebarOpen ] = React.useState(!isMobile);
 
   React.useEffect(() => {
     if (rdId && getRdIdFromUrl() !== rdId) {
