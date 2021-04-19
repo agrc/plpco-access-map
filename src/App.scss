@@ -42,4 +42,8 @@ html, body, #root, .app {
       background-color: #ffffffb0;
     }
   }
+  .sherlock button.disabled {
+    background-color: $primaryColor;
+    border-color: $primaryColor;
+  }
 }

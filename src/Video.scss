@@ -1,3 +1,5 @@
+@import 'variables';
+
 .video {
   .header {
     display: flex;
@@ -13,5 +15,7 @@
   a.btn {
     display: block;
     margin: 1rem;
+    background-color: $primaryColor;
+    border-color: $primaryColor;
   }
 }
