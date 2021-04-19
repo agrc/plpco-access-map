@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.7.0-2](https://github.com/agrc/plpco-video-widget/compare/v1.7.0-1...v1.7.0-2) (2021-04-19)
+
+
+### Features
+
+* add google analytics tag ([cd3f10b](https://github.com/agrc/plpco-video-widget/commit/cd3f10b1c68fa20400c14d3b4ccf5138ed35e071)), closes [#12](https://github.com/agrc/plpco-video-widget/issues/12)
+
+
+### Bug Fixes
+
+* make colors more consistent ([0350672](https://github.com/agrc/plpco-video-widget/commit/03506720e027423eae48b9fe9112069af5bcfd5a)), closes [#13](https://github.com/agrc/plpco-video-widget/issues/13)
+
 ## [1.7.0-1](https://github.com/agrc/plpco-video-widget/compare/v1.7.0-0...v1.7.0-1) (2021-04-16)
 
 
