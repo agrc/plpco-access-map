@@ -8,6 +8,8 @@
   border-bottom-left-radius: 0;
   border-top-left-radius: 0;
   border-top-right-radius: 0;
+  background-color: $primaryColor !important;
+  border-color: $primaryColor !important;
   &:focus {
     box-shadow: none !important;
   }
