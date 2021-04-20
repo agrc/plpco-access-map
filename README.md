@@ -35,6 +35,6 @@ Note: Field names are configurable in `config.js`
 1. `npm run release`
 1. Production:
     1. `npm run build-prod`
-    1. Copy zip files from `/deploy` to the web server.
+    1. Run `deploy.bat` from the directory on the server.
 1. Stage:
     1. `npm run deploy-stage`
