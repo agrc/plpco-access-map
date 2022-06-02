@@ -1,7 +1,7 @@
 import { loadModules } from 'esri-loader';
 
 
-export default async () => {
+export default async function esriModules() {
   const requires = [
     'esri/config',
     'esri/Graphic',

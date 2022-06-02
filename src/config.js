@@ -81,4 +81,6 @@ if (!process.env.REACT_APP_DEPLOY) {
   throw new Error('DEPLOY environment variable must be defined!');
 }
 
-export default {...defaultConfigs, ...deployConfigs[process.env.REACT_APP_DEPLOY]};
+const combinedConfigs = {...defaultConfigs, ...deployConfigs[process.env.REACT_APP_DEPLOY]};
+
+export default combinedConfigs;
