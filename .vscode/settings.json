@@ -1,4 +1,18 @@
 {
-  "cSpell.words": ["evenodd", "fontawesome", "fortawesome", "PLPCO", "pluginutils", "RDID", "VITE", "wonkavision"],
+  "cSpell.words": [
+    "autoplay",
+    "evenodd",
+    "firebaserc",
+    "fontawesome",
+    "fortawesome",
+    "hostingchannels",
+    "nosniff",
+    "PLPCO",
+    "pluginutils",
+    "RDID",
+    "SAMEORIGIN",
+    "VITE",
+    "wonkavision"
+  ],
   "editor.formatOnSave": true
 }
