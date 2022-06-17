@@ -25,8 +25,9 @@
     "reactstrap": "^9.1.1"
   },
   "scripts": {
-    "build": "vite build --mode viewer && vite build --mode internal --outDir dist/internal && vite build --mode bellwether --outDir dist/bellwether",
+    "build": "vite build --mode viewer && vite build --mode internal --outDir dist/internal --base /internal/ && vite build --mode bellwether --outDir dist/bellwether --base /bellwether/",
     "format": "prettier --write .",
+    "preview": "vite preview",
     "release": "standard-version",
     "start": "vite",
     "storybook": "start-storybook",
