@@ -1,10 +1,4 @@
 {
-  "cSpell.words": [
-    "PLPCO",
-    "RDID",
-    "evenodd",
-    "fontawesome",
-    "fortawesome",
-    "wonkavision"
-  ]
+  "cSpell.words": ["evenodd", "fontawesome", "fortawesome", "PLPCO", "pluginutils", "RDID", "VITE", "wonkavision"],
+  "editor.formatOnSave": true
 }

@@ -1,12 +1,13 @@
 /* global YT */
+import Graphic from '@arcgis/core/Graphic';
+import GraphicsLayer from '@arcgis/core/layers/GraphicsLayer';
 import React from 'react';
-import loadModules from './esriModules';
-import './Video.scss';
 import config from './config';
+import markerUrl from './marker.svg';
 import useIsMobile from './useIsMobile';
+import './Video.scss';
 
-
-export const getIDFromUrl = url => {
+export const getIDFromUrl = (url) => {
   // check for valid URL
   new URL(url);
 
@@ -17,10 +18,10 @@ export const getIDFromUrl = url => {
   return url.split('/').pop();
 };
 
-export const parsePoints = features => {
+export const parsePoints = (features) => {
   const lookup = {};
   let start;
-  features.forEach(point => {
+  features.forEach((point) => {
     const date = new Date(point.attributes[config.fieldNames.videoRoutePoints.Date_Time]);
     const seconds = Math.round(date.getTime() / 1000);
     if (start) {
@@ -35,10 +36,10 @@ export const parsePoints = features => {
 };
 const symbol = {
   type: 'picture-marker',
-  url: `${process.env.PUBLIC_URL}/marker.svg`,
+  url: markerUrl,
   width: 30,
   height: 30,
-  angle: 0
+  angle: 0,
 };
 
 const Video = ({ GPS_Track_ID, Date_Time, URL, pointsLayer, mapView, testWarningMessage }) => {
@@ -46,12 +47,12 @@ const Video = ({ GPS_Track_ID, Date_Time, URL, pointsLayer, mapView, testWarning
   const pointsLookup = React.useRef({});
   const intervalId = React.useRef();
   const graphic = React.useRef();
-  const [ videoAngle, setVideoAngle ] = React.useState(0)
-  const [ angleOfSegment, setAngleOfSegment ] = React.useState(0);
+  const [videoAngle, setVideoAngle] = React.useState(0);
+  const [angleOfSegment, setAngleOfSegment] = React.useState(0);
   const player = React.useRef();
   const requestAnimationId = React.useRef();
-  const [ errorMessage, setErrorMessage ] = React.useState();
-  const [ warningMessage, setWarningMessage ] = React.useState(testWarningMessage);
+  const [errorMessage, setErrorMessage] = React.useState();
+  const [warningMessage, setWarningMessage] = React.useState(testWarningMessage);
   const isMobile = useIsMobile();
 
   const updateVideoAngle = React.useCallback((oldPlayerId) => {
@@ -68,54 +69,60 @@ const Video = ({ GPS_Track_ID, Date_Time, URL, pointsLayer, mapView, testWarning
     requestAnimationId.current = window.requestAnimationFrame(updateVideoAngle);
   }, []);
 
-  const onPlayerStateChange = React.useCallback(event => {
-    if (intervalId.current) {
-      window.clearInterval(intervalId.current);
-    }
+  const onPlayerStateChange = React.useCallback(
+    (event) => {
+      if (intervalId.current) {
+        window.clearInterval(intervalId.current);
+      }
 
-    if (event.data === YT.PlayerState.PLAYING) {
-      console.log('playing');
+      if (event.data === YT.PlayerState.PLAYING) {
+        console.log('playing');
 
-      player.current = event.target;
+        player.current = event.target;
 
-      updateVideoAngle(requestAnimationId.current);
+        updateVideoAngle(requestAnimationId.current);
 
-      intervalId.current = window.setInterval(() => {
-        const currentTime = Math.round(player.current.getCurrentTime()).toString();
-        const position = pointsLookup.current[currentTime];
+        intervalId.current = window.setInterval(() => {
+          const currentTime = Math.round(player.current.getCurrentTime()).toString();
+          const position = pointsLookup.current[currentTime];
 
-        if (position) {
-          const keys = Object.keys(pointsLookup.current);
-          const lastPosition = pointsLookup.current[keys[keys.indexOf(currentTime) - 1]];
-          const nextPosition = pointsLookup.current[keys[keys.indexOf(currentTime) + 1]];
+          if (position) {
+            const keys = Object.keys(pointsLookup.current);
+            const lastPosition = pointsLookup.current[keys[keys.indexOf(currentTime) - 1]];
+            const nextPosition = pointsLookup.current[keys[keys.indexOf(currentTime) + 1]];
 
-          if (lastPosition && nextPosition) {
-            const yDiff = nextPosition.y - lastPosition.y;
-            const xDiff = nextPosition.x - lastPosition.x;
-            setAngleOfSegment(90 - (Math.atan2(yDiff, xDiff) * 180) / Math.PI);
+            if (lastPosition && nextPosition) {
+              const yDiff = nextPosition.y - lastPosition.y;
+              const xDiff = nextPosition.x - lastPosition.x;
+              setAngleOfSegment(90 - (Math.atan2(yDiff, xDiff) * 180) / Math.PI);
+            }
+
+            mapView.goTo(position);
+            graphic.current.geometry = position;
           }
-
-          mapView.goTo(position);
-          graphic.current.geometry = position;
-        }
-      }, 1000);
-    }
-  }, [mapView, updateVideoAngle]);
+        }, 1000);
+      }
+    },
+    [mapView, updateVideoAngle]
+  );
 
   React.useEffect(() => {
     if (graphic.current) {
       graphic.current.symbol = {
         ...symbol,
-        angle: angleOfSegment - videoAngle
+        angle: angleOfSegment - videoAngle,
       };
     }
   }, [videoAngle, angleOfSegment]);
 
   React.useEffect(() => {
+    let graphicsLayer;
     const giddyUp = async () => {
-      const { Graphic } = await loadModules();
       graphic.current = new Graphic({ symbol });
-      mapView.graphics.add(graphic.current);
+      graphicsLayer = new GraphicsLayer();
+      graphicsLayer.add(graphic.current);
+
+      mapView.map.add(graphicsLayer);
 
       let videoId;
       try {
@@ -133,11 +140,11 @@ const Video = ({ GPS_Track_ID, Date_Time, URL, pointsLayer, mapView, testWarning
         width: '100%',
         videoId,
         events: {
-          onStateChange: onPlayerStateChange
-        }
+          onStateChange: onPlayerStateChange,
+        },
       });
 
-      const queryForPoints = async (start=null, num=null) => {
+      const queryForPoints = async (start = null, num = null) => {
         console.log('queryForPoints', start, num);
 
         const results = await pointsLayer.queryFeatures({
@@ -147,16 +154,17 @@ const Video = ({ GPS_Track_ID, Date_Time, URL, pointsLayer, mapView, testWarning
           orderByFields: `${config.fieldNames.videoRoutePoints.Date_Time} ASC`,
           outSpatialReference: mapView.spatialReference,
           start,
-          num
+          num,
         });
 
         if (results.exceededTransferLimit) {
-
-          return results.features.concat(await queryForPoints(start + results.features.length + 1, results.features.length));
+          return results.features.concat(
+            await queryForPoints(start + results.features.length + 1, results.features.length)
+          );
         }
 
         return results.features;
-      }
+      };
 
       const features = await queryForPoints(null);
 
@@ -170,8 +178,8 @@ const Video = ({ GPS_Track_ID, Date_Time, URL, pointsLayer, mapView, testWarning
     giddyUp();
 
     return () => {
-      if (graphic.current) {
-        mapView.graphics.remove(graphic.current);
+      if (graphicsLayer) {
+        mapView.map.remove(graphicsLayer);
       }
 
       if (intervalId.current) {
@@ -186,7 +194,17 @@ const Video = ({ GPS_Track_ID, Date_Time, URL, pointsLayer, mapView, testWarning
         player.current.destroy();
       }
     };
-  }, [URL, pointsLayer, GPS_Track_ID, onPlayerStateChange, mapView, updateVideoAngle, setErrorMessage, setWarningMessage, isMobile]);
+  }, [
+    URL,
+    pointsLayer,
+    GPS_Track_ID,
+    onPlayerStateChange,
+    mapView,
+    updateVideoAngle,
+    setErrorMessage,
+    setWarningMessage,
+    isMobile,
+  ]);
 
   const popOut = () => {
     console.log('popOut');
@@ -210,15 +228,15 @@ const Video = ({ GPS_Track_ID, Date_Time, URL, pointsLayer, mapView, testWarning
           if (player.current) {
             event.target.seekTo(player.current.getCurrentTime(), true);
           }
-        }
-      }
+        },
+      },
     });
 
     popupWindow.document.body.style.margin = 0;
     popupWindow.addEventListener('unload', () => {
-        window.clearInterval(intervalId.current);
-        popupPlayer.destroy();
-        window.cancelAnimationFrame(requestAnimationId);
+      window.clearInterval(intervalId.current);
+      popupPlayer.destroy();
+      window.cancelAnimationFrame(requestAnimationId);
     });
 
     // close popup window if the main window is closed or reloaded
@@ -236,20 +254,42 @@ const Video = ({ GPS_Track_ID, Date_Time, URL, pointsLayer, mapView, testWarning
 
   return (
     <div className="video">
-        <div className="header">
-          { // ref: https://icons.getbootstrap.com/icons/box-arrow-up-right/
-          }
-          { !isMobile ? <svg onClick={popOut} width="0.9em" height="0.9em" viewBox="0 0 16 16" className="bi bi-box-arrow-up-right" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-            <path fillRule="evenodd" d="M8.636 3.5a.5.5 0 0 0-.5-.5H1.5A1.5 1.5 0 0 0 0 4.5v10A1.5 1.5 0 0 0 1.5 16h10a1.5 1.5 0 0 0 1.5-1.5V7.864a.5.5 0 0 0-1 0V14.5a.5.5 0 0 1-.5.5h-10a.5.5 0 0 1-.5-.5v-10a.5.5 0 0 1 .5-.5h6.636a.5.5 0 0 0 .5-.5z"/>
-            <path fillRule="evenodd" d="M16 .5a.5.5 0 0 0-.5-.5h-5a.5.5 0 0 0 0 1h3.793L6.146 9.146a.5.5 0 1 0 .708.708L15 1.707V5.5a.5.5 0 0 0 1 0v-5z"/>
-          </svg> : null }
-          <span>{new Date(Date_Time).toLocaleDateString()}</span>
-        </div>
-        { (errorMessage) ? <div className="alert alert-danger">{errorMessage}</div> :
-          isMobile ? <a href={URL} className="btn btn-primary btn-lg" target="_blank" rel="noopener noreferrer">Watch Video on YouTube</a> :
-            <div ref={playerDiv}></div>
+      <div className="header">
+        {
+          // ref: https://icons.getbootstrap.com/icons/box-arrow-up-right/
         }
-        { (warningMessage) ? <div className="alert alert-warning">{warningMessage}</div> : null }
+        {!isMobile ? (
+          <svg
+            onClick={popOut}
+            width="0.9em"
+            height="0.9em"
+            viewBox="0 0 16 16"
+            className="bi bi-box-arrow-up-right"
+            fill="currentColor"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              fillRule="evenodd"
+              d="M8.636 3.5a.5.5 0 0 0-.5-.5H1.5A1.5 1.5 0 0 0 0 4.5v10A1.5 1.5 0 0 0 1.5 16h10a1.5 1.5 0 0 0 1.5-1.5V7.864a.5.5 0 0 0-1 0V14.5a.5.5 0 0 1-.5.5h-10a.5.5 0 0 1-.5-.5v-10a.5.5 0 0 1 .5-.5h6.636a.5.5 0 0 0 .5-.5z"
+            />
+            <path
+              fillRule="evenodd"
+              d="M16 .5a.5.5 0 0 0-.5-.5h-5a.5.5 0 0 0 0 1h3.793L6.146 9.146a.5.5 0 1 0 .708.708L15 1.707V5.5a.5.5 0 0 0 1 0v-5z"
+            />
+          </svg>
+        ) : null}
+        <span>{new Date(Date_Time).toLocaleDateString()}</span>
+      </div>
+      {errorMessage ? (
+        <div className="alert alert-danger">{errorMessage}</div>
+      ) : isMobile ? (
+        <a href={URL} className="btn btn-primary btn-lg" target="_blank" rel="noopener noreferrer">
+          Watch Video on YouTube
+        </a>
+      ) : (
+        <div ref={playerDiv}></div>
+      )}
+      {warningMessage ? <div className="alert alert-warning">{warningMessage}</div> : null}
     </div>
   );
 };
