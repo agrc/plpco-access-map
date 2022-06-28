@@ -219,6 +219,7 @@ const Video = ({ GPS_Track_ID, Date_Time, URL, pointsLayer, mapView, testWarning
     const iframe = popupWindow.document.createElement('iframe');
     iframe.style = 'border: none;';
     iframe.src = `https://www.youtube.com/embed/${id}?enablejsapi=1`;
+    iframe.allow = 'fullscreen';
     popupWindow.document.body.appendChild(iframe);
 
     const popupPlayer = new YT.Player(iframe, {
