@@ -1,13 +1,12 @@
+import { faListUl, faTimes } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import clsx from 'clsx';
 import * as React from 'react';
 import './WidgetToggle.scss';
-import clsx from 'clsx';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faTimes, faListUl } from '@fortawesome/free-solid-svg-icons';
-
 
 const WidgetToggle = ({ widget }) => {
   const containerRef = React.useRef();
-  const [ isOpen, setIsOpen ] = React.useState(true);
+  const [isOpen, setIsOpen] = React.useState(true);
 
   React.useEffect(() => {
     if (isOpen) {
@@ -21,10 +20,8 @@ const WidgetToggle = ({ widget }) => {
 
   return (
     <div className="widget-toggle">
-      <button type="button" onClick={() => setIsOpen(!isOpen)}
-        className={clsx('btn', 'btn-small', isOpen && 'open')}>
-        { (isOpen) ?
-          <FontAwesomeIcon icon={faTimes} /> : <FontAwesomeIcon icon={faListUl} /> }
+      <button type="button" onClick={() => setIsOpen(!isOpen)} className={clsx('btn', 'btn-small', isOpen && 'open')}>
+        {isOpen ? <FontAwesomeIcon icon={faTimes} /> : <FontAwesomeIcon icon={faListUl} />}
       </button>
       <div ref={containerRef}></div>
     </div>
