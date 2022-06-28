@@ -8,6 +8,7 @@ on:
       - '.firebaserc'
       - 'src/**'
       - 'package-lock.json'
+      - 'index.html'
 
 concurrency:
   group: '${{ github.head_ref || github.ref }}'
