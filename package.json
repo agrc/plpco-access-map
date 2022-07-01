@@ -4,7 +4,7 @@
   "private": true,
   "type": "module",
   "dependencies": {
-    "@arcgis/core": "^4.24.4",
+    "@arcgis/core": "^4.24.5",
     "@fortawesome/free-solid-svg-icons": "^6.1.1",
     "@fortawesome/react-fontawesome": "^0.2.0",
     "@react-hook/window-size": "^3.0.7",
