@@ -2,6 +2,42 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.9.0](https://github.com/agrc/plpco-videos/compare/v1.6.0...v1.9.0) (2022-10-06)
+
+
+### 🚀 Features
+
+* add google analytics tag ([f217807](https://github.com/agrc/plpco-videos/commit/f217807737665d85bb5c93ec37f6aabfa982c2bf)), closes [#12](https://github.com/agrc/plpco-videos/issues/12)
+* auto-open side panel on feature selection ([b1066e3](https://github.com/agrc/plpco-videos/commit/b1066e301949706ae2316cebb3deaa3c3608f007))
+* **build:** add firebase deploy to gha action and modernize it ([d5cfa8d](https://github.com/agrc/plpco-videos/commit/d5cfa8dfc133ade6c120375479d6eea0e8227d4c)), closes [#35](https://github.com/agrc/plpco-videos/issues/35)
+* give smaller screens a better layout ([4eac330](https://github.com/agrc/plpco-videos/commit/4eac330d7c1a97d706af3778b32d39ff20da481d))
+* replace inline video with link on mobile ([07287b4](https://github.com/agrc/plpco-videos/commit/07287b442e9036b31b51669b7d372defeb7ec890))
+
+
+### 📖 Documentation Improvements
+
+* add note about deploy.bat ([3206f04](https://github.com/agrc/plpco-videos/commit/3206f045620dfa0a66cc4df26a6ae74e66ab8be8))
+* add required video fields ([2a96712](https://github.com/agrc/plpco-videos/commit/2a967123ea30e17767ba7b21ed3ef2a6e50f4247))
+
+
+### 🐛 Bug Fixes
+
+* add rewrite for serving up default index.html ([55392fc](https://github.com/agrc/plpco-videos/commit/55392fc67c774a664f80980d9824380b4251a245))
+* allow for fullscreen youtube video when hosted in firebase ([fe25a3e](https://github.com/agrc/plpco-videos/commit/fe25a3ec126028d0083320c649dfd6bb82de7373)), closes [#37](https://github.com/agrc/plpco-videos/issues/37)
+* **build:** checkout before calling local action ([a44a9ea](https://github.com/agrc/plpco-videos/commit/a44a9eab2053dfbe8a7a112c17d18a53751a0d5b))
+* **build:** fix base path for nested apps (internal and bellwether) ([288e435](https://github.com/agrc/plpco-videos/commit/288e435373ed165e9d53f727039cc8ce1b52e385)), closes [#36](https://github.com/agrc/plpco-videos/issues/36)
+* deploy-specific document titles ([a294852](https://github.com/agrc/plpco-videos/commit/a294852e4a4df258f8d9ab3af82ef35e444adab8))
+* hide video popout on mobile ([f51a73b](https://github.com/agrc/plpco-videos/commit/f51a73ba13229ad6bacda8ffe998bccacb41a169))
+* linting errors ([3d8971b](https://github.com/agrc/plpco-videos/commit/3d8971b12670b770db3783f5c08988e3f99c6e40))
+* load map on mobile even when it's not visible ([b273a69](https://github.com/agrc/plpco-videos/commit/b273a69554343e9305a5892d5de8a3a1afcf7c5f))
+* make colors more consistent ([d916942](https://github.com/agrc/plpco-videos/commit/d9169429f21bba9be4137b31472af67652fb5ef6)), closes [#13](https://github.com/agrc/plpco-videos/issues/13)
+* make sure that player is available for popout ([2399918](https://github.com/agrc/plpco-videos/commit/23999189289cfa239cc31fc83a097cdc361fcc02))
+* October dependency bumps 🌲 ([03cf4c5](https://github.com/agrc/plpco-videos/commit/03cf4c5e052764998c9eb752b40f26b6f5276b3c))
+* prevent blank initial load on mobile ([f7f48bb](https://github.com/agrc/plpco-videos/commit/f7f48bb33ddec237b45af1646eb73b7012fb2dc2))
+* punctuation ([643f9a6](https://github.com/agrc/plpco-videos/commit/643f9a681736af8be92edeeb66316a3cb7e93c19))
+* show map by default on mobile ([235b186](https://github.com/agrc/plpco-videos/commit/235b1868ece9f7b8ece8d206c1ec70c4e61f5ffe))
+* trigger deploy on changes to index.html ([70842b9](https://github.com/agrc/plpco-videos/commit/70842b915ad0ccd02914647e111a55a110e10950))
+
 ## [1.8.0](https://github.com/agrc/plpco-video-widget/compare/v1.6.0...v1.8.0) (2022-06-28)
 
 
