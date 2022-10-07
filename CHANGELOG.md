@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.9.1](https://github.com/agrc/plpco-videos/compare/v1.9.0...v1.9.1) (2022-10-07)
+
+
+### 🐛 Bug Fixes
+
+* **ci:** add repo-token input ([43e4b37](https://github.com/agrc/plpco-videos/commit/43e4b3733f7c43282da5048d2c1275c1208be23f))
+
 ## [1.9.0](https://github.com/agrc/plpco-videos/compare/v1.6.0...v1.9.0) (2022-10-06)
 
 
