@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.9.3](https://github.com/agrc/plpco-videos/compare/v1.9.2...v1.9.3) (2022-12-09)
+
+
+### 🐛 Bug Fixes
+
+* December dependency bumps 🌲 ([37eb3eb](https://github.com/agrc/plpco-videos/commit/37eb3eb15bf9d7e75f35571ce03cb7706e837bd4))
+
 ## [1.9.2](https://github.com/agrc/plpco-videos/compare/v1.9.1...v1.9.2) (2022-11-03)
 
 
