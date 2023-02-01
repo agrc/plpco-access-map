@@ -81,7 +81,7 @@
     "@storybook/builder-vite": "^0.2.6",
     "@storybook/react": "^6.5.15",
     "@vitejs/plugin-react": "^3.0.0",
-    "eslint-plugin-react": "^7.31.11",
+    "eslint-plugin-react": "^7.32.2",
     "eslint-plugin-react-hooks": "^4.6.0",
     "prettier": "^2.8.1",
     "prettier-plugin-organize-imports": "^3.2.1",
