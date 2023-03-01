@@ -71,7 +71,7 @@
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-fast-compare": "^3.2.0",
-    "reactstrap": "^9.1.5"
+    "reactstrap": "^9.1.6"
   },
   "devDependencies": {
     "@mdx-js/react": "^2.2.1",
