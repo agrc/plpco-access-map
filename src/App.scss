@@ -44,6 +44,9 @@ body,
     .esri-widget {
       background-color: #ffffffb0;
     }
+    .esri-view-surface:focus::after {
+      outline: none;
+    }
   }
   .sherlock button.disabled {
     background-color: $primaryColor;
