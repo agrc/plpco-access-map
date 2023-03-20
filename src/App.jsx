@@ -78,6 +78,15 @@ function App() {
       const view = new MapView({
         map: webMap,
         container: mapContainer.current,
+        extent: {
+          xmax: -11762120.612131765,
+          xmin: -13074391.513731329,
+          ymax: 5225035.106177688,
+          ymin: 4373832.359194187,
+          spatialReference: {
+            wkid: 3857,
+          },
+        },
       });
       view.popup = null;
 
