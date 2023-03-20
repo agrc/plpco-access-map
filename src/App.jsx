@@ -13,6 +13,7 @@ import './App.scss';
 import config from './config';
 import EndPointPhoto from './EndPointPhoto';
 import Feature from './Feature';
+import logo from './PLPCO_Logo_2022.jpeg';
 import { MapServiceProvider, Sherlock } from './Sherlock';
 import SidebarToggler from './SidebarToggler';
 import useIsMobile from './useIsMobile';
@@ -265,6 +266,9 @@ function App() {
   return (
     <div className="app">
       <div className={clsx('side-bar', sidebarOpen && 'open')}>
+        <a href="https://publiclands.utah.gov/public-lands/access-map-360/">
+          <img src={logo} alt="logo" className="logo" style={{ width: 'calc(275px / 2)' }} />
+        </a>
         <VideosContainer rdId={rdId} mapView={mapView} {...videoDataSources} />
         <EndPointPhoto
           oid={selectedEndPointFeature?.attributes[config.fieldNames.endPointPhotos.OBJECTID]}
