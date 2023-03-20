@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.10.0-1](https://github.com/agrc/plpco-access-map/compare/v1.10.0-0...v1.10.0-1) (2023-03-20)
+
+
+### 🐛 Bug Fixes
+
+* **style:** remove focus outline on map ([2211e42](https://github.com/agrc/plpco-access-map/commit/2211e4290406dd42a6929e69265d2a4b661c274e))
+
 ## [1.10.0-0](https://github.com/agrc/plpco-access-map/compare/v1.9.5...v1.10.0-0) (2023-03-20)
 
 
