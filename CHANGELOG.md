@@ -2,6 +2,26 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.10.0-0](https://github.com/agrc/plpco-access-map/compare/v1.9.5...v1.10.0-0) (2023-03-20)
+
+
+### 🚀 Features
+
+* add new PLPCO logo with link to access map landing page ([e031c20](https://github.com/agrc/plpco-access-map/commit/e031c202ddb337fe862487b921f4220b31bf764e)), closes [#113](https://github.com/agrc/plpco-access-map/issues/113)
+
+
+### 📖 Documentation Improvements
+
+* update URLs ([26564cc](https://github.com/agrc/plpco-access-map/commit/26564cc9e44f3c7976d7a209d6d82e7c17acd7b1))
+
+
+### 🐛 Bug Fixes
+
+* bump deps 🌲 ([857fa07](https://github.com/agrc/plpco-access-map/commit/857fa07fdc911d494cce409b807fc3d19e0e4d91))
+* force map to open at statewide extent ([b19dd2a](https://github.com/agrc/plpco-access-map/commit/b19dd2aa39ec8197aeb44b8f6d2b3604570343bc)), closes [#114](https://github.com/agrc/plpco-access-map/issues/114)
+* remove jquery ([cf11dde](https://github.com/agrc/plpco-access-map/commit/cf11dde5571d679862598c8a4604cdb015956741))
+* update favicon ([6dc2738](https://github.com/agrc/plpco-access-map/commit/6dc273872d2c9c2aad4423450cd247f11f8e7c75)), closes [#115](https://github.com/agrc/plpco-access-map/issues/115)
+
 ## [1.9.5](https://github.com/agrc/plpco-videos/compare/v1.9.4...v1.9.5) (2023-02-07)
 
 
