@@ -61,7 +61,7 @@
     "bootstrap": "^5.2.3",
     "clsx": "^1.2.1",
     "downshift": "^7.6.0",
-    "eslint-config-prettier": "^8.7.0",
+    "eslint-config-prettier": "^8.8.0",
     "lodash.escaperegexp": "^4.1.2",
     "lodash.sortby": "^4.7.0",
     "lodash.uniqwith": "^4.5.0",
