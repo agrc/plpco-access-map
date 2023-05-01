@@ -76,7 +76,7 @@
     "@mdx-js/react": "^2.3.0",
     "@storybook/addon-actions": "^7.0.2",
     "@storybook/addon-essentials": "^7.0.2",
-    "@storybook/addon-links": "^7.0.2",
+    "@storybook/addon-links": "^7.0.7",
     "@storybook/builder-vite": "^7.0.2",
     "@storybook/react": "^7.0.2",
     "@vitejs/plugin-react": "^3.1.0",
