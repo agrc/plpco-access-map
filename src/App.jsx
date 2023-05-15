@@ -137,7 +137,7 @@ function App() {
 
           if (selectedGraphic.layer.title === ROADS_LAYER_NAME) {
             setSelectedRoadFeature(selectedGraphic);
-          } else {
+          } else if (selectedGraphic.layer.title === END_POINTS_LAYER_NAME) {
             setSelectedEndPointFeature(selectedGraphic);
           }
         }
