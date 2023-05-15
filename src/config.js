@@ -1,6 +1,6 @@
 const deployConfigs = {
   VIEWER: {
-    webMapId: '45e7f29dfe474cfbab419feacd99ddd5',
+    appTitle: 'Access Map',
     showRelatedRecords: false,
     showEndPointPhotos: false,
     fieldNames: {
@@ -23,7 +23,7 @@ const deployConfigs = {
     },
   },
   INTERNAL: {
-    webMapId: 'ef84ebe3975d4431b0821f2feda538ad',
+    appTitle: 'Access Map (Internal)',
     showRelatedRecords: true,
     showEndPointPhotos: true,
     fieldNames: {
@@ -46,7 +46,7 @@ const deployConfigs = {
     },
   },
   BELLWETHER: {
-    webMapId: '2eaf07b9fc8e44a0a2f0b3f9ce982bdb',
+    appTitle: 'Access Map (Bellwether)',
     showRelatedRecords: false,
     showEndPointPhotos: false,
     fieldNames: {
@@ -71,6 +71,7 @@ const deployConfigs = {
 };
 
 const defaultConfigs = {
+  webMapId: import.meta.env.VITE_APP_MAP_ID,
   maxMobileWidth: 600,
 };
 

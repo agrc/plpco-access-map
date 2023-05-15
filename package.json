@@ -4,7 +4,8 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "build": "vite build --mode viewer && vite build --mode internal --outDir dist/internal --base /internal/ && vite build --mode bellwether --outDir dist/bellwether --base /bellwether/",
+    "build:prod": "vite build --mode viewer_prod && vite build --mode internal_prod --outDir dist/internal --base /internal/ && vite build --mode bellwether_prod --outDir dist/bellwether --base /bellwether/",
+    "build:stage": "vite build --mode viewer_stage && vite build --mode internal_stage --outDir dist/internal --base /internal/ && vite build --mode bellwether_stage --outDir dist/bellwether --base /bellwether/",
     "format": "prettier --write .",
     "lint": "eslint ./src",
     "preview": "vite preview",
