@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.11.0](https://github.com/agrc/plpco-access-map/compare/v1.10.1...v1.11.0) (2023-05-15)
+
+
+### 🚀 Features
+
+* add error boundary ([5082a51](https://github.com/agrc/plpco-access-map/commit/5082a51781aa6728f59fa8468e2ba785f55f5e68))
+
+
+### 🐛 Bug Fixes
+
+* add support for staging/test web map ids ([ab51398](https://github.com/agrc/plpco-access-map/commit/ab513984624c617a3079c65b46b9aadf017d56bb))
+* bump dependencies 🌲 ([0efa1ed](https://github.com/agrc/plpco-access-map/commit/0efa1ed37f62f66fa934f51c1213ebfde83ff854))
+* handle additional reference layers in map ([653c0be](https://github.com/agrc/plpco-access-map/commit/653c0beb14b67bc5da1e90e1b63ed4165c07957b)), closes [#135](https://github.com/agrc/plpco-access-map/issues/135)
+
 ## [1.11.0-0](https://github.com/agrc/plpco-access-map/compare/v1.10.1...v1.11.0-0) (2023-05-15)
 
 
