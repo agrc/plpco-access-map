@@ -5,6 +5,7 @@ import PropTypes from 'prop-types';
 import { createRoot } from 'react-dom/client';
 import { ErrorBoundary } from 'react-error-boundary';
 import App from './App';
+import config from './config';
 
 function ErrorFallback({ error }) {
   return (
@@ -41,7 +42,7 @@ ErrorFallback.propTypes = {
   error: PropTypes.object,
 };
 
-document.title = import.meta.env.VITE_APP_TITLE;
+document.title = config.appTitle;
 createRoot(document.getElementById('root')).render(
   <ErrorBoundary FallbackComponent={ErrorFallback}>
     <App />
