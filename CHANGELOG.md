@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.12.0](https://github.com/agrc/plpco-access-map/compare/v1.11.0...v1.12.0) (2023-10-09)
+
+
+### 🚀 Features
+
+* implement new ga4 analytics tag ([81dd0b2](https://github.com/agrc/plpco-access-map/commit/81dd0b2af8645f6fa7eaa19e69bed5149525cb9b))
+
 ## [1.11.0](https://github.com/agrc/plpco-access-map/compare/v1.10.1...v1.11.0) (2023-05-15)
 
 
