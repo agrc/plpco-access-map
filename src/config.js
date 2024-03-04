@@ -73,6 +73,7 @@ const deployConfigs = {
 const defaultConfigs = {
   webMapId: import.meta.env.VITE_APP_MAP_ID,
   maxMobileWidth: 600,
+  autoZoomScaleThreshold: 72223.82209,
 };
 
 // DEV is set when running `npm start`

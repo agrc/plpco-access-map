@@ -97,13 +97,17 @@ const Video = ({ GPS_Track_ID, Date_Time, URL, pointsLayer, mapView, testWarning
               setAngleOfSegment(90 - (Math.atan2(yDiff, xDiff) * 180) / Math.PI);
             }
 
-            mapView.goTo(position);
+            if (mapView.scale > config.autoZoomScaleThreshold) {
+              mapView.goTo({ target: position, scale: config.autoZoomScaleThreshold });
+            } else {
+              mapView.goTo(position);
+            }
             graphic.current.geometry = position;
           }
         }, 1000);
       }
     },
-    [mapView, updateVideoAngle]
+    [mapView, updateVideoAngle],
   );
 
   React.useEffect(() => {
@@ -159,7 +163,7 @@ const Video = ({ GPS_Track_ID, Date_Time, URL, pointsLayer, mapView, testWarning
 
         if (results.exceededTransferLimit) {
           return results.features.concat(
-            await queryForPoints(start + results.features.length + 1, results.features.length)
+            await queryForPoints(start + results.features.length + 1, results.features.length),
           );
         }
 
