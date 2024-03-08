@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.13.0](https://github.com/agrc/plpco-access-map/compare/v1.12.0...v1.13.0) (2024-03-08)
+
+
+### 🌲 Dependencies
+
+* bump the safe-dependencies group with 1 update ([33d0133](https://github.com/agrc/plpco-access-map/commit/33d0133e8d8be69482acd1ae35542a4fd9e4c103))
+* **dev:** bump @babel/traverse from 7.23.0 to 7.23.2 ([60a114d](https://github.com/agrc/plpco-access-map/commit/60a114db1deff8c594e721f4b517a8d59e30f1b9))
+
 ## [1.12.0](https://github.com/agrc/plpco-access-map/compare/v1.11.0...v1.12.0) (2023-10-09)
 
 
