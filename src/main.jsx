@@ -7,6 +7,8 @@ import { ErrorBoundary } from 'react-error-boundary';
 import App from './App';
 import config from './config';
 
+console.log(`App version: ${import.meta.env.DEV ? 'dev' : window.APP_VERSION}`);
+
 function ErrorFallback({ error }) {
   return (
     <div className="w-100 h-100 d-flex justify-content-center align-items-center">
@@ -46,5 +48,5 @@ document.title = config.appTitle;
 createRoot(document.getElementById('root')).render(
   <ErrorBoundary FallbackComponent={ErrorFallback}>
     <App />
-  </ErrorBoundary>
+  </ErrorBoundary>,
 );
