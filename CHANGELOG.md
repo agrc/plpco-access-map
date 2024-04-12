@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.13.1-0](https://github.com/agrc/plpco-access-map/compare/v1.13.0...v1.13.1-0) (2024-04-12)
+
+
+### 🐛 Bug Fixes
+
+* bump deps for Q4 🌲 ([403967d](https://github.com/agrc/plpco-access-map/commit/403967d7a0a3a4b32a44e813c3f8ec678e532bbe))
+
+
+### 🌲 Dependencies
+
+* bump tar from 6.2.0 to 6.2.1 ([1cbc947](https://github.com/agrc/plpco-access-map/commit/1cbc9476a241192933edbe6e9b017c88723881ad))
+* **dev:** bump express from 4.18.1 to 4.19.2 ([757bc2c](https://github.com/agrc/plpco-access-map/commit/757bc2c14be332a4dbf5ccae7c2d7210b620f448))
+* **dev:** bump vite from 5.1.4 to 5.1.7 ([337be75](https://github.com/agrc/plpco-access-map/commit/337be752fa0b62423ffd41fa5f04ba4ce58d924a))
+
 ## [1.13.0](https://github.com/agrc/plpco-access-map/compare/v1.12.0...v1.13.0) (2024-03-08)
 
 
