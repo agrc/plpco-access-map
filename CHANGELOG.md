@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.13.2](https://github.com/agrc/plpco-access-map/compare/v1.13.1...v1.13.2) (2024-07-05)
+
+
+### Dependencies
+
+* bump the safe-dependencies group across 1 directory with 19 updates ([c3a2ddb](https://github.com/agrc/plpco-access-map/commit/c3a2ddba2389c699ca8e55efe84a9d04834afb03))
+* **dev:** bump braces from 3.0.2 to 3.0.3 ([2a5b7b6](https://github.com/agrc/plpco-access-map/commit/2a5b7b60cf0b58179ba94ff9ea6a9a581e42860e))
+
 ## [1.13.1](https://github.com/agrc/plpco-access-map/compare/v1.13.0...v1.13.1) (2024-04-12)
 
 
