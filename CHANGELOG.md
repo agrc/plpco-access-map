@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.13.3](https://github.com/agrc/plpco-access-map/compare/v1.13.2...v1.13.3) (2024-08-08)
+
+
+### Bug Fixes
+
+* use new value for attribute style for web api ([2e243e5](https://github.com/agrc/plpco-access-map/commit/2e243e51364e1eea833a559a68e4fbc86eac1eb7))
+
 ## [1.13.2](https://github.com/agrc/plpco-access-map/compare/v1.13.1...v1.13.2) (2024-07-05)
 
 
