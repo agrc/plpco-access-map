@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.13.4](https://github.com/agrc/plpco-access-map/compare/v1.13.3...v1.13.4) (2024-10-03)
+
+
+### Dependencies
+
+* FY25Q2 dependency updates 🌲 ([3c48501](https://github.com/agrc/plpco-access-map/commit/3c485017ce56f1dc9ab66e656f9c2b3f2aeba103))
+
 ## [1.13.3](https://github.com/agrc/plpco-access-map/compare/v1.13.2...v1.13.3) (2024-08-08)
 
 
