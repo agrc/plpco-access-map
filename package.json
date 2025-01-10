@@ -34,30 +34,6 @@
       "prettier-plugin-packagejson"
     ]
   },
-  "eslintConfig": {
-    "env": {
-      "browser": true
-    },
-    "parserOptions": {
-      "ecmaVersion": "latest",
-      "sourceType": "module"
-    },
-    "settings": {
-      "react": {
-        "version": "detect"
-      }
-    },
-    "extends": [
-      "eslint:recommended",
-      "prettier",
-      "plugin:react/recommended",
-      "plugin:react/jsx-runtime",
-      "plugin:react-hooks/recommended"
-    ],
-    "ignorePatterns": [
-      "dist/**"
-    ]
-  },
   "dependencies": {
     "@arcgis/core": "^4.31.6",
     "@fortawesome/free-solid-svg-icons": "^6.7.2",
@@ -79,6 +55,9 @@
     "reactstrap": "^9.2.3"
   },
   "devDependencies": {
+    "@eslint/compat": "^1.2.4",
+    "@eslint/eslintrc": "^3.2.0",
+    "@eslint/js": "^9.17.0",
     "@storybook/addon-actions": "^8.4.7",
     "@storybook/addon-essentials": "^8.4.7",
     "@storybook/addon-links": "^8.4.7",
@@ -87,6 +66,7 @@
     "@vitejs/plugin-react": "^4.3.4",
     "eslint-plugin-react": "^7.37.3",
     "eslint-plugin-react-hooks": "^5.1.0",
+    "globals": "^15.14.0",
     "prettier": "^3.4.2",
     "prettier-plugin-organize-imports": "^4.1.0",
     "prettier-plugin-packagejson": "^2.5.6",
