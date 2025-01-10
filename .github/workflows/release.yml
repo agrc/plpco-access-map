@@ -24,7 +24,7 @@ jobs:
           identity-provider: ${{ secrets.IDENTITY_PROVIDER }}
           service-account-email: ${{ secrets.SERVICE_ACCOUNT_EMAIL }}
           project-id: ${{ secrets.PROJECT_ID }}
-          build-command: npm run build:stage
+          build-command: pnpm run build:stage
 
   deploy-prod:
     name: Deploy to production
@@ -41,7 +41,7 @@ jobs:
           identity-provider: ${{ secrets.IDENTITY_PROVIDER }}
           service-account-email: ${{ secrets.SERVICE_ACCOUNT_EMAIL }}
           project-id: ${{ secrets.PROJECT_ID }}
-          build-command: npm run build:prod
+          build-command: pnpm run build:prod
           service-now-instance: ${{ secrets.SN_INSTANCE }}
           service-now-table: ${{ secrets.SN_TABLE }}
           service-now-system-id: ${{ secrets.SN_SYS_ID }}
