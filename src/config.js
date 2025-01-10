@@ -75,7 +75,7 @@ const defaultConfigs = {
   maxMobileWidth: 600,
 };
 
-// DEV is set when running `npm start`
+// DEV is set when running `pnpm start`
 deployConfigs.DEV = deployConfigs.VIEWER;
 
 if (!import.meta.env.VITE_APP_DEPLOY) {
