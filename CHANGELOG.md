@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.13.5-0](https://github.com/agrc/plpco-access-map/compare/v1.13.4...v1.13.5-0) (2025-01-10)
+
+
+### Dependencies
+
+* FY25 Q3 dependency bumps 🌲 & npm -&gt; pnpm ([e06852f](https://github.com/agrc/plpco-access-map/commit/e06852f242eeb00ca550bb62d5be23e34b00520a))
+
 ## [1.13.4](https://github.com/agrc/plpco-access-map/compare/v1.13.3...v1.13.4) (2024-10-03)
 
 
