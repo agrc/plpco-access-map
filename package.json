@@ -7,7 +7,7 @@
     "build:prod": "vite build --mode viewer_prod && vite build --mode internal_prod --outDir dist/internal --base /internal/ && vite build --mode bellwether_prod --outDir dist/bellwether --base /bellwether/",
     "build:stage": "vite build --mode viewer_stage && vite build --mode internal_stage --outDir dist/internal --base /internal/ && vite build --mode bellwether_stage --outDir dist/bellwether --base /bellwether/",
     "format": "prettier --write .",
-    "lint": "eslint ./src",
+    "lint": "eslint . --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview",
     "release": "standard-version",
     "start": "vite",
@@ -27,12 +27,12 @@
     ]
   },
   "prettier": {
-    "printWidth": 120,
-    "singleQuote": true,
     "plugins": [
       "prettier-plugin-organize-imports",
       "prettier-plugin-packagejson"
-    ]
+    ],
+    "printWidth": 120,
+    "singleQuote": true
   },
   "dependencies": {
     "@arcgis/core": "^4.31.6",
@@ -42,7 +42,6 @@
     "bootstrap": "^5.3.3",
     "clsx": "^2.1.1",
     "downshift": "^9.0.8",
-    "eslint-config-prettier": "^9.1.0",
     "lodash.escaperegexp": "^4.1.2",
     "lodash.sortby": "^4.7.0",
     "lodash.uniqwith": "^4.5.0",
@@ -54,17 +53,14 @@
     "reactstrap": "^9.2.3"
   },
   "devDependencies": {
-    "@eslint/compat": "^1.2.4",
-    "@eslint/eslintrc": "^3.2.0",
-    "@eslint/js": "^9.17.0",
     "@storybook/addon-actions": "^8.4.7",
     "@storybook/addon-essentials": "^8.4.7",
     "@storybook/addon-links": "^8.4.7",
     "@storybook/react": "^8.4.7",
     "@storybook/react-vite": "^8.4.7",
+    "@ugrc/eslint-config": "^1.2.2",
     "@vitejs/plugin-react": "^4.3.4",
-    "eslint-plugin-react": "^7.37.3",
-    "eslint-plugin-react-hooks": "^5.1.0",
+    "eslint": "^9.27.0",
     "globals": "^15.14.0",
     "prettier": "^3.4.2",
     "prettier-plugin-organize-imports": "^4.1.0",
