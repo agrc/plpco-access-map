@@ -71,7 +71,7 @@ export function Sherlock({
           geometry: feature.geometry,
           attributes: feature.attributes,
           symbol: symbols[feature.geometry.type],
-        })
+        }),
     );
 
     onSherlockMatch(graphics);
@@ -128,8 +128,8 @@ export function Sherlock({
                         let items = data.map((item, index) => (
                           // eslint-disable-next-line react/jsx-key
                           <li
+                            key={index}
                             {...getItemProps({
-                              key: index,
                               className:
                                 'sherlock__match-item' +
                                 (highlightedIndex === index ? ' sherlock__match-item--selected' : ''),
@@ -149,7 +149,7 @@ export function Sherlock({
                           items.push(
                             <li key="too-many" className="sherlock__match-item alert-primary text-center" disabled>
                               More than {maxResultsToDisplay} items found.
-                            </li>
+                            </li>,
                           );
                         }
 
