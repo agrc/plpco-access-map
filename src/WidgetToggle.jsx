@@ -1,6 +1,7 @@
 import { faListUl, faTimes } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import clsx from 'clsx';
+import PropTypes from 'prop-types';
 import * as React from 'react';
 import './WidgetToggle.scss';
 
@@ -26,6 +27,12 @@ const WidgetToggle = ({ widget }) => {
       <div ref={containerRef}></div>
     </div>
   );
+};
+
+WidgetToggle.propTypes = {
+  widget: PropTypes.shape({
+    container: PropTypes.object.isRequired
+  }).isRequired
 };
 
 export default WidgetToggle;

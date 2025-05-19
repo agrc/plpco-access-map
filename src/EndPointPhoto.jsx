@@ -1,4 +1,5 @@
 import * as React from 'react';
+import PropTypes from 'prop-types';
 import './EndPointPhoto.scss';
 
 const EndPointPhoto = ({ oid, featureLayer }) => {
@@ -57,6 +58,13 @@ const EndPointPhoto = ({ oid, featureLayer }) => {
   }
 
   return null;
+};
+
+EndPointPhoto.propTypes = {
+  oid: PropTypes.number,
+  featureLayer: PropTypes.shape({
+    queryAttachments: PropTypes.func.isRequired
+  })
 };
 
 export default EndPointPhoto;
