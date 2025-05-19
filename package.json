@@ -53,11 +53,11 @@
     "reactstrap": "^9.2.3"
   },
   "devDependencies": {
-    "@storybook/addon-actions": "^8.4.7",
-    "@storybook/addon-essentials": "^8.4.7",
-    "@storybook/addon-links": "^8.4.7",
-    "@storybook/react": "^8.4.7",
-    "@storybook/react-vite": "^8.4.7",
+    "@storybook/addon-actions": "^8.6.14",
+    "@storybook/addon-essentials": "^8.6.14",
+    "@storybook/addon-links": "^8.6.14",
+    "@storybook/react": "^8.6.14",
+    "@storybook/react-vite": "^8.6.14",
     "@ugrc/eslint-config": "^1.2.2",
     "@vitejs/plugin-react": "^4.3.4",
     "eslint": "^9.27.0",
@@ -67,7 +67,7 @@
     "prettier-plugin-packagejson": "^2.5.6",
     "prop-types": "^15.8.1",
     "sass": "^1.83.1",
-    "storybook": "^8.4.7",
+    "storybook": "^8.6.14",
     "vite": "^6.0.7",
     "vitest": "^2.1.8"
   }
