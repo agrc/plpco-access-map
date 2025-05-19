@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.13.6-1](https://github.com/agrc/plpco-access-map/compare/v1.13.5...v1.13.6-1) (2025-05-19)
+
+
+### Dependencies
+
+* bump npm dependencies 🌲 ([6ba5296](https://github.com/agrc/plpco-access-map/commit/6ba52961c18118ffa6f5faad7a7292446b90396a))
+* bump storybook to latest ([0d55ec2](https://github.com/agrc/plpco-access-map/commit/0d55ec213941688de5a43cdbc7cd21bbf22f77f5))
+
 ## [1.13.6-0](https://github.com/agrc/plpco-access-map/compare/v1.13.5...v1.13.6-0) (2025-05-19)
 
 
