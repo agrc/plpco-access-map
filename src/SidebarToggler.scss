@@ -1,4 +1,4 @@
-@import 'variables';
+@use 'variables';
 
 .side-bar-toggler.btn {
   position: absolute;
@@ -8,20 +8,20 @@
   border-bottom-left-radius: 0;
   border-top-left-radius: 0;
   border-top-right-radius: 0;
-  background-color: $primaryColor !important;
-  border-color: $primaryColor !important;
+  background-color: variables.$primaryColor !important;
+  border-color: variables.$primaryColor !important;
   &:focus {
     box-shadow: none !important;
   }
   &.open {
-    @media (max-width: $smallScreenWidth) {
+    left: variables.$sideBarWidth - 1px;
+    @media (max-width: variables.$smallScreenWidth) {
       right: 0;
       left: auto;
       border-bottom-right-radius: 0;
       border-bottom-left-radius: 0.25rem;
       z-index: 2;
     }
-    left: $sideBarWidth - 1px;
   }
   svg {
     height: 1.4em;

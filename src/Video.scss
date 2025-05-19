@@ -1,4 +1,4 @@
-@import 'variables';
+@use 'variables';
 
 .video {
   .header {
@@ -15,7 +15,7 @@
   a.btn {
     display: block;
     margin: 1rem;
-    background-color: $primaryColor;
-    border-color: $primaryColor;
+    background-color: variables.$primaryColor;
+    border-color: variables.$primaryColor;
   }
 }
