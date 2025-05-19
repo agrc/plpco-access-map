@@ -1,4 +1,5 @@
 import EsriFeature from '@arcgis/core/widgets/Feature';
+import PropTypes from 'prop-types';
 import React from 'react';
 import './Feature.scss';
 
@@ -17,6 +18,13 @@ const RelatedRecord = ({ feature, table }) => {
   }, [feature, table]);
 
   return <div ref={container}></div>;
+};
+
+RelatedRecord.propTypes = {
+  feature: PropTypes.object.isRequired,
+  table: PropTypes.shape({
+    popupTemplate: PropTypes.object.isRequired,
+  }).isRequired,
 };
 
 const RelatedRecordContainer = ({ relatedRecordInfo }) => {
@@ -62,13 +70,29 @@ const RelatedRecordContainer = ({ relatedRecordInfo }) => {
         )}
         {`${relatedRecordInfo.name} (${relatedRecordInfo.features.length} record(s))`}
       </button>
-      <div ref={container} id={containerId} className={isOpen ? 'collapse show' : 'collapse'}>
-        {relatedRecordInfo.features.map((feature, index) => (
-          <RelatedRecord feature={feature} table={relatedRecordInfo.table} key={index} />
-        ))}
+      <div
+        ref={container}
+        id={containerId}
+        className={isOpen ? 'collapse show' : 'collapse'}
+        aria-labelledby="headingOne"
+        data-parent="#relatedRecordContainer"
+      >
+        <div className="card-body">
+          {relatedRecordInfo.features.map((feature, index) => (
+            <RelatedRecord key={index} feature={feature} table={relatedRecordInfo.table} />
+          ))}
+        </div>
       </div>
     </div>
   );
+};
+
+RelatedRecordContainer.propTypes = {
+  relatedRecordInfo: PropTypes.shape({
+    name: PropTypes.string.isRequired,
+    features: PropTypes.arrayOf(PropTypes.object).isRequired,
+    table: PropTypes.object.isRequired,
+  }).isRequired,
 };
 
 const emptyGraphic = {
@@ -121,6 +145,19 @@ const Feature = ({ feature, mapView, relatedRecords }) => {
       ) : null}
     </div>
   );
+};
+
+Feature.propTypes = {
+  feature: PropTypes.object,
+  mapView: PropTypes.shape({
+    map: PropTypes.object.isRequired,
+    spatialReference: PropTypes.object.isRequired,
+  }),
+  relatedRecords: PropTypes.arrayOf(
+    PropTypes.shape({
+      map: PropTypes.func.isRequired,
+    }),
+  ),
 };
 
 export default Feature;

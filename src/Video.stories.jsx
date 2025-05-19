@@ -1,7 +1,6 @@
 import Video from './Video';
 import './VideosContainer.scss';
 
-// eslint-disable-next-line import/no-anonymous-default-export
 export default {
   title: 'Video',
   component: Video,

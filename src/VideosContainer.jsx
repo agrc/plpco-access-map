@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import config from './config';
 import Video from './Video';
 import './VideosContainer.scss';
@@ -26,7 +27,7 @@ const VideosContainer = ({ rdId, mapView, table, points }) => {
     } else {
       setVideos([]);
     }
-  }, [rdId]);
+  }, [rdId, table]);
 
   return (
     <div className="videos-container">
@@ -39,6 +40,15 @@ const VideosContainer = ({ rdId, mapView, table, points }) => {
       ) : null}
     </div>
   );
+};
+
+VideosContainer.propTypes = {
+  rdId: PropTypes.string,
+  mapView: PropTypes.object,
+  table: PropTypes.shape({
+    queryFeatures: PropTypes.func.isRequired
+  }),
+  points: PropTypes.object
 };
 
 export default VideosContainer;

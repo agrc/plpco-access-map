@@ -1,7 +1,9 @@
-const { mergeConfig } = require('vite');
+// @ts-check
+import { mergeConfig } from 'vite';
 
-module.exports = {
-  async viteFinal(config, { configType }) {
+/** @type {import('@storybook/react-vite').StorybookConfig} */
+export default {
+  async viteFinal(config) {
     return mergeConfig(config, {});
   },
 
@@ -15,8 +17,8 @@ module.exports = {
 
   framework: {
     name: '@storybook/react-vite',
-    options: {}
+    options: {},
   },
 
-  docs: {}
+  docs: {},
 };

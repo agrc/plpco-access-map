@@ -126,7 +126,6 @@ export function Sherlock({
                         }
 
                         let items = data.map((item, index) => (
-                          // eslint-disable-next-line react/jsx-key
                           <li
                             key={index}
                             {...getItemProps({
@@ -517,3 +516,18 @@ class WebApi {
     };
   }
 }
+
+Sherlock.propTypes = {
+  symbols: PropTypes.object,
+  provider: PropTypes.object.isRequired,
+  onSherlockMatch: PropTypes.func,
+  label: PropTypes.string,
+  placeHolder: PropTypes.string,
+  maxResultsToDisplay: PropTypes.number,
+  mapView: PropTypes.shape({
+    ui: PropTypes.shape({
+      add: PropTypes.func.isRequired,
+    }).isRequired,
+  }).isRequired,
+  position: PropTypes.string.isRequired,
+};

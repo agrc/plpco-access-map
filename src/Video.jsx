@@ -1,6 +1,7 @@
 /* global YT */
 import Graphic from '@arcgis/core/Graphic';
 import GraphicsLayer from '@arcgis/core/layers/GraphicsLayer';
+import PropTypes from 'prop-types';
 import React from 'react';
 import config from './config';
 import markerUrl from './marker.svg';
@@ -103,7 +104,7 @@ const Video = ({ GPS_Track_ID, Date_Time, URL, pointsLayer, mapView, testWarning
         }, 1000);
       }
     },
-    [mapView, updateVideoAngle]
+    [mapView, updateVideoAngle],
   );
 
   React.useEffect(() => {
@@ -127,7 +128,7 @@ const Video = ({ GPS_Track_ID, Date_Time, URL, pointsLayer, mapView, testWarning
       let videoId;
       try {
         videoId = getIDFromUrl(URL);
-      } catch (e) {
+      } catch {
         setErrorMessage(`Invalid Video URL: ${URL}`);
 
         return;
@@ -159,7 +160,7 @@ const Video = ({ GPS_Track_ID, Date_Time, URL, pointsLayer, mapView, testWarning
 
         if (results.exceededTransferLimit) {
           return results.features.concat(
-            await queryForPoints(start + results.features.length + 1, results.features.length)
+            await queryForPoints(start + results.features.length + 1, results.features.length),
           );
         }
 
@@ -293,6 +294,24 @@ const Video = ({ GPS_Track_ID, Date_Time, URL, pointsLayer, mapView, testWarning
       {warningMessage ? <div className="alert alert-warning">{warningMessage}</div> : null}
     </div>
   );
+};
+
+Video.propTypes = {
+  GPS_Track_ID: PropTypes.string,
+  Date_Time: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+  URL: PropTypes.string,
+  pointsLayer: PropTypes.shape({
+    queryFeatures: PropTypes.func.isRequired,
+  }),
+  mapView: PropTypes.shape({
+    goTo: PropTypes.func.isRequired,
+    map: PropTypes.shape({
+      add: PropTypes.func.isRequired,
+      remove: PropTypes.func.isRequired,
+    }).isRequired,
+    spatialReference: PropTypes.object.isRequired,
+  }),
+  testWarningMessage: PropTypes.string,
 };
 
 export default Video;
