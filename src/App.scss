@@ -1,4 +1,4 @@
-@import 'variables';
+@use 'variables';
 
 html,
 body,
@@ -10,7 +10,7 @@ body,
 }
 .app {
   display: flex;
-  @media (max-width: $smallScreenWidth) {
+  @media (max-width: variables.$smallScreenWidth) {
     display: block;
   }
   .side-bar {
@@ -22,9 +22,9 @@ body,
     overflow-y: auto;
     width: 0;
     &.open {
-      width: $sideBarWidth;
+      width: variables.$sideBarWidth;
     }
-    @media (max-width: $smallScreenWidth) {
+    @media (max-width: variables.$smallScreenWidth) {
       &.open {
         width: 100%;
       }
@@ -35,7 +35,7 @@ body,
   }
   .esri-view {
     flex: 1;
-    @media (max-width: $smallScreenWidth) {
+    @media (max-width: variables.$smallScreenWidth) {
       position: absolute;
       height: 100%;
       width: 100%;
@@ -49,7 +49,7 @@ body,
     }
   }
   .sherlock button.disabled {
-    background-color: $primaryColor;
-    border-color: $primaryColor;
+    background-color: variables.$primaryColor;
+    border-color: variables.$primaryColor;
   }
 }
