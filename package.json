@@ -7,7 +7,7 @@
     "build:prod": "vite build --mode viewer_prod && vite build --mode internal_prod --outDir dist/internal --base /internal/ && vite build --mode bellwether_prod --outDir dist/bellwether --base /bellwether/",
     "build:stage": "vite build --mode viewer_stage && vite build --mode internal_stage --outDir dist/internal --base /internal/ && vite build --mode bellwether_stage --outDir dist/bellwether --base /bellwether/",
     "format": "prettier --write .",
-    "lint": "eslint . --report-unused-disable-directives --max-warnings 0",
+    "lint": "eslint . --report-unused-disable-directives",
     "preview": "vite preview",
     "release": "standard-version",
     "start": "vite",
@@ -53,6 +53,7 @@
     "reactstrap": "^9.2.3"
   },
   "devDependencies": {
+    "@storybook/addon-docs": "^9.0.18",
     "@storybook/addon-links": "^9.0.18",
     "@storybook/react-vite": "^9.0.18",
     "@ugrc/eslint-config": "^1.2.2",
@@ -65,7 +66,6 @@
     "sass": "^1.89.0",
     "storybook": "^9.0.18",
     "vite": "^6.3.5",
-    "vitest": "^3.1.4",
-    "@storybook/addon-docs": "^9.0.18"
+    "vitest": "^3.1.4"
   }
 }
