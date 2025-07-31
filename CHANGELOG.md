@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.13.7](https://github.com/agrc/plpco-access-map/compare/v1.13.6...v1.13.7) (2025-07-31)
+
+
+### Dependencies
+
+* bump the npm_and_yarn group across 1 directory with 2 updates ([42ce6dc](https://github.com/agrc/plpco-access-map/commit/42ce6dc0759d32e346102e718e9199f0135e394a))
+* bump the safe-dependencies group with 12 updates ([4197ce6](https://github.com/agrc/plpco-access-map/commit/4197ce68ec8d5761a85a9d4b3ae6b12d91f60e63))
+
 ## [1.13.6](https://github.com/agrc/plpco-access-map/compare/v1.13.5...v1.13.6) (2025-05-19)
 
 
