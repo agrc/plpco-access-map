@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.13.8](https://github.com/agrc/plpco-access-map/compare/v1.13.7...v1.13.8) (2025-08-01)
+
+
+### Dependencies
+
+* bump the safe-dependencies group with 2 updates ([2a4d2b9](https://github.com/agrc/plpco-access-map/commit/2a4d2b9481c04ec1bb0d73d43593780ad16a3041))
+
 ## [1.13.7](https://github.com/agrc/plpco-access-map/compare/v1.13.6...v1.13.7) (2025-07-31)
 
 
