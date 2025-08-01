@@ -9,8 +9,8 @@ importers:
   .:
     dependencies:
       '@arcgis/core':
-        specifier: ^4.33.9
-        version: 4.33.9
+        specifier: ^4.33.10
+        version: 4.33.10
       '@fortawesome/free-solid-svg-icons':
         specifier: ^6.7.2
         version: 6.7.2
@@ -70,8 +70,8 @@ importers:
         specifier: ^1.2.3
         version: 1.2.3(@typescript-eslint/parser@8.38.0(eslint@9.31.0)(typescript@5.7.3))(eslint@9.31.0)(storybook@9.0.18(@testing-library/dom@10.4.1)(prettier@3.6.2))(typescript@5.7.3)
       '@vitejs/plugin-react':
-        specifier: ^4.6.0
-        version: 4.6.0(vite@6.3.5(sass@1.89.2))
+        specifier: ^4.7.0
+        version: 4.7.0(vite@6.3.5(sass@1.89.2))
       eslint:
         specifier: ^9.31.0
         version: 9.31.0
@@ -109,14 +109,14 @@ packages:
     resolution: {integrity: sha512-30iZtAPgz+LTIYoeivqYo853f02jBYSd5uGnGpkFV0M3xOt9aN73erkgYAmZU43x4VfqcnLxW9Kpg3R5LC4YYw==}
     engines: {node: '>=6.0.0'}
 
-  '@arcgis/components-utils@4.33.12':
-    resolution: {integrity: sha512-B3cISRLbWEfTTYyjwLR5M5CT38fq6EerAeV8h+nYZMu7Zijy8rWrFLpDXGmDu9eD+KaWZG74Zq065UQv3nhWtg==}
+  '@arcgis/components-utils@4.33.13':
+    resolution: {integrity: sha512-6rBblq24lwQ/zTBVKkE675FB9pyBmyKGQSgGR9ot0izyW9u0Jh+ggxJ+54JG8medYPNgKxOwsLw/0ktTtuPF2Q==}
 
-  '@arcgis/core@4.33.9':
-    resolution: {integrity: sha512-I6O43kuo53MhDl9ACcc+RFa//vol650XoFjmo6lwqga47lFMULZfHkh5tf9UCEVu8RXPaeQGb2mrrZhXJk6a7Q==}
+  '@arcgis/core@4.33.10':
+    resolution: {integrity: sha512-UsF2y9NjhE5wTsiBO54ZMnaDvWu4fqIkZanBM0Dde/01rkp+RXmCHR+xzhbsvT4A52JbjbASn6466uMhQeoX9w==}
 
-  '@arcgis/lumina@4.33.12':
-    resolution: {integrity: sha512-KSkL9AfZX6R6OyxTesa7QLIYedtX2Cje4+9PbcZY5R/txiqGHeunnF842r/xuuNGWrp0L6hQI9zCKCaZkPqzPg==}
+  '@arcgis/lumina@4.33.13':
+    resolution: {integrity: sha512-WOxHls8EN4u177ReNaFqRD0/LjXd59SggNBjAvOicDL2YO9Pr3doVnosaLP7/8TKzGah3fA+pvn/Nt266XitNg==}
 
   '@babel/code-frame@7.27.1':
     resolution: {integrity: sha512-cjQ7ZlQ0Mv3b47hABuTevyTuYN4i+loJKGeV9flcCgIK37cCXRh+L1bd3iBHlynerhQ7BhCkn2BPbQUL+rGqFg==}
@@ -659,8 +659,8 @@ packages:
     peerDependencies:
       react: '>=16.8'
 
-  '@rolldown/pluginutils@1.0.0-beta.19':
-    resolution: {integrity: sha512-3FL3mnMbPu0muGOCaKAhhFEYmqv9eTfPSJRJmANrCwtgK8VuxpsZDGK+m0LYAGoyO8+0j5uRe4PeyPDK1yA/hA==}
+  '@rolldown/pluginutils@1.0.0-beta.27':
+    resolution: {integrity: sha512-+d0F4MKMCbeVUJwG96uQ4SgAznZNSq93I3V+9NHA4OpvqG8mRCpGdKmK8l/dl02h2CCDHwW2FqilnTyDcAnqjA==}
 
   '@rollup/pluginutils@5.1.4':
     resolution: {integrity: sha512-USm05zrsFxYLPdWWq+K3STlWiT/3ELn3RcV5hJMghpeAIhxfsUIg6mt12CBJBInWMV4VneoV7SfGv8xIwo2qNQ==}
@@ -871,8 +871,8 @@ packages:
   '@types/babel__traverse@7.20.6':
     resolution: {integrity: sha512-r1bzfrm0tomOI8g1SzvCaQHo6Lcv6zu0EA+W2kHrt8dyrHQxGzBBL4kdkzIS+jBMV+EYcMAEAqXqYaLJq5rOZg==}
 
-  '@types/babel__traverse@7.20.7':
-    resolution: {integrity: sha512-dkO5fhS7+/oos4ciWxyEyjWe48zmG6wbCheo/G2ZnHx4fs3EU6YC6UM8rk56gAjNJ9P3MTH2jo5jb92/K6wbng==}
+  '@types/babel__traverse@7.28.0':
+    resolution: {integrity: sha512-8PvcXf70gTDZBgt9ptxJ8elBeBjcLOAcOtoO/mPJjtji1+CdGbHgm77om1GrsPxsiE+uXIpNSK64UYaIwQXd4Q==}
 
   '@types/chai@5.2.2':
     resolution: {integrity: sha512-8kB30R7Hwqf40JPiKhVzodJs2Qc1ZJ5zuT3uzw5Hq/dhNCl3G3l83jfpdI1e20BP348+fV7VIL/+FxaXkqBmWg==}
@@ -1020,11 +1020,11 @@ packages:
     resolution: {integrity: sha512-8r4TNknD7OJQADe3VygeofFR7UNAXZ2/jjBFP5dgI8+2uMfnuGYgbuHivasKr9WSQ64sPej6m8rDoM1uSllXjQ==}
     engines: {node: ^12.20.0 || ^14.13.1 || >=16.0.0}
 
-  '@vitejs/plugin-react@4.6.0':
-    resolution: {integrity: sha512-5Kgff+m8e2PB+9j51eGHEpn5kUzRKH2Ry0qGoe8ItJg7pqnkPrYPkDQZGgGmTa0EGarHrkjLvOdU3b1fzI8otQ==}
+  '@vitejs/plugin-react@4.7.0':
+    resolution: {integrity: sha512-gUu9hwfWvvEDBBmgtAowQCojwZmJ5mcLn3aufeCsitijs3+f2NsrPtlAWIR6OPiqljl96GVCUbLe0HyqIpVaoA==}
     engines: {node: ^14.18.0 || >=16.0.0}
     peerDependencies:
-      vite: ^4.2.0 || ^5.0.0 || ^6.0.0 || ^7.0.0-beta.0
+      vite: ^4.2.0 || ^5.0.0 || ^6.0.0 || ^7.0.0
 
   '@vitest/expect@3.2.4':
     resolution: {integrity: sha512-Io0yyORnB6sikFlt8QW5K7slY4OjqNX9jmJQ02QDda8lyM6B5oNgVWoSoKPac8/kgnCUzuHQKrSLtu/uOqqrig==}
@@ -1058,8 +1058,8 @@ packages:
   '@webcomponents/shadycss@1.11.2':
     resolution: {integrity: sha512-vRq+GniJAYSBmTRnhCYPAPq6THYqovJ/gzGThWbgEZUQaBccndGTi1hdiUP15HzEco0I6t4RCtXyX0rsSmwgPw==}
 
-  '@zip.js/zip.js@2.7.70':
-    resolution: {integrity: sha512-GkUtNfhrfR90xurdCUtFI6yDqlTI70dMolOZuyDAVNxvgn0uv8qvoGzbyYWcfkfTYBKNR4NJs6poQE/cr1pW3A==}
+  '@zip.js/zip.js@2.7.71':
+    resolution: {integrity: sha512-TA6hXQQeOsqJGchrPRaPPt+CScLcS05A/JD03sVTysAUqJ1HungAW5rSqRk23AK9i3Zph5kswrv31rHSEum+Tw==}
     engines: {bun: '>=0.7.0', deno: '>=1.0.0', node: '>=16.5.0'}
 
   acorn-jsx@5.3.2:
@@ -2828,22 +2828,22 @@ snapshots:
       '@jridgewell/gen-mapping': 0.3.12
       '@jridgewell/trace-mapping': 0.3.29
 
-  '@arcgis/components-utils@4.33.12':
+  '@arcgis/components-utils@4.33.13':
     dependencies:
       tslib: 2.8.1
 
-  '@arcgis/core@4.33.9':
+  '@arcgis/core@4.33.10':
     dependencies:
       '@esri/arcgis-html-sanitizer': 4.1.0
       '@esri/calcite-components': 3.2.1
       '@vaadin/grid': 24.7.11
-      '@zip.js/zip.js': 2.7.70
+      '@zip.js/zip.js': 2.7.71
       luxon: 3.6.1
       marked: 15.0.12
 
-  '@arcgis/lumina@4.33.12':
+  '@arcgis/lumina@4.33.13':
     dependencies:
-      '@arcgis/components-utils': 4.33.12
+      '@arcgis/components-utils': 4.33.13
       '@lit-labs/ssr': 3.3.1
       '@lit-labs/ssr-client': 1.1.7
       '@lit/context': 1.1.6
@@ -3112,8 +3112,8 @@ snapshots:
 
   '@esri/calcite-components@3.2.1':
     dependencies:
-      '@arcgis/components-utils': 4.33.12
-      '@arcgis/lumina': 4.33.12
+      '@arcgis/components-utils': 4.33.13
+      '@arcgis/lumina': 4.33.13
       '@esri/calcite-ui-icons': 4.2.0
       '@floating-ui/dom': 1.7.3
       '@floating-ui/utils': 0.2.10
@@ -3355,7 +3355,7 @@ snapshots:
       '@react-hook/throttle': 2.2.0(react@19.1.0)
       react: 19.1.0
 
-  '@rolldown/pluginutils@1.0.0-beta.19': {}
+  '@rolldown/pluginutils@1.0.0-beta.27': {}
 
   '@rollup/pluginutils@5.1.4(rollup@4.41.0)':
     dependencies:
@@ -3543,7 +3543,7 @@ snapshots:
       '@babel/types': 7.28.2
       '@types/babel__generator': 7.27.0
       '@types/babel__template': 7.4.4
-      '@types/babel__traverse': 7.20.7
+      '@types/babel__traverse': 7.28.0
 
   '@types/babel__generator@7.27.0':
     dependencies:
@@ -3558,7 +3558,7 @@ snapshots:
     dependencies:
       '@babel/types': 7.27.1
 
-  '@types/babel__traverse@7.20.7':
+  '@types/babel__traverse@7.28.0':
     dependencies:
       '@babel/types': 7.28.2
 
@@ -3814,12 +3814,12 @@ snapshots:
     dependencies:
       '@vaadin/vaadin-development-mode-detector': 2.0.7
 
-  '@vitejs/plugin-react@4.6.0(vite@6.3.5(sass@1.89.2))':
+  '@vitejs/plugin-react@4.7.0(vite@6.3.5(sass@1.89.2))':
     dependencies:
       '@babel/core': 7.28.0
       '@babel/plugin-transform-react-jsx-self': 7.27.1(@babel/core@7.28.0)
       '@babel/plugin-transform-react-jsx-source': 7.27.1(@babel/core@7.28.0)
-      '@rolldown/pluginutils': 1.0.0-beta.19
+      '@rolldown/pluginutils': 1.0.0-beta.27
       '@types/babel__core': 7.20.5
       react-refresh: 0.17.0
       vite: 6.3.5(sass@1.89.2)
@@ -3870,7 +3870,7 @@ snapshots:
 
   '@webcomponents/shadycss@1.11.2': {}
 
-  '@zip.js/zip.js@2.7.70': {}
+  '@zip.js/zip.js@2.7.71': {}
 
   acorn-jsx@5.3.2(acorn@8.15.0):
     dependencies:
