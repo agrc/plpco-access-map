@@ -5,7 +5,7 @@ import WebMap from '@arcgis/core/WebMap';
 import BasemapGallery from '@arcgis/core/widgets/BasemapGallery';
 import Expand from '@arcgis/core/widgets/Expand';
 import Legend from '@arcgis/core/widgets/Legend';
-import clsx from 'clsx';
+import { clsx } from 'clsx';
 import queryString from 'query-string';
 import React from 'react';
 import { createRoot } from 'react-dom/client';
