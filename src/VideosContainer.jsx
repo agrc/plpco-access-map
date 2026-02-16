@@ -1,5 +1,5 @@
-import React from 'react';
 import PropTypes from 'prop-types';
+import React from 'react';
 import config from './config';
 import Video from './Video';
 import './VideosContainer.scss';
@@ -46,9 +46,9 @@ VideosContainer.propTypes = {
   rdId: PropTypes.string,
   mapView: PropTypes.object,
   table: PropTypes.shape({
-    queryFeatures: PropTypes.func.isRequired
+    queryFeatures: PropTypes.func.isRequired,
   }),
-  points: PropTypes.object
+  points: PropTypes.object,
 };
 
 export default VideosContainer;
