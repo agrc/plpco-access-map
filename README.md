@@ -15,7 +15,7 @@ Production URLs:
 ### Layers and Tables
 
 | name                         | type                                       | required fields                          |
-|------------------------------|--------------------------------------------|------------------------------------------|
+| ---------------------------- | ------------------------------------------ | ---------------------------------------- |
 | `RS2477 Centerlines`         | polyline feature layer                     | `OBJECTID` `RD_ID` `S_Name`              |
 | `Video_Routes - Video Route` | points feature layer                       | `Date_Time` `GPS_Track_ID`               |
 | `Video End Point`            | point feature layer with photo attachments | `OBJECTID`                               |
@@ -32,3 +32,7 @@ Note: Field names are configurable in `config.js`
 ## Releasing
 
 Releases are managed automatically via [release-composite-action](https://github.com/agrc/release-composite-action).
+
+## Attribution
+
+This project was developed with the assistance of [GitHub Copilot](https://github.com/features/copilot).
