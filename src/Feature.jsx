@@ -17,7 +17,7 @@ const RelatedRecord = ({ feature, table }) => {
     }
   }, [feature, table]);
 
-  return <div ref={container}></div>;
+  return feature ? <div ref={container}></div> : null;
 };
 
 RelatedRecord.propTypes = {

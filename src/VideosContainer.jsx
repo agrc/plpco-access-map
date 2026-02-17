@@ -31,7 +31,7 @@ const VideosContainer = ({ rdId, mapView, table, points }) => {
 
   return (
     <div className="videos-container">
-      <h3>{rdId}</h3>
+      {rdId && <h3>{rdId}</h3>}
       {videos.map((video, index) => (
         <Video key={index} {...video} pointsLayer={points} mapView={mapView} />
       ))}
