@@ -2,6 +2,19 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.13.10](https://github.com/agrc/plpco-access-map/compare/v1.13.9...v1.13.10) (2026-02-18)
+
+
+### Bug Fixes
+
+* a11y improvements ([172ed47](https://github.com/agrc/plpco-access-map/commit/172ed474c20278fa1ec1ab39bc49376f31ed9356))
+
+
+### Dependencies
+
+* bump npm dependencies 🌲 ([5ae0e07](https://github.com/agrc/plpco-access-map/commit/5ae0e07096663eefca4dc453dd3efa0ad1b40be4))
+* bump the safe-dependencies group across 1 directory with 3 updates ([5da8de2](https://github.com/agrc/plpco-access-map/commit/5da8de2437b42a99b1b7c5e988335c86509380c8))
+
 ## [1.13.9](https://github.com/agrc/plpco-access-map/compare/v1.13.8...v1.13.9) (2025-11-05)
 
 
