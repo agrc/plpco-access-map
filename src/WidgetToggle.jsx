@@ -22,6 +22,7 @@ const WidgetToggle = ({ widget }) => {
   return (
     <div className="widget-toggle">
       <button type="button" onClick={() => setIsOpen(!isOpen)} className={clsx('btn', 'btn-small', isOpen && 'open')}>
+        <span className="sr-only">Toggle Widget</span>
         {isOpen ? <FontAwesomeIcon icon={faTimes} /> : <FontAwesomeIcon icon={faListUl} />}
       </button>
       <div ref={containerRef}></div>
