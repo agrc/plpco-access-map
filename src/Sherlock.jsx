@@ -116,7 +116,7 @@ export function Sherlock({
                           if (error) {
                             return (
                               <li className="sherlock__match-item alert-danger" disabled>
-                                Error! ${error}
+                                Error! {String(error)}
                               </li>
                             );
                           }
