@@ -273,27 +273,30 @@ function App() {
   };
 
   return (
-    <div className="app">
-      <div className={clsx('side-bar', sidebarOpen && 'open')}>
-        <a href="https://publiclands.utah.gov/public-lands/access-map-360/">
-          <img src={logo} alt="logo" className="logo" style={{ width: 'calc(275px / 2)' }} />
-        </a>
-        <VideosContainer rdId={rdId} mapView={mapView} {...videoDataSources} />
-        <EndPointPhoto
-          oid={selectedEndPointFeature?.attributes[config.fieldNames.endPointPhotos.OBJECTID]}
-          featureLayer={endPointsFeatureLayer.current}
-        />
-        <Feature
-          feature={selectedRoadFeature || selectedEndPointFeature}
-          mapView={mapView}
-          relatedRecords={relatedRecords}
-        />
-      </div>
-      <div ref={mapContainer}>
-        <SidebarToggler sidebarOpen={sidebarOpen} toggleSidebar={toggleSidebar} />
-        {sherlockConfig ? <Sherlock {...sherlockConfig} /> : null}
-      </div>
-    </div>
+    <>
+      <main className="app" id="main-content">
+        <h1 className="visually-hidden">{config.appTitle}</h1>
+        <div aria-label="Road details and media" className={clsx('side-bar', sidebarOpen && 'open')} id="app-sidebar">
+          <a href="https://publiclands.utah.gov/public-lands/access-map-360/">
+            <img src={logo} alt="PLPCO logo" className="logo" style={{ width: 'calc(275px / 2)' }} />
+          </a>
+          <VideosContainer rdId={rdId} mapView={mapView} {...videoDataSources} />
+          <EndPointPhoto
+            oid={selectedEndPointFeature?.attributes[config.fieldNames.endPointPhotos.OBJECTID]}
+            featureLayer={endPointsFeatureLayer.current}
+          />
+          <Feature
+            feature={selectedRoadFeature || selectedEndPointFeature}
+            mapView={mapView}
+            relatedRecords={relatedRecords}
+          />
+        </div>
+        <div aria-label="Interactive map" ref={mapContainer} role="region">
+          <SidebarToggler sidebarOpen={sidebarOpen} toggleSidebar={toggleSidebar} />
+          {sherlockConfig ? <Sherlock {...sherlockConfig} /> : null}
+        </div>
+      </main>
+    </>
   );
 }
 

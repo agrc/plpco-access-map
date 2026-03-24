@@ -40,7 +40,6 @@ export function Sherlock({
   symbols = defaultSymbols,
   provider,
   onSherlockMatch,
-  label,
   placeHolder,
   maxResultsToDisplay,
   mapView,
@@ -86,79 +85,85 @@ export function Sherlock({
   return (
     <div ref={containerRef}>
       <Downshift itemToString={itemToString} onChange={handleStateChange}>
-        {({ getInputProps, getItemProps, highlightedIndex, isOpen, inputValue, getMenuProps }) => (
+        {({ getLabelProps, getInputProps, getItemProps, highlightedIndex, isOpen, inputValue, getMenuProps }) => (
           <div className="sherlock">
-            {label ? <h4>{label}</h4> : null}
-            <div>
-              <InputGroup>
-                <Input {...getInputProps()} placeholder={placeHolder} autoComplete="nope"></Input>
-                <Button size="sm" color="secondary" disabled>
-                  <FontAwesomeIcon icon={faSearch} size="lg"></FontAwesomeIcon>
-                </Button>
-              </InputGroup>
-              <div className="sherlock__match-dropdown" {...getMenuProps()}>
-                <ul className="sherlock__matches">
-                  {!isOpen ? null : (
-                    <Clue clue={inputValue} provider={provider} maxResults={maxResultsToDisplay}>
-                      {({ short, hasMore, error, data = [] }) => {
-                        if (short) {
-                          return (
-                            <li className="sherlock__match-item alert-primary" disabled>
-                              Type more than 2 letters.
+            <>
+              {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
+              <label className="sr-only" {...getLabelProps()}>
+                search
+              </label>
+              <div>
+                <InputGroup>
+                  <Input {...getInputProps()} placeholder={placeHolder} autoComplete="nope"></Input>
+                  <Button size="sm" color="secondary" disabled>
+                    <span className="sr-only">Search</span>
+                    <FontAwesomeIcon icon={faSearch} size="lg"></FontAwesomeIcon>
+                  </Button>
+                </InputGroup>
+                <div className="sherlock__match-dropdown" {...getMenuProps()}>
+                  <ul className="sherlock__matches">
+                    {!isOpen ? null : (
+                      <Clue clue={inputValue} provider={provider} maxResults={maxResultsToDisplay}>
+                        {({ short, hasMore, error, data = [] }) => {
+                          if (short) {
+                            return (
+                              <li className="sherlock__match-item alert-primary" disabled>
+                                Type more than 2 letters.
+                              </li>
+                            );
+                          }
+
+                          if (error) {
+                            return (
+                              <li className="sherlock__match-item alert-danger" disabled>
+                                Error! ${error}
+                              </li>
+                            );
+                          }
+
+                          if (!data.length) {
+                            return (
+                              <li className="sherlock__match-item alert-warning" disabled>
+                                No items found.
+                              </li>
+                            );
+                          }
+
+                          let items = data.map((item, index) => (
+                            <li
+                              key={index}
+                              {...getItemProps({
+                                className:
+                                  'sherlock__match-item' +
+                                  (highlightedIndex === index ? ' sherlock__match-item--selected' : ''),
+                                item,
+                                index,
+                              })}
+                            >
+                              <Highlighted
+                                text={item.attributes[provider.searchField]}
+                                highlight={inputValue}
+                              ></Highlighted>
+                              <div>{item.attributes[provider.contextField] || ''}</div>
                             </li>
-                          );
-                        }
+                          ));
 
-                        if (error) {
-                          return (
-                            <li className="sherlock__match-item alert-danger" disabled>
-                              Error! ${error}
-                            </li>
-                          );
-                        }
+                          if (hasMore) {
+                            items.push(
+                              <li key="too-many" className="sherlock__match-item alert-primary text-center" disabled>
+                                More than {maxResultsToDisplay} items found.
+                              </li>,
+                            );
+                          }
 
-                        if (!data.length) {
-                          return (
-                            <li className="sherlock__match-item alert-warning" disabled>
-                              No items found.
-                            </li>
-                          );
-                        }
-
-                        let items = data.map((item, index) => (
-                          <li
-                            key={index}
-                            {...getItemProps({
-                              className:
-                                'sherlock__match-item' +
-                                (highlightedIndex === index ? ' sherlock__match-item--selected' : ''),
-                              item,
-                              index,
-                            })}
-                          >
-                            <Highlighted
-                              text={item.attributes[provider.searchField]}
-                              highlight={inputValue}
-                            ></Highlighted>
-                            <div>{item.attributes[provider.contextField] || ''}</div>
-                          </li>
-                        ));
-
-                        if (hasMore) {
-                          items.push(
-                            <li key="too-many" className="sherlock__match-item alert-primary text-center" disabled>
-                              More than {maxResultsToDisplay} items found.
-                            </li>,
-                          );
-                        }
-
-                        return items;
-                      }}
-                    </Clue>
-                  )}
-                </ul>
+                          return items;
+                        }}
+                      </Clue>
+                    )}
+                  </ul>
+                </div>
               </div>
-            </div>
+            </>
           </div>
         )}
       </Downshift>

@@ -9,6 +9,9 @@ const SidebarToggler = ({ sidebarOpen, toggleSidebar }) => {
     <button
       type="button"
       className={clsx('side-bar-toggler', 'btn', 'btn-info', 'btn-sm', sidebarOpen && 'open')}
+      aria-controls="app-sidebar"
+      aria-expanded={sidebarOpen}
+      aria-label={sidebarOpen ? 'Hide road details panel' : 'Show road details panel'}
       onClick={toggleSidebar}
     >
       {sidebarOpen ? (

@@ -8,6 +8,24 @@ body,
   height: 100%;
   margin: 0;
 }
+
+.skip-link {
+  position: absolute;
+  left: 1rem;
+  top: 1rem;
+  z-index: 1000;
+  padding: 0.75rem 1rem;
+  border-radius: 0.25rem;
+  background: #ffffff;
+  color: #000000;
+  transform: translateY(-200%);
+  transition: transform 0.2s ease;
+
+  &:focus {
+    transform: translateY(0);
+  }
+}
+
 .app {
   display: flex;
   @media (max-width: variables.$smallScreenWidth) {
@@ -52,4 +70,16 @@ body,
     background-color: variables.$primaryColor;
     border-color: variables.$primaryColor;
   }
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
 }
