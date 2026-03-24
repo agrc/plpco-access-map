@@ -21,11 +21,17 @@ const WidgetToggle = ({ widget }) => {
 
   return (
     <div className="widget-toggle">
-      <button type="button" onClick={() => setIsOpen(!isOpen)} className={clsx('btn', 'btn-small', isOpen && 'open')}>
-        <span className="sr-only">Toggle Widget</span>
+      <button
+        type="button"
+        onClick={() => setIsOpen(!isOpen)}
+        className={clsx('btn', 'btn-small', isOpen && 'open')}
+        aria-expanded={isOpen}
+        aria-controls="widget-container"
+      >
+        <span className="sr-only">{isOpen ? 'Hide legend' : 'Show legend'}</span>
         {isOpen ? <FontAwesomeIcon icon={faTimes} /> : <FontAwesomeIcon icon={faListUl} />}
       </button>
-      <div ref={containerRef}></div>
+      <div ref={containerRef} id="widget-container"></div>
     </div>
   );
 };

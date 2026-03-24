@@ -107,7 +107,13 @@ export function Sherlock({
                         {({ short, hasMore, error, data = [] }) => {
                           if (short) {
                             return (
-                              <li className="sherlock__match-item alert-primary" disabled>
+                              <li
+                                className="sherlock__match-item alert-primary"
+                                aria-disabled="true"
+                                role="option"
+                                aria-selected="false"
+                                disabled
+                              >
                                 Type more than 2 letters.
                               </li>
                             );
