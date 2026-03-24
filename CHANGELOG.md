@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.13.11](https://github.com/agrc/plpco-access-map/compare/v1.13.10...v1.13.11) (2026-03-24)
+
+
+### Bug Fixes
+
+* accessibility improvements ([3a717fa](https://github.com/agrc/plpco-access-map/commit/3a717fa70f3957e26ce86f93192691c1ac9b7320))
+
 ## [1.13.10](https://github.com/agrc/plpco-access-map/compare/v1.13.9...v1.13.10) (2026-02-18)
 
 
