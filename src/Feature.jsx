@@ -133,10 +133,6 @@ const Feature = ({ feature, mapView, relatedRecords }) => {
     }
   }, [feature]);
 
-  if (!feature) {
-    return null;
-  }
-
   return (
     <div className="feature">
       <div ref={node}></div>
