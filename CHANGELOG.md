@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.14.0-rc.2](https://github.com/agrc/plpco-access-map/compare/v1.14.0-rc.1...v1.14.0-rc.2) (2026-07-21)
+
+
+### Bug Fixes
+
+* add missing deploy dependency ([2815b58](https://github.com/agrc/plpco-access-map/commit/2815b58156fc0c911a74bacc3af42868ff259389))
+
 ## [1.14.0-rc.1](https://github.com/agrc/plpco-access-map/compare/v1.13.11...v1.14.0-rc.1) (2026-07-21)
 
 
