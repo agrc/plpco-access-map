@@ -1,4 +1,6 @@
 import esriConfig from '@arcgis/core/config';
+import IdentityManager from '@arcgis/core/identity/IdentityManager';
+import OAuthInfo from '@arcgis/core/identity/OAuthInfo';
 import GraphicsLayer from '@arcgis/core/layers/GraphicsLayer';
 import MapView from '@arcgis/core/views/MapView';
 import WebMap from '@arcgis/core/WebMap';
@@ -25,11 +27,34 @@ const END_POINTS_LAYER_NAME = 'Video End Point';
 const ROADS_LAYER_NAME = 'RS2477 Centerlines';
 const VIDEO_REPORT_TABLE_NAME = 'Video Report';
 const VIDEO_ROUTES_LAYER_NAME = 'Video_Routes - Video Route';
+const PORTAL_URL = 'https://maps.publiclands.utah.gov/portal';
 
 const getRdIdFromUrl = () => {
   const parameters = queryString.parse(document.location.hash);
 
   return parameters[URL_PARAM];
+};
+
+esriConfig.request.trustedServers.push('https://gis.trustlands.utah.gov/');
+
+const authenticateInternalUser = async () => {
+  const { clientId, portalUrl } = config.authentication;
+  const portalSharingUrl = `${portalUrl}/sharing`;
+
+  esriConfig.portalUrl = portalUrl;
+  IdentityManager.registerOAuthInfos([
+    new OAuthInfo({
+      appId: clientId,
+      portalUrl,
+      popup: false,
+    }),
+  ]);
+
+  try {
+    await IdentityManager.checkSignInStatus(portalSharingUrl);
+  } catch {
+    await IdentityManager.getCredential(portalSharingUrl);
+  }
 };
 
 function App() {
@@ -52,6 +77,8 @@ function App() {
   const tableIdsLookup = React.useRef({});
   const isMobile = useIsMobile();
   const [sidebarOpen, setSidebarOpen] = React.useState(!isMobile);
+  const [authenticationState, setAuthenticationState] = React.useState(config.authentication ? 'loading' : 'ready');
+  const [authenticationError, setAuthenticationError] = React.useState();
 
   React.useEffect(() => {
     if (rdId && getRdIdFromUrl() !== rdId) {
@@ -64,7 +91,18 @@ function App() {
     const initMap = async () => {
       console.log('initMap');
 
-      esriConfig.portalUrl = 'https://maps.publiclands.utah.gov/portal';
+      try {
+        if (config.authentication) {
+          await authenticateInternalUser();
+        } else {
+          esriConfig.portalUrl = PORTAL_URL;
+        }
+        setAuthenticationState('ready');
+      } catch (error) {
+        setAuthenticationError(error);
+        setAuthenticationState('error');
+        return;
+      }
 
       const webMap = new WebMap({
         portalItem: {
@@ -92,7 +130,14 @@ function App() {
 
       setMapView(view);
 
-      await view.when();
+      try {
+        await view.when();
+      } catch (error) {
+        console.error('Unable to load the Access Map web map.', error);
+        setAuthenticationError(error);
+        setAuthenticationState('error');
+        return;
+      }
 
       const basemapGallery = new BasemapGallery({ view });
       const expand = new Expand({
@@ -235,6 +280,10 @@ function App() {
       }
     };
 
+    if (!highlightGraphicsLayer.current) {
+      return;
+    }
+
     highlightGraphicsLayer.current.removeAll();
 
     if (selectedRoadFeature) {
@@ -274,6 +323,22 @@ function App() {
 
   return (
     <>
+      {authenticationState === 'loading' ? (
+        <div
+          className="position-absolute top-0 start-0 w-100 h-100 d-flex justify-content-center align-items-center"
+          role="status"
+        >
+          Signing in...
+        </div>
+      ) : null}
+      {authenticationState === 'error' ? (
+        <div className="position-absolute top-0 start-0 w-100 h-100 d-flex justify-content-center align-items-center">
+          <div className="alert alert-danger w-75" role="alert">
+            Unable to sign in to the internal Access Map.
+            {authenticationError?.message ? <div className="mt-2">{authenticationError.message}</div> : null}
+          </div>
+        </div>
+      ) : null}
       <main className="app" id="main-content">
         <h1 className="visually-hidden">{config.appTitle}</h1>
         <div aria-label="Road details and media" className={clsx('side-bar', sidebarOpen && 'open')} id="app-sidebar">

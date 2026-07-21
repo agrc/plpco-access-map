@@ -57,6 +57,7 @@
     "@storybook/addon-links": "^10.2.8",
     "@storybook/react-vite": "^10.2.8",
     "@ugrc/eslint-config": "^1.2.3",
+    "@vitejs/plugin-basic-ssl": "^2.3.0",
     "@vitejs/plugin-react": "^5.1.4",
     "eslint": "^9.39.2",
     "eslint-plugin-storybook": "10.2.8",
