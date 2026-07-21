@@ -1,3 +1,8 @@
+allowBuilds:
+  '@parcel/watcher': true
+  '@vaadin/vaadin-usage-statistics': true
+  esbuild: true
+
 onlyBuiltDependencies:
   - '@parcel/watcher'
   - esbuild
