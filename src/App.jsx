@@ -35,10 +35,13 @@ const getRdIdFromUrl = () => {
   return parameters[URL_PARAM];
 };
 
-esriConfig.request.trustedServers.push('https://gis.trustlands.utah.gov/');
-
 const authenticateInternalUser = async () => {
   const { clientId, portalUrl } = config.authentication;
+
+  if (!clientId) {
+    throw new Error('Missing OAuth client ID. Please set VITE_APP_OAUTH_CLIENT_ID.');
+  }
+
   const portalSharingUrl = `${portalUrl}/sharing`;
 
   esriConfig.portalUrl = portalUrl;
@@ -334,7 +337,7 @@ function App() {
       {authenticationState === 'error' ? (
         <div className="position-absolute top-0 start-0 w-100 h-100 d-flex justify-content-center align-items-center">
           <div className="alert alert-danger w-75" role="alert">
-            Unable to sign in to the internal Access Map.
+            Unable to initialize the Access Map.
             {authenticationError?.message ? <div className="mt-2">{authenticationError.message}</div> : null}
           </div>
         </div>

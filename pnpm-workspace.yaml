@@ -1,9 +1,12 @@
-allowBuilds:
-  '@parcel/watcher': true
-  '@vaadin/vaadin-usage-statistics': true
-  esbuild: true
-  protobufjs: true
-  re2: true
+# Enforce a 7-day (10,080 minutes) quarantine
+minimumReleaseAge: 10080
+
+# Fail the build if metadata/timestamps are missing
+minimumReleaseAgeStrict: true
+
+# EXCLUSIONS: Critical to prevent 7-day delays on stable tools
+minimumReleaseAgeExclude:
+  - '@ugrc/*'
 
 onlyBuiltDependencies:
   - '@parcel/watcher'
@@ -12,3 +15,10 @@ onlyBuiltDependencies:
 overrides:
   glob@>=10.2.0 <10.5.0: '>=10.5.0'
   storybook@>=9.0.0 <9.1.17: '>=9.1.17'
+
+allowBuilds:
+  '@parcel/watcher': true
+  '@vaadin/vaadin-usage-statistics': true
+  esbuild: true
+  protobufjs: true
+  re2: true
