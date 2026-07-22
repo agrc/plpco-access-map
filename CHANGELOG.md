@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.13.12](https://github.com/agrc/plpco-access-map/compare/v1.13.11...v1.13.12) (2026-07-22)
+
+
+### Features
+
+* enable single sign-on support for the internal app ([f02f452](https://github.com/agrc/plpco-access-map/commit/f02f4522fbeda79449e458ee7d6556d97104a0f1))
+
+
+### Bug Fixes
+
+* add missing deploy dependency ([37286c5](https://github.com/agrc/plpco-access-map/commit/37286c5b8f4cd1a88a454d65d459525db0a31e27))
+
 ## [1.14.0-rc.2](https://github.com/agrc/plpco-access-map/compare/v1.14.0-rc.1...v1.14.0-rc.2) (2026-07-21)
 
 
