@@ -4,14 +4,31 @@ import config from './config';
 import Video from './Video';
 import './VideosContainer.scss';
 
-const VideosContainer = ({ rdId, mapView, table, points }) => {
-  const [videos, setVideos] = React.useState([]);
+type VideoAttributes = {
+  GPS_Track_ID?: string;
+  Date_Time?: string | number;
+  URL?: string;
+};
+
+type VideosContainerProps = {
+  rdId?: string;
+  mapView?: unknown;
+  table?: {
+    queryFeatures: (options: { where: string; outFields: string }) => Promise<{
+      features: Array<{ attributes: VideoAttributes }>;
+    }>;
+  };
+  points?: unknown;
+};
+
+const VideosContainer = ({ rdId, mapView, table, points }: VideosContainerProps) => {
+  const [videos, setVideos] = React.useState<VideoAttributes[]>([]);
   const [loading, setLoading] = React.useState(false);
 
   React.useEffect(() => {
-    const giddyUp = async () => {
+    const giddyUp = async (videoTable: NonNullable<VideosContainerProps['table']>) => {
       setLoading(true);
-      const results = await table.queryFeatures({
+      const results = await videoTable.queryFeatures({
         where: `UPPER(${config.fieldNames.videoReports.RD_ID}) = UPPER('${rdId}') AND URL IS NOT NULL`,
         outFields: '*',
       });
@@ -22,8 +39,8 @@ const VideosContainer = ({ rdId, mapView, table, points }) => {
       setLoading(false);
     };
 
-    if (rdId) {
-      giddyUp();
+    if (rdId && table) {
+      giddyUp(table);
     } else {
       setVideos([]);
     }

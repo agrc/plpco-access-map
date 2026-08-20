@@ -8,7 +8,7 @@ import config from './config';
 
 console.log(`App version: ${import.meta.env.DEV ? 'dev' : window.APP_VERSION}`);
 
-function ErrorFallback({ error }) {
+function ErrorFallback({ error }: { error: unknown }) {
   return (
     <div className="w-100 h-100 d-flex justify-content-center align-items-center">
       <div className="alert alert-danger w-75" role="alert">
@@ -31,7 +31,7 @@ function ErrorFallback({ error }) {
         </div>
         <div className="collapse mt-3" id="details">
           <div className="card card-body">
-            <pre>{error?.stack}</pre>
+            <pre>{error instanceof Error ? error.stack : String(error)}</pre>
           </div>
         </div>
       </div>
@@ -44,7 +44,13 @@ ErrorFallback.propTypes = {
 };
 
 document.title = config.appTitle;
-createRoot(document.getElementById('root')).render(
+const rootElement = document.getElementById('root');
+
+if (!rootElement) {
+  throw new Error('Unable to find the application root element.');
+}
+
+createRoot(rootElement).render(
   <ErrorBoundary FallbackComponent={ErrorFallback}>
     <App />
   </ErrorBoundary>,

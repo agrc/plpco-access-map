@@ -1,4 +1,19 @@
-const deployConfigs = {
+type DeployConfig = {
+  appTitle: string;
+  authentication?: {
+    clientId?: string;
+  };
+  showRelatedRecords: boolean;
+  showEndPointPhotos: boolean;
+  fieldNames: {
+    roads: Record<'OBJECTID' | 'RD_ID' | 'S_Name' | 'County', string>;
+    videoRoutePoints: Record<'Date_Time' | 'GPS_Track_ID', string>;
+    endPointPhotos: Record<'OBJECTID', string>;
+    videoReports: Record<'RD_ID', string>;
+  };
+};
+
+const deployConfigs: Record<string, DeployConfig> = {
   VIEWER: {
     appTitle: 'Access Map',
     showRelatedRecords: false,
@@ -79,12 +94,18 @@ const defaultConfigs = {
 };
 
 // DEV is set when running `pnpm start`
-deployConfigs.DEV = deployConfigs.VIEWER;
+deployConfigs.DEV = deployConfigs.VIEWER!;
 
 if (!import.meta.env.VITE_APP_DEPLOY) {
   throw new Error('DEPLOY environment variable must be defined!');
 }
 
-const combinedConfigs = { ...defaultConfigs, ...deployConfigs[import.meta.env.VITE_APP_DEPLOY] };
+const deployConfig = deployConfigs[import.meta.env.VITE_APP_DEPLOY];
+
+if (!deployConfig) {
+  throw new Error(`Unknown deployment: ${import.meta.env.VITE_APP_DEPLOY}`);
+}
+
+const combinedConfigs = { ...defaultConfigs, ...deployConfig };
 
 export default combinedConfigs;

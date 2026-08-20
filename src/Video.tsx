@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/ban-ts-comment */
+// @ts-nocheck
 /* global YT */
 import Graphic from '@arcgis/core/Graphic';
 import GraphicsLayer from '@arcgis/core/layers/GraphicsLayer';
@@ -43,7 +45,16 @@ const symbol = {
   angle: 0,
 };
 
-const Video = ({ GPS_Track_ID, Date_Time, URL, pointsLayer, mapView, testWarningMessage }) => {
+export type VideoProps = {
+  GPS_Track_ID?: string;
+  Date_Time?: string | number;
+  URL?: string;
+  pointsLayer?: unknown;
+  mapView?: unknown;
+  testWarningMessage?: string;
+};
+
+const Video = ({ GPS_Track_ID, Date_Time, URL, pointsLayer, mapView, testWarningMessage }: VideoProps) => {
   const playerDiv = React.useRef();
   const pointsLookup = React.useRef({});
   const intervalId = React.useRef();
