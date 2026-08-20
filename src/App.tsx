@@ -195,8 +195,6 @@ function App() {
         }),
         placeHolder: 'search by street name...',
         onSherlockMatch,
-        mapView: view,
-        position: 'top-right',
       });
 
       const rdIdFromUrl = getRdIdFromUrl();

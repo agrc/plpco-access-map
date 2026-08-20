@@ -38,22 +38,7 @@ const defaultSymbols = {
   },
 };
 
-export function Sherlock({
-  symbols = defaultSymbols,
-  provider,
-  onSherlockMatch,
-  placeHolder,
-  maxResultsToDisplay,
-  mapView,
-  position,
-}) {
-  const containerRef = React.useRef(null);
-  React.useEffect(() => {
-    if (containerRef.current) {
-      mapView.ui.add(containerRef.current, position);
-    }
-  }, [mapView, position]);
-
+export function Sherlock({ symbols = defaultSymbols, provider, onSherlockMatch, placeHolder, maxResultsToDisplay }) {
   const handleStateChange = async (feature) => {
     const searchValue = feature.attributes[provider.searchField];
 
@@ -85,7 +70,7 @@ export function Sherlock({
   };
 
   return (
-    <div ref={containerRef}>
+    <div className="sherlock-container">
       <Downshift itemToString={itemToString} onChange={handleStateChange}>
         {({ getLabelProps, getInputProps, getItemProps, highlightedIndex, isOpen, inputValue, getMenuProps }) => (
           <div className="sherlock">
