@@ -4,6 +4,7 @@
     "autoplay",
     "basemap",
     "Centerlines",
+    "enablejsapi",
     "escaperegexp",
     "evenodd",
     "firebaserc",
