@@ -23,6 +23,12 @@ Production URLs:
 
 Note: Field names are configurable in `config.js`
 
+### Sidebar Pop-ups
+
+The sidebar displays feature details for any web map layer whose `popupEnabled` property is set to `true`. Use the layer's popup configuration to control which layers are selectable for sidebar details. A popup template is also needed to provide useful content.
+
+The `RS2477 Centerlines` and `Video End Point` layers retain their additional application behavior when their pop-ups are enabled. Road selections support videos, highlights, and related records; endpoint selections support photo attachments.
+
 ### Testing
 
 - Example RDID for related records: `RD279908`

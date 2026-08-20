@@ -5,6 +5,7 @@ import IdentityManager from '@arcgis/core/identity/IdentityManager';
 import OAuthInfo from '@arcgis/core/identity/OAuthInfo';
 import type FeatureLayer from '@arcgis/core/layers/FeatureLayer';
 import GraphicsLayer from '@arcgis/core/layers/GraphicsLayer';
+import type Layer from '@arcgis/core/layers/Layer';
 import type Map from '@arcgis/core/Map';
 import type FeatureLayerView from '@arcgis/core/views/layers/FeatureLayerView';
 import type MapView from '@arcgis/core/views/MapView';
@@ -22,6 +23,7 @@ import config from './config';
 import EndPointPhoto from './EndPointPhoto';
 import Feature from './Feature';
 import logo from './PLPCO_Logo_2022.jpeg';
+import { isPopupEnabledGraphic } from './popupSelection';
 import { MapServiceProvider, Sherlock } from './Sherlock';
 import SidebarToggler from './SidebarToggler';
 import useIsMobile from './useIsMobile';
@@ -73,6 +75,7 @@ const authenticateInternalUser = async () => {
 function App() {
   const mapElement = React.useRef<MapElement | null>(null);
   const [mapView, setMapView] = React.useState<MapView | null>(null);
+  const [selectedFeature, setSelectedFeature] = React.useState<Graphic | null>(null);
   const [selectedRoadFeature, setSelectedRoadFeature] = React.useState<Graphic | null>(null);
   const [selectedEndPointFeature, setSelectedEndPointFeature] = React.useState<Graphic | null>(null);
   const [videoDataSources, setVideoDataSources] = React.useState({
@@ -88,6 +91,7 @@ function App() {
     onSherlockMatch: (matches: Graphic[]) => void;
   } | null>(null);
   const highlightedHandle = React.useRef<Handle | null>(null);
+  const selectedFeatureHighlightHandle = React.useRef<Handle | null>(null);
   const roadsLayerView = React.useRef<FeatureLayerView | null>(null);
   const endPointsLayerView = React.useRef<FeatureLayerView | null>(null);
   const [relatedRecords, setRelatedRecords] = React.useState<Array<{
@@ -197,15 +201,20 @@ function App() {
       setVideoDataSources({ table: table as FeatureLayer | undefined, points });
 
       view.on('click', async (event) => {
+        setSelectedFeature(null);
         setSelectedRoadFeature(null);
         setSelectedEndPointFeature(null);
         setRelatedRecords(null);
 
         const test = await view.hitTest(event);
 
-        const firstResult = test.results[0];
-        if (firstResult && 'graphic' in firstResult && firstResult.graphic.layer) {
-          const selectedGraphic = firstResult.graphic;
+        const selectedGraphic = test.results
+          .filter((result): result is typeof result & { graphic: Graphic } => 'graphic' in result)
+          .map((result) => result.graphic)
+          .find(isPopupEnabledGraphic);
+
+        if (selectedGraphic) {
+          setSelectedFeature(selectedGraphic);
 
           if (selectedGraphic.layer?.title === ROADS_LAYER_NAME) {
             setSelectedRoadFeature(selectedGraphic);
@@ -216,6 +225,7 @@ function App() {
       });
 
       const onSherlockMatch = async (matches: Graphic[]) => {
+        setSelectedFeature(null);
         setSelectedRoadFeature(null);
 
         if (matches.length) {
@@ -260,15 +270,26 @@ function App() {
   }, [mapConfigured]);
 
   React.useEffect(() => {
-    if (!selectedRoadFeature || !roadsFeatureLayer.current) {
-      return;
+    let cancelled = false;
+    const highlightLayer = highlightGraphicsLayer.current;
+
+    highlightLayer?.removeAll();
+
+    if (!selectedRoadFeature || !roadsFeatureLayer.current || !highlightLayer) {
+      setRdId(null);
+      setRelatedRecords(null);
+      return () => {
+        cancelled = true;
+      };
     }
 
     const roadsLayer = roadsFeatureLayer.current;
 
     const getRdId = async () => {
       if (selectedRoadFeature.attributes[config.fieldNames.roads.RD_ID]) {
-        setRdId(String(selectedRoadFeature.attributes[config.fieldNames.roads.RD_ID]));
+        if (!cancelled) {
+          setRdId(String(selectedRoadFeature.attributes[config.fieldNames.roads.RD_ID]));
+        }
 
         return;
       }
@@ -284,9 +305,9 @@ function App() {
 
       if (featureSet.features.length) {
         const feature = featureSet.features[0];
-        if (feature) setRdId(String(feature.attributes[config.fieldNames.roads.RD_ID]));
+        if (feature && !cancelled) setRdId(String(feature.attributes[config.fieldNames.roads.RD_ID]));
       } else {
-        setRdId(null);
+        if (!cancelled) setRdId(null);
       }
     };
 
@@ -310,7 +331,7 @@ function App() {
         }
       }
 
-      if (selectedRoadFeature) {
+      if (selectedRoadFeature && !cancelled) {
         setRelatedRecords(
           records.filter((record): record is { name: string; features: Graphic[]; table: FeatureLayer } =>
             Boolean(record.table),
@@ -318,12 +339,6 @@ function App() {
         );
       }
     };
-
-    if (!highlightGraphicsLayer.current) {
-      return;
-    }
-
-    highlightGraphicsLayer.current.removeAll();
 
     if (selectedRoadFeature) {
       getRdId();
@@ -334,13 +349,52 @@ function App() {
 
       const highlightGraphic = selectedRoadFeature.clone();
       highlightGraphic.symbol = { type: 'simple-line', color: '#00FFFF', width: 7 };
-      highlightGraphicsLayer.current.add(highlightGraphic);
+      highlightLayer.add(highlightGraphic);
       setSidebarOpen(true);
     } else {
       setRdId(null);
       setRelatedRecords(null);
     }
+
+    return () => {
+      cancelled = true;
+    };
   }, [selectedRoadFeature]);
+
+  React.useEffect(() => {
+    selectedFeatureHighlightHandle.current?.remove();
+    selectedFeatureHighlightHandle.current = null;
+
+    if (
+      !selectedFeature ||
+      !selectedFeature.layer ||
+      !('popupEnabled' in selectedFeature.layer) ||
+      selectedFeature.layer.title === ROADS_LAYER_NAME ||
+      selectedFeature.layer.title === END_POINTS_LAYER_NAME
+    ) {
+      return;
+    }
+
+    let cancelled = false;
+
+    const highlightSelectedFeature = async () => {
+      if (!mapView) return;
+
+      const layerView = (await mapView.whenLayerView(selectedFeature.layer as Layer)) as FeatureLayerView;
+
+      if (!cancelled && layerView) {
+        selectedFeatureHighlightHandle.current = layerView.highlight(selectedFeature);
+      }
+    };
+
+    highlightSelectedFeature();
+
+    return () => {
+      cancelled = true;
+      selectedFeatureHighlightHandle.current?.remove();
+      selectedFeatureHighlightHandle.current = null;
+    };
+  }, [mapView, selectedFeature]);
 
   React.useEffect(() => {
     if (highlightedHandle.current) {
@@ -392,7 +446,7 @@ function App() {
             featureLayer={endPointsFeatureLayer.current ?? undefined}
           />
           <Feature
-            feature={selectedRoadFeature || selectedEndPointFeature}
+            feature={selectedFeature || selectedRoadFeature || selectedEndPointFeature}
             mapView={mapView}
             relatedRecords={relatedRecords}
           />
