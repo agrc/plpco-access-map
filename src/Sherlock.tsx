@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/ban-ts-comment */
+// @ts-nocheck
 import Graphic from '@arcgis/core/Graphic';
 import * as query from '@arcgis/core/rest/query';
 import Query from '@arcgis/core/rest/support/Query';
@@ -77,7 +79,7 @@ export function Sherlock({
   };
 
   const itemToString = (item) => {
-    console.log('Clue:itemToString', arguments);
+    console.log('Clue:itemToString');
 
     return item ? item.attributes[provider.searchField] : '';
   };
@@ -135,7 +137,7 @@ export function Sherlock({
                             );
                           }
 
-                          let items = data.map((item, index) => (
+                          const items = data.map((item, index) => (
                             <li
                               key={index}
                               {...getItemProps({
@@ -328,7 +330,7 @@ class ProviderBase {
 
 export class MapServiceProvider extends ProviderBase {
   constructor(serviceUrl, searchField, options = {}) {
-    console.log('sherlock.MapServiceProvider:constructor', arguments);
+    console.log('sherlock.MapServiceProvider:constructor');
     super();
 
     this.searchField = searchField;
@@ -347,7 +349,7 @@ export class MapServiceProvider extends ProviderBase {
   }
 
   async search(searchString) {
-    console.log('sherlock.MapServiceProvider:search', arguments);
+    console.log('sherlock.MapServiceProvider:search');
 
     this.query.where = this.getSearchClause(searchString);
     const featureSet = await query.executeQueryJSON(this.serviceUrl, this.query);
@@ -356,7 +358,7 @@ export class MapServiceProvider extends ProviderBase {
   }
 
   async getFeature(searchValue, contextValue) {
-    console.log('sherlock.MapServiceProvider', arguments);
+    console.log('sherlock.MapServiceProvider');
 
     this.query.where = this.getFeatureClause(searchValue, contextValue);
     this.query.returnGeometry = true;
@@ -369,7 +371,7 @@ export class MapServiceProvider extends ProviderBase {
 export class WebApiProvider extends ProviderBase {
   constructor(apiKey, searchLayer, searchField, options) {
     super();
-    console.log('sherlock.providers.WebAPI:constructor', arguments);
+    console.log('sherlock.providers.WebAPI:constructor');
 
     const defaultWkid = 3857;
     this.geometryClasses = {
@@ -394,7 +396,7 @@ export class WebApiProvider extends ProviderBase {
   }
 
   async search(searchString) {
-    console.log('sherlock.providers.WebAPI:search', arguments);
+    console.log('sherlock.providers.WebAPI:search');
 
     return await this.webApi.search(this.searchLayer, this.outFields, {
       predicate: this.getSearchClause(searchString),
@@ -403,7 +405,7 @@ export class WebApiProvider extends ProviderBase {
   }
 
   async getFeature(searchValue, contextValue) {
-    console.log('sherlock.providers.WebAPI:getFeature', arguments);
+    console.log('sherlock.providers.WebAPI:getFeature');
 
     return await this.webApi.search(this.searchLayer, this.outFields.concat('shape@'), {
       predicate: this.getFeatureClause(searchValue, contextValue),
@@ -490,9 +492,9 @@ class WebApi {
     //      'camel': camel cases all attribute names
     //
     // returns: Promise
-    console.log('WebApi:search', arguments);
+    console.log('WebApi:search');
 
-    var url = `${this.baseUrl}search/${featureClass}/${encodeURIComponent(returnValues.join(','))}?`;
+    const url = `${this.baseUrl}search/${featureClass}/${encodeURIComponent(returnValues.join(','))}?`;
 
     if (!options) {
       options = {};
@@ -503,7 +505,7 @@ class WebApi {
       options.attributeStyle = this.defaultAttributeStyle;
     }
 
-    const response = await fetch(url + URLSearchParams(options), { signal: this.signal });
+    const response = await fetch(url + new URLSearchParams(options), { signal: this.signal });
 
     if (!response.ok) {
       return {

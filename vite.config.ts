@@ -1,6 +1,5 @@
-/* eslint-env node */
 import react from '@vitejs/plugin-react';
-import { defineConfig } from 'vite';
+import { defineConfig } from 'vitest/config';
 
 const arcgisCorePath = new URL('./node_modules/@arcgis/core', import.meta.url).pathname;
 
@@ -22,5 +21,8 @@ export default defineConfig({
   },
   define: {
     APP_VERSION: JSON.stringify(process.env.npm_package_version),
+  },
+  test: {
+    environment: 'happy-dom',
   },
 });
