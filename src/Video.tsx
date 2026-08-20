@@ -147,10 +147,17 @@ const Video = ({ GPS_Track_ID, Date_Time, URL, pointsLayer, mapView, testWarning
 
       if (isMobile) return;
 
+      // note that 360 video dragging to pan is no supported on localhost
       new YT.Player(playerDiv.current, {
         height: '250',
         width: '100%',
         videoId,
+        // https://developers.google.com/youtube/player_parameters
+        playerVars: {
+          enablejsapi: 1,
+          origin: window.location.origin,
+          rel: 0,
+        },
         events: {
           onStateChange: onPlayerStateChange,
         },
@@ -228,13 +235,21 @@ const Video = ({ GPS_Track_ID, Date_Time, URL, pointsLayer, mapView, testWarning
     const popupWindow = window.open('', 'roadsVideo', 'width=640,height=390,location=0');
 
     const id = getIDFromUrl(URL);
-    const iframe = popupWindow.document.createElement('iframe');
-    iframe.style = 'border: none;';
-    iframe.src = `https://www.youtube.com/embed/${id}?enablejsapi=1`;
-    iframe.allow = 'fullscreen';
-    popupWindow.document.body.appendChild(iframe);
+    const playerContainer = popupWindow.document.createElement('div');
+    playerContainer.style.width = '100%';
+    playerContainer.style.height = '100%';
+    popupWindow.document.body.appendChild(playerContainer);
 
-    const popupPlayer = new YT.Player(iframe, {
+    const popupPlayer = new YT.Player(playerContainer, {
+      height: '100%',
+      width: '100%',
+      videoId: id,
+      // https://developers.google.com/youtube/player_parameters
+      playerVars: {
+        enablejsapi: 1,
+        origin: popupWindow.location.origin,
+        rel: 0,
+      },
       events: {
         onStateChange: onPlayerStateChange,
         onReady: (event) => {
@@ -249,7 +264,7 @@ const Video = ({ GPS_Track_ID, Date_Time, URL, pointsLayer, mapView, testWarning
     popupWindow.addEventListener('unload', () => {
       window.clearInterval(intervalId.current);
       popupPlayer.destroy();
-      window.cancelAnimationFrame(requestAnimationId);
+      window.cancelAnimationFrame(requestAnimationId.current);
     });
 
     // close popup window if the main window is closed or reloaded
@@ -260,6 +275,7 @@ const Video = ({ GPS_Track_ID, Date_Time, URL, pointsLayer, mapView, testWarning
     // need to wait a bit for the window to finish laying out
     // otherwise the iframe has 0 height
     window.setTimeout(() => {
+      const iframe = popupPlayer.getIframe();
       iframe.width = '100%';
       iframe.height = '100%';
     }, 500);
