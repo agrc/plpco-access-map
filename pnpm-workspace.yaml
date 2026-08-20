@@ -7,6 +7,17 @@ minimumReleaseAgeStrict: true
 # EXCLUSIONS: Critical to prevent 7-day delays on stable tools
 minimumReleaseAgeExclude:
   - '@ugrc/*'
+  - uuid@11.1.1
+  - '@opentelemetry/core@2.8.0'
+  - fast-uri@3.1.4 || 3.1.5
+  - tar@7.5.21
+  - brace-expansion@1.1.17 || 1.1.18 || 2.1.3 || 2.1.4 || 5.0.8 || 5.0.9
+  - undici@6.28.0 || 8.9.0
+  - ip-address@10.2.1 || 10.2.2 || 10.3.1
+  - hono@4.12.34
+  - js-yaml@4.3.1
+  - re2@1.26.1
+  - '@hono/node-server@1.19.15'
 
 onlyBuiltDependencies:
   - '@parcel/watcher'
