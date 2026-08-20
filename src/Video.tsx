@@ -232,38 +232,43 @@ const Video = ({ GPS_Track_ID, Date_Time, URL, pointsLayer, mapView, testWarning
       player.current.pauseVideo();
     }
 
-    const popupWindow = window.open('', 'roadsVideo', 'width=640,height=390,location=0');
+    const popupUrl = new window.URL(`${import.meta.env.BASE_URL}video-popup.html`, window.location.href);
+    const popupWindow = window.open(popupUrl, 'roadsVideo', 'width=640,height=390,location=0');
+
+    if (!popupWindow) {
+      return;
+    }
 
     const id = getIDFromUrl(URL);
-    const playerContainer = popupWindow.document.createElement('div');
-    playerContainer.style.width = '100%';
-    playerContainer.style.height = '100%';
-    popupWindow.document.body.appendChild(playerContainer);
-
-    const popupPlayer = new YT.Player(playerContainer, {
-      height: '100%',
-      width: '100%',
-      videoId: id,
-      // https://developers.google.com/youtube/player_parameters
-      playerVars: {
-        enablejsapi: 1,
-        origin: popupWindow.location.origin,
-        rel: 0,
-      },
-      events: {
-        onStateChange: onPlayerStateChange,
-        onReady: (event) => {
-          if (player.current) {
-            event.target.seekTo(player.current.getCurrentTime(), true);
-          }
+    let popupPlayer;
+    const initializePopupPlayer = () => {
+      popupPlayer = new YT.Player(popupWindow.document.getElementById('player'), {
+        height: '100%',
+        width: '100%',
+        videoId: id,
+        // https://developers.google.com/youtube/player_parameters
+        playerVars: {
+          enablejsapi: 1,
+          origin: window.location.origin,
+          widget_referrer: window.location.href,
+          rel: 0,
         },
-      },
-    });
+        events: {
+          onStateChange: onPlayerStateChange,
+          onReady: (event) => {
+            if (player.current) {
+              event.target.seekTo(player.current.getCurrentTime(), true);
+            }
+          },
+        },
+      });
+    };
 
-    popupWindow.document.body.style.margin = 0;
+    popupWindow.addEventListener('load', initializePopupPlayer, { once: true });
+
     popupWindow.addEventListener('unload', () => {
       window.clearInterval(intervalId.current);
-      popupPlayer.destroy();
+      popupPlayer?.destroy();
       window.cancelAnimationFrame(requestAnimationId.current);
     });
 
@@ -271,14 +276,6 @@ const Video = ({ GPS_Track_ID, Date_Time, URL, pointsLayer, mapView, testWarning
     window.addEventListener('unload', () => {
       popupWindow.close();
     });
-
-    // need to wait a bit for the window to finish laying out
-    // otherwise the iframe has 0 height
-    window.setTimeout(() => {
-      const iframe = popupPlayer.getIframe();
-      iframe.width = '100%';
-      iframe.height = '100%';
-    }, 500);
   };
 
   return (
