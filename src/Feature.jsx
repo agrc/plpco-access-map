@@ -1,23 +1,19 @@
-import EsriFeature from '@arcgis/core/widgets/Feature';
+import '@arcgis/map-components/components/arcgis-feature';
 import PropTypes from 'prop-types';
 import React from 'react';
 import './Feature.scss';
 
 const RelatedRecord = ({ feature, table }) => {
-  const container = React.useRef();
+  const featureElement = React.useRef();
 
   React.useEffect(() => {
-    const giddyUp = async () => {
+    if (feature && featureElement.current) {
       feature.popupTemplate = table.popupTemplate;
-
-      new EsriFeature({ container: container.current, graphic: feature });
-    };
-    if (feature) {
-      giddyUp();
+      featureElement.current.graphic = feature;
     }
   }, [feature, table]);
 
-  return feature ? <div ref={container}></div> : null;
+  return feature ? <arcgis-feature ref={featureElement} /> : null;
 };
 
 RelatedRecord.propTypes = {
@@ -102,40 +98,22 @@ const emptyGraphic = {
 };
 
 const Feature = ({ feature, mapView, relatedRecords }) => {
-  const node = React.useRef();
-  const featureWidget = React.useRef();
+  const featureElement = React.useRef();
   const relatedContainer = React.useRef();
 
   React.useEffect(() => {
-    const init = async () => {
-      console.log('Feature.init');
-
-      featureWidget.current = new EsriFeature({
-        container: node.current,
-        map: mapView.map,
-        graphic: emptyGraphic,
-        spatialReference: mapView.spatialReference,
-      });
-    };
-
-    if (mapView) {
-      init();
+    if (!mapView || !featureElement.current) {
+      return;
     }
-  }, [mapView]);
 
-  React.useEffect(() => {
-    if (featureWidget.current) {
-      if (feature) {
-        featureWidget.current.graphic = feature;
-      } else {
-        featureWidget.current.graphic = emptyGraphic;
-      }
-    }
-  }, [feature]);
+    featureElement.current.map = mapView.map;
+    featureElement.current.spatialReference = mapView.spatialReference;
+    featureElement.current.graphic = feature || emptyGraphic;
+  }, [feature, mapView]);
 
   return (
     <div className="feature">
-      <div ref={node}></div>
+      <arcgis-feature ref={featureElement} />
       {relatedRecords ? (
         <div ref={relatedContainer} className="accordion">
           {relatedRecords.map((relatedRecordInfo, index) => (

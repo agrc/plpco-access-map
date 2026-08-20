@@ -26,7 +26,6 @@ const deployConfigs = {
     appTitle: 'Access Map (Internal)',
     authentication: {
       clientId: import.meta.env.VITE_APP_OAUTH_CLIENT_ID,
-      portalUrl: 'https://maps.publiclands.utah.gov/portal',
     },
     showRelatedRecords: true,
     showEndPointPhotos: true,
@@ -80,7 +79,7 @@ const defaultConfigs = {
 };
 
 // DEV is set when running `pnpm start`
-deployConfigs.DEV = deployConfigs.INTERNAL;
+deployConfigs.DEV = deployConfigs.VIEWER;
 
 if (!import.meta.env.VITE_APP_DEPLOY) {
   throw new Error('DEPLOY environment variable must be defined!');

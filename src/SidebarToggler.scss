@@ -14,7 +14,7 @@
     box-shadow: none !important;
   }
   &.open {
-    left: variables.$sideBarWidth - 1px;
+    left: -1px;
     @media (max-width: variables.$smallScreenWidth) {
       right: 0;
       left: auto;
