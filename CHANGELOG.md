@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.14.0-rc.5](https://github.com/agrc/plpco-access-map/compare/v1.14.0-rc.4...v1.14.0-rc.5) (2026-08-20)
+
+
+### Features
+
+* enable a feature from any layer to show in the sidebar ([8edadeb](https://github.com/agrc/plpco-access-map/commit/8edadeb1547f5be3a9a753b9edfd5e40f51975d1))
+
 ## [1.14.0-rc.4](https://github.com/agrc/plpco-access-map/compare/v1.14.0-rc.3...v1.14.0-rc.4) (2026-08-20)
 
 
