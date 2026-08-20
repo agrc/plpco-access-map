@@ -2,15 +2,26 @@ import PropTypes from 'prop-types';
 import * as React from 'react';
 import './EndPointPhoto.scss';
 
-const EndPointPhoto = ({ oid, featureLayer }) => {
-  const [imageUrl, setImageUrl] = React.useState();
+type EndPointPhotoProps = {
+  oid?: number;
+  featureLayer?: {
+    queryAttachments: (options: { objectIds: number[] }) => Promise<Record<number, Array<{ url: string }>>>;
+  };
+};
+
+const EndPointPhoto = ({ oid, featureLayer }: EndPointPhotoProps) => {
+  const [imageUrl, setImageUrl] = React.useState<string | null>(null);
   const [showLoading, setShowLoading] = React.useState(false);
 
   React.useEffect(() => {
-    const getAttachment = async () => {
-      const attachmentInfos = await featureLayer.queryAttachments({ objectIds: [oid] });
-      if (attachmentInfos[oid] && attachmentInfos[oid].length > 0) {
-        setImageUrl(attachmentInfos[oid][0].url);
+    const getAttachment = async (
+      attachmentLayer: NonNullable<EndPointPhotoProps['featureLayer']>,
+      objectId: number,
+    ) => {
+      const attachmentInfos = await attachmentLayer.queryAttachments({ objectIds: [objectId] });
+      const attachment = attachmentInfos[objectId]?.[0];
+      if (attachment) {
+        setImageUrl(attachment.url);
       }
 
       setShowLoading(false);
@@ -18,7 +29,7 @@ const EndPointPhoto = ({ oid, featureLayer }) => {
 
     if (featureLayer && oid) {
       setShowLoading(true);
-      getAttachment();
+      getAttachment(featureLayer, oid);
     } else {
       setImageUrl(null);
     }
