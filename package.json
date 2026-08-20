@@ -39,6 +39,7 @@
   "dependencies": {
     "@arcgis/core": "^5.1.17",
     "@arcgis/map-components": "^5.1.17",
+    "@fortawesome/fontawesome-svg-core": "^7.3.1",
     "@fortawesome/free-solid-svg-icons": "^7.3.1",
     "@fortawesome/react-fontawesome": "^3.5.0",
     "@react-hook/window-size": "^3.1.1",
