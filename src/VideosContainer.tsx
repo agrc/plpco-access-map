@@ -1,7 +1,8 @@
+import type FeatureLayer from '@arcgis/core/layers/FeatureLayer';
 import PropTypes from 'prop-types';
 import React from 'react';
 import config from './config';
-import Video from './Video';
+import Video, { type VideoMapView, type VideoPointsLayer } from './Video';
 import './VideosContainer.scss';
 
 type VideoAttributes = {
@@ -12,13 +13,9 @@ type VideoAttributes = {
 
 type VideosContainerProps = {
   rdId?: string;
-  mapView?: unknown;
-  table?: {
-    queryFeatures: (options: { where: string; outFields: string }) => Promise<{
-      features: Array<{ attributes: VideoAttributes }>;
-    }>;
-  };
-  points?: unknown;
+  mapView?: VideoMapView;
+  table?: FeatureLayer;
+  points?: VideoPointsLayer;
 };
 
 const VideosContainer = ({ rdId, mapView, table, points }: VideosContainerProps) => {
@@ -30,7 +27,7 @@ const VideosContainer = ({ rdId, mapView, table, points }: VideosContainerProps)
       setLoading(true);
       const results = await videoTable.queryFeatures({
         where: `UPPER(${config.fieldNames.videoReports.RD_ID}) = UPPER('${rdId}') AND URL IS NOT NULL`,
-        outFields: '*',
+        outFields: ['*'],
       });
 
       if (results.features.length) {

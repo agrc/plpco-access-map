@@ -1,12 +1,11 @@
+import type FeatureLayer from '@arcgis/core/layers/FeatureLayer';
 import PropTypes from 'prop-types';
 import * as React from 'react';
 import './EndPointPhoto.scss';
 
 type EndPointPhotoProps = {
   oid?: number;
-  featureLayer?: {
-    queryAttachments: (options: { objectIds: number[] }) => Promise<Record<number, Array<{ url: string }>>>;
-  };
+  featureLayer?: FeatureLayer;
 };
 
 const EndPointPhoto = ({ oid, featureLayer }: EndPointPhotoProps) => {
@@ -20,7 +19,7 @@ const EndPointPhoto = ({ oid, featureLayer }: EndPointPhotoProps) => {
     ) => {
       const attachmentInfos = await attachmentLayer.queryAttachments({ objectIds: [objectId] });
       const attachment = attachmentInfos[objectId]?.[0];
-      if (attachment) {
+      if (attachment?.url) {
         setImageUrl(attachment.url);
       }
 

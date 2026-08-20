@@ -1,12 +1,19 @@
-/* eslint-disable @typescript-eslint/ban-ts-comment */
-// @ts-nocheck
+import Graphic from '@arcgis/core/Graphic.js';
+import type FeatureLayer from '@arcgis/core/layers/FeatureLayer.js';
+import type MapView from '@arcgis/core/views/MapView.js';
 import '@arcgis/map-components/components/arcgis-feature';
+import type { ArcgisFeature } from '@arcgis/map-components/components/arcgis-feature/customElement';
 import PropTypes from 'prop-types';
 import React from 'react';
 import './Feature.scss';
 
-const RelatedRecord = ({ feature, table }) => {
-  const featureElement = React.useRef();
+type RelatedRecordProps = {
+  feature: Graphic;
+  table: FeatureLayer;
+};
+
+const RelatedRecord = ({ feature, table }: RelatedRecordProps) => {
+  const featureElement = React.useRef<ArcgisFeature | null>(null);
 
   React.useEffect(() => {
     if (feature && featureElement.current) {
@@ -25,10 +32,20 @@ RelatedRecord.propTypes = {
   }).isRequired,
 };
 
-const RelatedRecordContainer = ({ relatedRecordInfo }) => {
+type RelatedRecordInfo = {
+  name: string;
+  features: Graphic[];
+  table: FeatureLayer;
+};
+
+type RelatedRecordContainerProps = {
+  relatedRecordInfo: RelatedRecordInfo;
+};
+
+const RelatedRecordContainer = ({ relatedRecordInfo }: RelatedRecordContainerProps) => {
   const [isOpen, setIsOpen] = React.useState(false);
   const containerId = `#relatedRecordContainer_${relatedRecordInfo.name}`;
-  const container = React.useRef();
+  const container = React.useRef<HTMLDivElement | null>(null);
 
   const onClick = () => {
     setIsOpen((current) => !current);
@@ -93,15 +110,21 @@ RelatedRecordContainer.propTypes = {
   }).isRequired,
 };
 
-const emptyGraphic = {
+const emptyGraphic = new Graphic({
   popupTemplate: {
     content: 'Click on a road or end point for more information.',
   },
+});
+
+type FeatureProps = {
+  feature?: Graphic | null;
+  mapView?: MapView | null;
+  relatedRecords?: RelatedRecordInfo[] | null;
 };
 
-const Feature = ({ feature, mapView, relatedRecords }) => {
-  const featureElement = React.useRef();
-  const relatedContainer = React.useRef();
+const Feature = ({ feature, mapView, relatedRecords }: FeatureProps) => {
+  const featureElement = React.useRef<ArcgisFeature | null>(null);
+  const relatedContainer = React.useRef<HTMLDivElement | null>(null);
 
   React.useEffect(() => {
     if (!mapView || !featureElement.current) {
