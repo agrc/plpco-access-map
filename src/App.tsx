@@ -354,7 +354,7 @@ function App() {
               <arcgis-expand slot="top-left">
                 <arcgis-basemap-gallery />
               </arcgis-expand>
-              <arcgis-expand expand-icon="legend" expand-tooltip="Show legend" slot="bottom-right" expanded={true}>
+              <arcgis-expand expand-icon="legend" expand-tooltip="Show legend" slot="bottom-right">
                 <arcgis-legend heading-level="2" />
               </arcgis-expand>
             </arcgis-map>
