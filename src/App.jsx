@@ -2,15 +2,13 @@ import esriConfig from '@arcgis/core/config';
 import IdentityManager from '@arcgis/core/identity/IdentityManager';
 import OAuthInfo from '@arcgis/core/identity/OAuthInfo';
 import GraphicsLayer from '@arcgis/core/layers/GraphicsLayer';
-import MapView from '@arcgis/core/views/MapView';
-import WebMap from '@arcgis/core/WebMap';
-import BasemapGallery from '@arcgis/core/widgets/BasemapGallery';
-import Expand from '@arcgis/core/widgets/Expand';
-import Legend from '@arcgis/core/widgets/Legend';
+import '@arcgis/map-components/components/arcgis-basemap-gallery';
+import '@arcgis/map-components/components/arcgis-expand';
+import '@arcgis/map-components/components/arcgis-legend';
+import '@arcgis/map-components/components/arcgis-map';
 import { clsx } from 'clsx';
 import queryString from 'query-string';
 import React from 'react';
-import { createRoot } from 'react-dom/client';
 import './App.scss';
 import config from './config';
 import EndPointPhoto from './EndPointPhoto';
@@ -20,7 +18,6 @@ import { MapServiceProvider, Sherlock } from './Sherlock';
 import SidebarToggler from './SidebarToggler';
 import useIsMobile from './useIsMobile';
 import VideosContainer from './VideosContainer';
-import WidgetToggle from './WidgetToggle';
 
 const URL_PARAM = 'rdid';
 const END_POINTS_LAYER_NAME = 'Video End Point';
@@ -36,19 +33,18 @@ const getRdIdFromUrl = () => {
 };
 
 const authenticateInternalUser = async () => {
-  const { clientId, portalUrl } = config.authentication;
+  const { clientId } = config.authentication;
 
   if (!clientId) {
     throw new Error('Missing OAuth client ID. Please set VITE_APP_OAUTH_CLIENT_ID.');
   }
 
-  const portalSharingUrl = `${portalUrl}/sharing`;
+  const portalSharingUrl = `${PORTAL_URL}/sharing`;
 
-  esriConfig.portalUrl = portalUrl;
   IdentityManager.registerOAuthInfos([
     new OAuthInfo({
       appId: clientId,
-      portalUrl,
+      portalUrl: PORTAL_URL,
       popup: false,
     }),
   ]);
@@ -61,7 +57,7 @@ const authenticateInternalUser = async () => {
 };
 
 function App() {
-  const mapContainer = React.useRef();
+  const mapElement = React.useRef();
   const [mapView, setMapView] = React.useState();
   const [selectedRoadFeature, setSelectedRoadFeature] = React.useState();
   const [selectedEndPointFeature, setSelectedEndPointFeature] = React.useState();
@@ -82,6 +78,7 @@ function App() {
   const [sidebarOpen, setSidebarOpen] = React.useState(!isMobile);
   const [authenticationState, setAuthenticationState] = React.useState(config.authentication ? 'loading' : 'ready');
   const [authenticationError, setAuthenticationError] = React.useState();
+  const [mapConfigured, setMapConfigured] = React.useState(false);
 
   React.useEffect(() => {
     if (rdId && getRdIdFromUrl() !== rdId) {
@@ -91,14 +88,11 @@ function App() {
 
   const highlightGraphicsLayer = React.useRef();
   React.useEffect(() => {
-    const initMap = async () => {
-      console.log('initMap');
-
+    const configureMap = async () => {
       try {
+        esriConfig.portalUrl = PORTAL_URL;
         if (config.authentication) {
           await authenticateInternalUser();
-        } else {
-          esriConfig.portalUrl = PORTAL_URL;
         }
         setAuthenticationState('ready');
       } catch (error) {
@@ -107,34 +101,32 @@ function App() {
         return;
       }
 
-      const webMap = new WebMap({
-        portalItem: {
-          id: config.webMapId,
+      setMapConfigured(true);
+    };
+
+    configureMap();
+  }, []);
+
+  React.useEffect(() => {
+    if (!mapConfigured || !mapElement.current) {
+      return;
+    }
+
+    const initMap = async () => {
+      const map = mapElement.current;
+
+      map.extent = {
+        xmax: -11762120.612131765,
+        xmin: -13074391.513731329,
+        ymax: 5225035.106177688,
+        ymin: 4373832.359194187,
+        spatialReference: {
+          wkid: 3857,
         },
-      });
-
-      highlightGraphicsLayer.current = new GraphicsLayer();
-      webMap.add(highlightGraphicsLayer.current);
-
-      const view = new MapView({
-        map: webMap,
-        container: mapContainer.current,
-        extent: {
-          xmax: -11762120.612131765,
-          xmin: -13074391.513731329,
-          ymax: 5225035.106177688,
-          ymin: 4373832.359194187,
-          spatialReference: {
-            wkid: 3857,
-          },
-        },
-      });
-      view.popup = null;
-
-      setMapView(view);
+      };
 
       try {
-        await view.when();
+        await map.viewOnReady();
       } catch (error) {
         console.error('Unable to load the Access Map web map.', error);
         setAuthenticationError(error);
@@ -142,21 +134,12 @@ function App() {
         return;
       }
 
-      const basemapGallery = new BasemapGallery({ view });
-      const expand = new Expand({
-        view,
-        content: basemapGallery,
-      });
-      view.ui.add(expand, 'top-left');
+      const view = map.view;
 
-      const legend = new Legend({
-        view,
-        container: document.createElement('div'),
-      });
-      const toggleContainer = document.createElement('div');
-      createRoot(toggleContainer).render(<WidgetToggle widget={legend} />);
+      highlightGraphicsLayer.current = new GraphicsLayer();
+      map.map.add(highlightGraphicsLayer.current);
 
-      view.ui.add(toggleContainer, 'bottom-right');
+      setMapView(view);
 
       roadsFeatureLayer.current = view.map.layers.find((layer) => layer.title === ROADS_LAYER_NAME);
       roadsLayerView.current = await view.whenLayerView(roadsFeatureLayer.current);
@@ -232,7 +215,7 @@ function App() {
     };
 
     initMap();
-  }, []);
+  }, [mapConfigured]);
 
   React.useEffect(() => {
     const getRdId = async () => {
@@ -359,7 +342,23 @@ function App() {
             relatedRecords={relatedRecords}
           />
         </div>
-        <div aria-label="Interactive map" ref={mapContainer} role="region">
+        <div className="map-container">
+          {mapConfigured ? (
+            <arcgis-map
+              aria-label="Interactive map"
+              item-id={config.webMapId}
+              popup-disabled
+              ref={mapElement}
+              role="region"
+            >
+              <arcgis-expand slot="top-left">
+                <arcgis-basemap-gallery />
+              </arcgis-expand>
+              <arcgis-expand expand-icon="legend" expand-tooltip="Show legend" slot="bottom-right" expanded={true}>
+                <arcgis-legend heading-level="2" />
+              </arcgis-expand>
+            </arcgis-map>
+          ) : null}
           <SidebarToggler sidebarOpen={sidebarOpen} toggleSidebar={toggleSidebar} />
           {sherlockConfig ? <Sherlock {...sherlockConfig} /> : null}
         </div>

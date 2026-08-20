@@ -1,7 +1,9 @@
 {
   "cSpell.words": [
+    "arcgis",
     "autoplay",
     "basemap",
+    "escaperegexp",
     "evenodd",
     "firebaserc",
     "fontawesome",
@@ -14,6 +16,9 @@
     "pluginutils",
     "RDID",
     "SAMEORIGIN",
+    "sortby",
+    "ugrc",
+    "uniqwith",
     "VITE",
     "wonkavision"
   ],
