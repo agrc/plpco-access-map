@@ -76,6 +76,15 @@ importers:
       '@storybook/react-vite':
         specifier: 10.5.7
         version: 10.5.7(@types/react-dom@19.2.4(@types/react@19.2.18))(@types/react@19.2.18)(esbuild@0.28.1)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)(rollup@4.62.2)(storybook@10.5.7(@types/react@19.2.18)(prettier@3.9.6)(react@19.2.8))(supports-color@7.2.0)(typescript@6.0.3)(vite@8.2.1(@types/node@26.2.0)(esbuild@0.28.1)(sass@1.102.0)(yaml@2.9.0))
+      '@types/lodash.escaperegexp':
+        specifier: ^4.1.9
+        version: 4.1.9
+      '@types/lodash.sortby':
+        specifier: ^4.7.9
+        version: 4.7.9
+      '@types/lodash.uniqwith':
+        specifier: ^4.5.9
+        version: 4.5.9
       '@types/node':
         specifier: ^26.2.0
         version: 26.2.0
@@ -1743,6 +1752,18 @@ packages:
 
   '@types/json5@0.0.29':
     resolution: {integrity: sha512-dRLjCWHYg4oaA77cxO64oO+7JwCwnIzkZPdrrC71jQmQtlhM556pwKo5bUzqvZndkVbeFLIIi+9TC40JNF5hNQ==}
+
+  '@types/lodash.escaperegexp@4.1.9':
+    resolution: {integrity: sha512-CMQc8v16YzhnPZnMhYQuJUksI8BmL1jy/lHJkiXi4/t24Lx7Qvy7qxew1abrDJGa1T2i0NzLLaR27NK1/qp5Ow==}
+
+  '@types/lodash.sortby@4.7.9':
+    resolution: {integrity: sha512-PDmjHnOlndLS59GofH0pnxIs+n9i4CWeXGErSB5JyNFHu2cmvW6mQOaUKjG8EDPkni14IgF8NsRW8bKvFzTm9A==}
+
+  '@types/lodash.uniqwith@4.5.9':
+    resolution: {integrity: sha512-r/L/U1bAHuZF/bKVanxZtPTCr0J47L8Ftpg4BeV1Knv5ZOl9f6bwqVxP5fvvqniHatgcYpp7vwccxbvVGMV8Xw==}
+
+  '@types/lodash@4.17.25':
+    resolution: {integrity: sha512-+K1NIO8I+F9/wNulfVvu23QYd0Pe9/OCqRrim4NoYIf1VoEDL90Ve4ClzpyqBLc7NpGGWRvYNCKZ1BE/Jpf8dQ==}
 
   '@types/mdx@2.0.14':
     resolution: {integrity: sha512-T48PeuJtvLosNTPVhfnIp3i/n3a4g4Bad7YCq5k64D4u7NwDrAotikQ+5+sjtUvBmxCMlbo3dVL+C2dP0rWHzg==}
@@ -7203,6 +7224,20 @@ snapshots:
   '@types/json-schema@7.0.15': {}
 
   '@types/json5@0.0.29': {}
+
+  '@types/lodash.escaperegexp@4.1.9':
+    dependencies:
+      '@types/lodash': 4.17.25
+
+  '@types/lodash.sortby@4.7.9':
+    dependencies:
+      '@types/lodash': 4.17.25
+
+  '@types/lodash.uniqwith@4.5.9':
+    dependencies:
+      '@types/lodash': 4.17.25
+
+  '@types/lodash@4.17.25': {}
 
   '@types/mdx@2.0.14': {}
 

@@ -1,5 +1,4 @@
-/* eslint-disable @typescript-eslint/ban-ts-comment */
-// @ts-nocheck
+import type { GraphicProperties } from '@arcgis/core/Graphic';
 import Graphic from '@arcgis/core/Graphic';
 import * as query from '@arcgis/core/rest/query';
 import Query from '@arcgis/core/rest/support/Query';
@@ -13,6 +12,44 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import { Button, Input, InputGroup } from 'reactstrap';
 import './Sherlock.scss';
+
+type Attributes = Record<string, string | number | null | undefined>;
+type SearchFeature = Graphic & { attributes: Attributes };
+type SearchResponse = { data: SearchFeature[] };
+type ProviderOptions = {
+  outFields?: string[];
+  contextField?: string;
+  wkid?: number;
+};
+type SearchProvider = {
+  searchField: string;
+  contextField?: string;
+  search: (searchString: string) => Promise<SearchResponse>;
+  getFeature: (
+    searchValue: string | number | null | undefined,
+    contextValue?: string | number | null,
+  ) => Promise<SearchResponse>;
+};
+type SherlockProps = {
+  symbols?: Record<string, object>;
+  provider: SearchProvider;
+  onSherlockMatch: (features: Graphic[]) => void;
+  placeHolder?: string;
+  maxResultsToDisplay?: number;
+};
+type ClueState = {
+  data: SearchFeature[];
+  loading: boolean;
+  error: string | false;
+  short: boolean;
+  hasMore: boolean;
+};
+type ClueProps = {
+  clue: string;
+  provider: SearchProvider;
+  maxResults?: number;
+  children: (state: ClueState) => React.ReactNode;
+};
 
 const defaultSymbols = {
   polygon: {
@@ -38,8 +75,15 @@ const defaultSymbols = {
   },
 };
 
-export function Sherlock({ symbols = defaultSymbols, provider, onSherlockMatch, placeHolder, maxResultsToDisplay }) {
-  const handleStateChange = async (feature) => {
+export function Sherlock({
+  symbols = defaultSymbols,
+  provider,
+  onSherlockMatch,
+  placeHolder,
+  maxResultsToDisplay,
+}: SherlockProps) {
+  const handleStateChange = async (feature: SearchFeature | null) => {
+    if (!feature) return;
     const searchValue = feature.attributes[provider.searchField];
 
     let contextValue;
@@ -52,26 +96,26 @@ export function Sherlock({ symbols = defaultSymbols, provider, onSherlockMatch, 
     const results = response.data;
 
     const graphics = results.map(
-      (feature) =>
+      (feature: SearchFeature) =>
         new Graphic({
           geometry: feature.geometry,
           attributes: feature.attributes,
-          symbol: symbols[feature.geometry.type],
+          symbol: symbols[feature.geometry?.type ?? 'point'] as unknown as GraphicProperties['symbol'],
         }),
     );
 
     onSherlockMatch(graphics);
   };
 
-  const itemToString = (item) => {
+  const itemToString = (item: SearchFeature | null) => {
     console.log('Clue:itemToString');
 
-    return item ? item.attributes[provider.searchField] : '';
+    return item ? String(item.attributes[provider.searchField] ?? '') : '';
   };
 
   return (
     <div className="sherlock-container">
-      <Downshift itemToString={itemToString} onChange={handleStateChange}>
+      <Downshift<SearchFeature> itemToString={itemToString} onChange={handleStateChange}>
         {({ getLabelProps, getInputProps, getItemProps, highlightedIndex, isOpen, inputValue, getMenuProps }) => (
           <div className="sherlock">
             <>
@@ -90,7 +134,7 @@ export function Sherlock({ symbols = defaultSymbols, provider, onSherlockMatch, 
                 <div className="sherlock__match-dropdown" {...getMenuProps()}>
                   <ul className="sherlock__matches">
                     {!isOpen ? null : (
-                      <Clue clue={inputValue} provider={provider} maxResults={maxResultsToDisplay}>
+                      <Clue clue={inputValue || ''} provider={provider} maxResults={maxResultsToDisplay}>
                         {({ short, hasMore, error, data = [] }) => {
                           if (short) {
                             return (
@@ -99,7 +143,6 @@ export function Sherlock({ symbols = defaultSymbols, provider, onSherlockMatch, 
                                 aria-disabled="true"
                                 role="option"
                                 aria-selected="false"
-                                disabled
                               >
                                 Type more than 2 letters.
                               </li>
@@ -107,19 +150,11 @@ export function Sherlock({ symbols = defaultSymbols, provider, onSherlockMatch, 
                           }
 
                           if (error) {
-                            return (
-                              <li className="sherlock__match-item alert-danger" disabled>
-                                Error! {String(error)}
-                              </li>
-                            );
+                            return <li className="sherlock__match-item alert-danger">Error! {String(error)}</li>;
                           }
 
                           if (!data.length) {
-                            return (
-                              <li className="sherlock__match-item alert-warning" disabled>
-                                No items found.
-                              </li>
-                            );
+                            return <li className="sherlock__match-item alert-warning">No items found.</li>;
                           }
 
                           const items = data.map((item, index) => (
@@ -134,16 +169,16 @@ export function Sherlock({ symbols = defaultSymbols, provider, onSherlockMatch, 
                               })}
                             >
                               <Highlighted
-                                text={item.attributes[provider.searchField]}
-                                highlight={inputValue}
+                                text={String(item.attributes[provider.searchField] ?? '')}
+                                highlight={inputValue || ''}
                               ></Highlighted>
-                              <div>{item.attributes[provider.contextField] || ''}</div>
+                              <div>{provider.contextField ? item.attributes[provider.contextField] || '' : ''}</div>
                             </li>
                           ));
 
                           if (hasMore) {
                             items.push(
-                              <li key="too-many" className="sherlock__match-item alert-primary text-center" disabled>
+                              <li key="too-many" className="sherlock__match-item alert-primary text-center">
                                 More than {maxResultsToDisplay} items found.
                               </li>,
                             );
@@ -172,16 +207,16 @@ Sherlock.propTypes = {
   maxResultsToDisplay: PropTypes.number,
 };
 
-function Clue({ clue, provider, maxResults, children }) {
-  const [state, setState] = React.useState({
-    data: undefined,
+function Clue({ clue, provider, maxResults = 10, children }: ClueProps) {
+  const [state, setState] = React.useState<ClueState>({
+    data: [],
     loading: false,
     error: false,
     short: true,
     hasMore: false,
   });
 
-  const updateState = (newProps) => {
+  const updateState = (newProps: Partial<ClueState>) => {
     setState((oldState) => {
       return {
         ...oldState,
@@ -194,7 +229,7 @@ function Clue({ clue, provider, maxResults, children }) {
     console.log('makeNetworkRequest');
     const { searchField, contextField } = provider;
 
-    const response = await provider.search(clue).catch((e) => {
+    const response = await provider.search(clue).catch((e: Error): undefined => {
       updateState({
         data: undefined,
         error: e.message,
@@ -204,7 +239,11 @@ function Clue({ clue, provider, maxResults, children }) {
       });
 
       console.error(e);
+
+      return undefined;
     });
+
+    if (!response) return;
 
     const iteratee = [`attributes.${searchField}`];
     let hasContext = false;
@@ -213,11 +252,11 @@ function Clue({ clue, provider, maxResults, children }) {
       hasContext = true;
     }
 
-    let features = uniqWith(response.data, (a, b) => {
+    let features = uniqWith(response.data, (a: SearchFeature, b: SearchFeature) => {
       if (hasContext) {
         return (
           a.attributes[searchField] === b.attributes[searchField] &&
-          a.attributes[contextField] === b.attributes[contextField]
+          a.attributes[contextField!] === b.attributes[contextField!]
         );
       } else {
         return a.attributes[searchField] === b.attributes[searchField];
@@ -267,10 +306,12 @@ function Clue({ clue, provider, maxResults, children }) {
 }
 
 class ProviderBase {
+  searchField = '';
+  contextField?: string;
   controller = new AbortController();
   signal = this.controller.signal;
 
-  getOutFields(outFields, searchField, contextField) {
+  getOutFields(outFields: string[] | undefined | null, searchField: string, contextField?: string) {
     outFields = outFields || [];
 
     // don't mess with '*'
@@ -278,7 +319,7 @@ class ProviderBase {
       return outFields;
     }
 
-    const addField = (fld) => {
+    const addField = (fld?: string) => {
       if (fld && outFields.indexOf(fld) === -1) {
         outFields.push(fld);
       }
@@ -290,15 +331,15 @@ class ProviderBase {
     return outFields;
   }
 
-  getSearchClause(text) {
+  getSearchClause(text: string) {
     return `UPPER(${this.searchField}) LIKE UPPER('%${text}%')`;
   }
 
-  getFeatureClause(searchValue, contextValue) {
+  getFeatureClause(searchValue: string | number | null | undefined, contextValue?: string | number | null) {
     let statement = `${this.searchField}='${searchValue}'`;
 
     if (this.contextField) {
-      if (contextValue && contextValue.length > 0) {
+      if (contextValue !== null && contextValue !== undefined && String(contextValue).length > 0) {
         statement += ` AND ${this.contextField}='${contextValue}'`;
       } else {
         statement += ` AND ${this.contextField} IS NULL`;
@@ -314,7 +355,10 @@ class ProviderBase {
 }
 
 export class MapServiceProvider extends ProviderBase {
-  constructor(serviceUrl, searchField, options = {}) {
+  serviceUrl: string;
+  query!: Query;
+
+  constructor(serviceUrl: string, searchField: string, options: ProviderOptions = {}) {
     console.log('sherlock.MapServiceProvider:constructor');
     super();
 
@@ -325,7 +369,7 @@ export class MapServiceProvider extends ProviderBase {
     this.setUpQueryTask(options);
   }
 
-  async setUpQueryTask(options) {
+  async setUpQueryTask(options: ProviderOptions) {
     const defaultWkid = 3857;
     this.query = new Query();
     this.query.outFields = this.getOutFields(options.outFields, this.searchField, options.contextField);
@@ -333,7 +377,7 @@ export class MapServiceProvider extends ProviderBase {
     this.query.outSpatialReference = { wkid: options.wkid || defaultWkid };
   }
 
-  async search(searchString) {
+  async search(searchString: string): Promise<SearchResponse> {
     console.log('sherlock.MapServiceProvider:search');
 
     this.query.where = this.getSearchClause(searchString);
@@ -342,7 +386,10 @@ export class MapServiceProvider extends ProviderBase {
     return { data: featureSet.features };
   }
 
-  async getFeature(searchValue, contextValue) {
+  async getFeature(
+    searchValue: string | number | null | undefined,
+    contextValue?: string | number | null,
+  ): Promise<SearchResponse> {
     console.log('sherlock.MapServiceProvider');
 
     this.query.where = this.getFeatureClause(searchValue, contextValue);
@@ -354,7 +401,13 @@ export class MapServiceProvider extends ProviderBase {
 }
 
 export class WebApiProvider extends ProviderBase {
-  constructor(apiKey, searchLayer, searchField, options) {
+  geometryClasses: Record<string, unknown>;
+  searchLayer: string;
+  wkid: number;
+  outFields: string[];
+  webApi: WebApi;
+
+  constructor(apiKey: string, searchLayer: string, searchField: string, options?: ProviderOptions) {
     super();
     console.log('sherlock.providers.WebAPI:constructor');
 
@@ -380,22 +433,25 @@ export class WebApiProvider extends ProviderBase {
     this.webApi = new WebApi(apiKey, this.signal);
   }
 
-  async search(searchString) {
+  async search(searchString: string): Promise<SearchResponse> {
     console.log('sherlock.providers.WebAPI:search');
 
-    return await this.webApi.search(this.searchLayer, this.outFields, {
+    return (await this.webApi.search(this.searchLayer, this.outFields, {
       predicate: this.getSearchClause(searchString),
       spatialReference: this.wkid,
-    });
+    })) as SearchResponse;
   }
 
-  async getFeature(searchValue, contextValue) {
+  async getFeature(
+    searchValue: string | number | null | undefined,
+    contextValue?: string | number | null,
+  ): Promise<SearchResponse> {
     console.log('sherlock.providers.WebAPI:getFeature');
 
-    return await this.webApi.search(this.searchLayer, this.outFields.concat('shape@'), {
+    return (await this.webApi.search(this.searchLayer, this.outFields.concat('shape@'), {
       predicate: this.getFeatureClause(searchValue, contextValue),
       spatialReference: this.wkid,
-    });
+    })) as SearchResponse;
   }
 }
 
@@ -421,7 +477,13 @@ Highlighted.propTypes = {
 };
 
 class WebApi {
-  constructor(apiKey, signal) {
+  baseUrl: string;
+  defaultAttributeStyle: string;
+  xhrProvider: unknown;
+  apiKey: string;
+  signal: AbortSignal;
+
+  constructor(apiKey: string, signal: AbortSignal) {
     this.baseUrl = 'https://api.mapserv.utah.gov/api/v1/';
 
     // defaultAttributeStyle: String
@@ -440,7 +502,7 @@ class WebApi {
     this.signal = signal;
   }
 
-  async search(featureClass, returnValues, options) {
+  async search(featureClass: string, returnValues: string[], options: Record<string, string | number>) {
     // summary:
     //      search service wrapper (http://api.mapserv.utah.gov/#search)
     // featureClass: String
@@ -490,12 +552,12 @@ class WebApi {
       options.attributeStyle = this.defaultAttributeStyle;
     }
 
-    const response = await fetch(url + new URLSearchParams(options), { signal: this.signal });
+    const response = await fetch(url + new URLSearchParams(options as Record<string, string>), { signal: this.signal });
 
     if (!response.ok) {
       return {
         ok: false,
-        message: response.message || response.statusText,
+        message: response.statusText,
       };
     }
 
