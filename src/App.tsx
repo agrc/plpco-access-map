@@ -6,6 +6,7 @@ import OAuthInfo from '@arcgis/core/identity/OAuthInfo';
 import GraphicsLayer from '@arcgis/core/layers/GraphicsLayer';
 import '@arcgis/map-components/components/arcgis-basemap-gallery';
 import '@arcgis/map-components/components/arcgis-expand';
+import '@arcgis/map-components/components/arcgis-layer-list';
 import '@arcgis/map-components/components/arcgis-legend';
 import '@arcgis/map-components/components/arcgis-map';
 import { clsx } from 'clsx';
@@ -27,6 +28,8 @@ const ROADS_LAYER_NAME = 'RS2477 Centerlines';
 const VIDEO_REPORT_TABLE_NAME = 'Video Report';
 const VIDEO_ROUTES_LAYER_NAME = 'Video_Routes - Video Route';
 const PORTAL_URL = 'https://maps.publiclands.utah.gov/portal';
+
+const showLayerListItem = (item) => Boolean(item.layer?.title) && item.layer.title !== 'Untitled layer';
 
 const getRdIdFromUrl = () => {
   const parameters = queryString.parse(document.location.hash);
@@ -138,8 +141,17 @@ function App() {
 
       const view = map.view;
 
-      highlightGraphicsLayer.current = new GraphicsLayer();
+      highlightGraphicsLayer.current = new GraphicsLayer({
+        listMode: 'hide',
+        title: 'Selected road highlight',
+      });
       map.map.add(highlightGraphicsLayer.current);
+
+      map.map.allLayers.forEach((layer) => {
+        if (!layer.title || layer.title === 'Untitled layer') {
+          layer.listMode = 'hide';
+        }
+      });
 
       setMapView(view);
 
@@ -353,6 +365,9 @@ function App() {
             >
               <arcgis-expand slot="top-left">
                 <arcgis-basemap-gallery />
+              </arcgis-expand>
+              <arcgis-expand expand-icon="layers" expand-tooltip="Show layer list" slot="top-left">
+                <arcgis-layer-list filterPredicate={showLayerListItem} />
               </arcgis-expand>
               <arcgis-expand expand-icon="legend" expand-tooltip="Show legend" slot="bottom-right">
                 <arcgis-legend heading-level="2" />
