@@ -1,14 +1,19 @@
-/* eslint-disable @typescript-eslint/ban-ts-comment */
-// @ts-nocheck
 import esriConfig from '@arcgis/core/config';
+import type { ResourceHandle as Handle } from '@arcgis/core/core/Handles';
+import Graphic from '@arcgis/core/Graphic';
 import IdentityManager from '@arcgis/core/identity/IdentityManager';
 import OAuthInfo from '@arcgis/core/identity/OAuthInfo';
+import type FeatureLayer from '@arcgis/core/layers/FeatureLayer';
 import GraphicsLayer from '@arcgis/core/layers/GraphicsLayer';
+import type Map from '@arcgis/core/Map';
+import type FeatureLayerView from '@arcgis/core/views/layers/FeatureLayerView';
+import type MapView from '@arcgis/core/views/MapView';
 import '@arcgis/map-components/components/arcgis-basemap-gallery';
 import '@arcgis/map-components/components/arcgis-expand';
 import '@arcgis/map-components/components/arcgis-layer-list';
 import '@arcgis/map-components/components/arcgis-legend';
 import '@arcgis/map-components/components/arcgis-map';
+import type { ArcgisMap } from '@arcgis/map-components/components/arcgis-map';
 import { clsx } from 'clsx';
 import queryString from 'query-string';
 import React from 'react';
@@ -20,7 +25,10 @@ import logo from './PLPCO_Logo_2022.jpeg';
 import { MapServiceProvider, Sherlock } from './Sherlock';
 import SidebarToggler from './SidebarToggler';
 import useIsMobile from './useIsMobile';
+import type { VideoPointsLayer } from './Video';
 import VideosContainer from './VideosContainer';
+
+type MapElement = ArcgisMap & { view: MapView; map: Map };
 
 const URL_PARAM = 'rdid';
 const END_POINTS_LAYER_NAME = 'Video End Point';
@@ -29,7 +37,8 @@ const VIDEO_REPORT_TABLE_NAME = 'Video Report';
 const VIDEO_ROUTES_LAYER_NAME = 'Video_Routes - Video Route';
 const PORTAL_URL = 'https://maps.publiclands.utah.gov/portal';
 
-const showLayerListItem = (item) => Boolean(item.layer?.title) && item.layer.title !== 'Untitled layer';
+const showLayerListItem = (item: { layer?: { title?: string | null } | null }) =>
+  Boolean(item.layer?.title) && item.layer?.title !== 'Untitled layer';
 
 const getRdIdFromUrl = () => {
   const parameters = queryString.parse(document.location.hash);
@@ -38,7 +47,7 @@ const getRdIdFromUrl = () => {
 };
 
 const authenticateInternalUser = async () => {
-  const { clientId } = config.authentication;
+  const { clientId } = config.authentication ?? {};
 
   if (!clientId) {
     throw new Error('Missing OAuth client ID. Please set VITE_APP_OAUTH_CLIENT_ID.');
@@ -62,27 +71,35 @@ const authenticateInternalUser = async () => {
 };
 
 function App() {
-  const mapElement = React.useRef();
-  const [mapView, setMapView] = React.useState();
-  const [selectedRoadFeature, setSelectedRoadFeature] = React.useState();
-  const [selectedEndPointFeature, setSelectedEndPointFeature] = React.useState();
+  const mapElement = React.useRef<MapElement | null>(null);
+  const [mapView, setMapView] = React.useState<MapView | null>(null);
+  const [selectedRoadFeature, setSelectedRoadFeature] = React.useState<Graphic | null>(null);
+  const [selectedEndPointFeature, setSelectedEndPointFeature] = React.useState<Graphic | null>(null);
   const [videoDataSources, setVideoDataSources] = React.useState({
-    table: null,
-    points: null,
+    table: undefined as FeatureLayer | undefined,
+    points: undefined as VideoPointsLayer | undefined,
   });
-  const [rdId, setRdId] = React.useState();
-  const roadsFeatureLayer = React.useRef();
-  const endPointsFeatureLayer = React.useRef();
-  const [sherlockConfig, setSherlockConfig] = React.useState();
-  const highlightedHandle = React.useRef();
-  const roadsLayerView = React.useRef();
-  const endPointsLayerView = React.useRef();
-  const [relatedRecords, setRelatedRecords] = React.useState();
-  const tableIdsLookup = React.useRef({});
+  const [rdId, setRdId] = React.useState<string | null>(null);
+  const roadsFeatureLayer = React.useRef<FeatureLayer | null>(null);
+  const endPointsFeatureLayer = React.useRef<FeatureLayer | null>(null);
+  const [sherlockConfig, setSherlockConfig] = React.useState<{
+    provider: MapServiceProvider;
+    placeHolder: string;
+    onSherlockMatch: (matches: Graphic[]) => void;
+  } | null>(null);
+  const highlightedHandle = React.useRef<Handle | null>(null);
+  const roadsLayerView = React.useRef<FeatureLayerView | null>(null);
+  const endPointsLayerView = React.useRef<FeatureLayerView | null>(null);
+  const [relatedRecords, setRelatedRecords] = React.useState<Array<{
+    name: string;
+    features: Graphic[];
+    table: FeatureLayer;
+  }> | null>(null);
+  const tableIdsLookup = React.useRef<Record<number, FeatureLayer>>({});
   const isMobile = useIsMobile();
   const [sidebarOpen, setSidebarOpen] = React.useState(!isMobile);
   const [authenticationState, setAuthenticationState] = React.useState(config.authentication ? 'loading' : 'ready');
-  const [authenticationError, setAuthenticationError] = React.useState();
+  const [authenticationError, setAuthenticationError] = React.useState<Error | null>(null);
   const [mapConfigured, setMapConfigured] = React.useState(false);
 
   React.useEffect(() => {
@@ -91,7 +108,7 @@ function App() {
     }
   }, [rdId]);
 
-  const highlightGraphicsLayer = React.useRef();
+  const highlightGraphicsLayer = React.useRef<GraphicsLayer | null>(null);
   React.useEffect(() => {
     const configureMap = async () => {
       try {
@@ -101,7 +118,7 @@ function App() {
         }
         setAuthenticationState('ready');
       } catch (error) {
-        setAuthenticationError(error);
+        setAuthenticationError(error instanceof Error ? error : new Error(String(error)));
         setAuthenticationState('error');
         return;
       }
@@ -119,6 +136,7 @@ function App() {
 
     const initMap = async () => {
       const map = mapElement.current;
+      if (!map || !map.map) return;
 
       map.extent = {
         xmax: -11762120.612131765,
@@ -127,14 +145,14 @@ function App() {
         ymin: 4373832.359194187,
         spatialReference: {
           wkid: 3857,
-        },
-      };
+        } as unknown as MapElement['view']['spatialReference'],
+      } as unknown as MapElement['extent'];
 
       try {
         await map.viewOnReady();
       } catch (error) {
         console.error('Unable to load the Access Map web map.', error);
-        setAuthenticationError(error);
+        setAuthenticationError(error instanceof Error ? error : new Error(String(error)));
         setAuthenticationState('error');
         return;
       }
@@ -155,20 +173,28 @@ function App() {
 
       setMapView(view);
 
-      roadsFeatureLayer.current = view.map.layers.find((layer) => layer.title === ROADS_LAYER_NAME);
-      roadsLayerView.current = await view.whenLayerView(roadsFeatureLayer.current);
+      if (!view.map) return;
+      roadsFeatureLayer.current = view.map.layers.find((layer) => layer.title === ROADS_LAYER_NAME) as FeatureLayer;
+      if (!roadsFeatureLayer.current) return;
+      roadsLayerView.current = (await view.whenLayerView(roadsFeatureLayer.current)) as FeatureLayerView;
 
       if (config.showEndPointPhotos) {
-        endPointsFeatureLayer.current = view.map.layers.find((layer) => layer.title === END_POINTS_LAYER_NAME);
-        endPointsLayerView.current = await view.whenLayerView(endPointsFeatureLayer.current);
+        endPointsFeatureLayer.current = view.map.layers.find(
+          (layer) => layer.title === END_POINTS_LAYER_NAME,
+        ) as FeatureLayer;
+        if (endPointsFeatureLayer.current) {
+          endPointsLayerView.current = (await view.whenLayerView(endPointsFeatureLayer.current)) as FeatureLayerView;
+        }
       }
 
       view.map.tables.forEach((table) => {
-        tableIdsLookup.current[table.layerId] = table;
+        const featureTable = table as FeatureLayer;
+        tableIdsLookup.current[featureTable.layerId] = featureTable;
       });
       const table = view.map.tables.find((table) => table.title === VIDEO_REPORT_TABLE_NAME);
-      const points = view.map.layers.find((layer) => layer.title === VIDEO_ROUTES_LAYER_NAME);
-      setVideoDataSources({ table, points });
+      const points = view.map.layers.find((layer) => layer.title === VIDEO_ROUTES_LAYER_NAME) as
+        VideoPointsLayer | undefined;
+      setVideoDataSources({ table: table as FeatureLayer | undefined, points });
 
       view.on('click', async (event) => {
         setSelectedRoadFeature(null);
@@ -177,25 +203,29 @@ function App() {
 
         const test = await view.hitTest(event);
 
-        if (test.results.length) {
-          const selectedGraphic = test.results[0].graphic;
+        const firstResult = test.results[0];
+        if (firstResult && 'graphic' in firstResult && firstResult.graphic.layer) {
+          const selectedGraphic = firstResult.graphic;
 
-          if (selectedGraphic.layer.title === ROADS_LAYER_NAME) {
+          if (selectedGraphic.layer?.title === ROADS_LAYER_NAME) {
             setSelectedRoadFeature(selectedGraphic);
-          } else if (selectedGraphic.layer.title === END_POINTS_LAYER_NAME) {
+          } else if (selectedGraphic.layer?.title === END_POINTS_LAYER_NAME) {
             setSelectedEndPointFeature(selectedGraphic);
           }
         }
       });
 
-      const onSherlockMatch = async (matches) => {
+      const onSherlockMatch = async (matches: Graphic[]) => {
         setSelectedRoadFeature(null);
 
         if (matches.length) {
           const graphic = matches[0];
+          if (!graphic) return;
           view.goTo(graphic);
 
-          graphic.popupTemplate = roadsLayerView.current.layer.popupTemplate;
+          if (roadsLayerView.current) {
+            graphic.popupTemplate = roadsLayerView.current.layer.popupTemplate;
+          }
           setSelectedRoadFeature(graphic);
         }
       };
@@ -214,7 +244,7 @@ function App() {
         const featureSet = await roadsFeatureLayer.current.queryFeatures({
           where: `UPPER(${config.fieldNames.roads.RD_ID}) = UPPER('${rdIdFromUrl}')`,
           returnGeometry: true,
-          outFields: '*',
+          outFields: ['*'],
           outSpatialReference: view.spatialReference,
         });
 
@@ -230,24 +260,31 @@ function App() {
   }, [mapConfigured]);
 
   React.useEffect(() => {
+    if (!selectedRoadFeature || !roadsFeatureLayer.current) {
+      return;
+    }
+
+    const roadsLayer = roadsFeatureLayer.current;
+
     const getRdId = async () => {
       if (selectedRoadFeature.attributes[config.fieldNames.roads.RD_ID]) {
-        setRdId(selectedRoadFeature.attributes[config.fieldNames.roads.RD_ID]);
+        setRdId(String(selectedRoadFeature.attributes[config.fieldNames.roads.RD_ID]));
 
         return;
       }
 
       // query for RD_ID for features that come from map click (they only include the OBJECTID)
-      const featureSet = await roadsFeatureLayer.current.queryFeatures({
+      const featureSet = await roadsLayer.queryFeatures({
         where: `${config.fieldNames.roads.OBJECTID} = ${
           selectedRoadFeature.attributes[config.fieldNames.roads.OBJECTID]
         }`,
         returnGeometry: false,
-        outFields: '*',
+        outFields: ['*'],
       });
 
       if (featureSet.features.length) {
-        setRdId(featureSet.features[0].attributes[config.fieldNames.roads.RD_ID]);
+        const feature = featureSet.features[0];
+        if (feature) setRdId(String(feature.attributes[config.fieldNames.roads.RD_ID]));
       } else {
         setRdId(null);
       }
@@ -257,16 +294,16 @@ function App() {
       const records = [];
       const oid = selectedRoadFeature.attributes[config.fieldNames.roads.OBJECTID];
 
-      for (const relationship of roadsFeatureLayer.current.relationships) {
-        const result = await roadsFeatureLayer.current.queryRelatedFeatures({
-          outFields: '*',
+      for (const relationship of roadsLayer.relationships ?? []) {
+        const result = await roadsLayer.queryRelatedFeatures({
+          outFields: ['*'],
           relationshipId: relationship.id,
           objectIds: [oid],
         });
 
         if (result[oid]) {
           records.push({
-            name: relationship.name,
+            name: relationship.name ?? '',
             features: result[oid].features,
             table: tableIdsLookup.current[relationship.relatedTableId],
           });
@@ -274,7 +311,11 @@ function App() {
       }
 
       if (selectedRoadFeature) {
-        setRelatedRecords(records);
+        setRelatedRecords(
+          records.filter((record): record is { name: string; features: Graphic[]; table: FeatureLayer } =>
+            Boolean(record.table),
+          ),
+        );
       }
     };
 
@@ -310,7 +351,9 @@ function App() {
       const oid = selectedEndPointFeature.attributes[config.fieldNames.endPointPhotos.OBJECTID];
       console.log(`end point selected ${oid}`);
 
-      highlightedHandle.current = endPointsLayerView.current.highlight(oid);
+      if (endPointsLayerView.current) {
+        highlightedHandle.current = endPointsLayerView.current.highlight(oid);
+      }
       setSidebarOpen(true);
     }
   }, [selectedEndPointFeature]);
@@ -343,10 +386,10 @@ function App() {
           <a href="https://publiclands.utah.gov/public-lands/access-map-360/">
             <img src={logo} alt="PLPCO logo" className="logo" style={{ width: 'calc(275px / 2)' }} />
           </a>
-          <VideosContainer rdId={rdId} mapView={mapView} {...videoDataSources} />
+          <VideosContainer rdId={rdId ?? undefined} mapView={mapView ?? undefined} {...videoDataSources} />
           <EndPointPhoto
             oid={selectedEndPointFeature?.attributes[config.fieldNames.endPointPhotos.OBJECTID]}
-            featureLayer={endPointsFeatureLayer.current}
+            featureLayer={endPointsFeatureLayer.current ?? undefined}
           />
           <Feature
             feature={selectedRoadFeature || selectedEndPointFeature}
