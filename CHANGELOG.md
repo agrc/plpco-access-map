@@ -2,6 +2,25 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.14.0-rc.3](https://github.com/agrc/plpco-access-map/compare/v1.13.12...v1.14.0-rc.3) (2026-08-20)
+
+
+### Features
+
+* add layer list component ([fdd7678](https://github.com/agrc/plpco-access-map/commit/fdd7678e0342cbe9fc47937f7adbdb30611d63b0)), refs [#270](https://github.com/agrc/plpco-access-map/issues/270)
+
+
+### Bug Fixes
+
+* default legend to closed ([d5d36af](https://github.com/agrc/plpco-access-map/commit/d5d36af38ace980c9f07b7bdfc7a6993c948b8c1))
+* fix 360 dragging for youtube videos ([3424d79](https://github.com/agrc/plpco-access-map/commit/3424d79c0cfdda4acbc6b7c8264127444622cb2b)), refs [#271](https://github.com/agrc/plpco-access-map/issues/271)
+
+
+### Dependencies
+
+* @arcgis/core v4 - v5 ([eb92ef9](https://github.com/agrc/plpco-access-map/commit/eb92ef9e37fd655294cfd1fdd4802a37a5bfe982))
+* bump NPM dependencies 🌲 ([f6c3a85](https://github.com/agrc/plpco-access-map/commit/f6c3a851a5ac96486eeca770b0ed629d68ca3104))
+
 ## [1.13.12](https://github.com/agrc/plpco-access-map/compare/v1.13.11...v1.13.12) (2026-07-22)
 
 
