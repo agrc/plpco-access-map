@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.14.0-rc.4](https://github.com/agrc/plpco-access-map/compare/v1.14.0-rc.3...v1.14.0-rc.4) (2026-08-20)
+
+
+### Bug Fixes
+
+* fix video popups ([495f401](https://github.com/agrc/plpco-access-map/commit/495f401cbee2e4e31a8fc670d0e62008e01ca0d0))
+
 ## [1.14.0-rc.3](https://github.com/agrc/plpco-access-map/compare/v1.13.12...v1.14.0-rc.3) (2026-08-20)
 
 
