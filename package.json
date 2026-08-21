@@ -1,6 +1,6 @@
 {
   "name": "plpco-videos",
-  "version": "1.14.0-rc.5",
+  "version": "1.13.13",
   "private": true,
   "type": "module",
   "scripts": {
