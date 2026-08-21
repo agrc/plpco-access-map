@@ -2,6 +2,27 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.13.13](https://github.com/agrc/plpco-access-map/compare/v1.13.12...v1.13.13) (2026-08-21)
+
+
+### Features
+
+* add layer list component ([6efe835](https://github.com/agrc/plpco-access-map/commit/6efe8353467384e0ccf0dd9ed3eb5af5ab197daa)), refs [#270](https://github.com/agrc/plpco-access-map/issues/270)
+* enable a feature from any layer to show in the sidebar ([c284b9e](https://github.com/agrc/plpco-access-map/commit/c284b9e998b9c0b3538eefabcedd3d6becf2b1ba))
+
+
+### Bug Fixes
+
+* default legend to closed ([0878f18](https://github.com/agrc/plpco-access-map/commit/0878f18a0e537a9255b73d8a7cd87743a2e5d21a))
+* fix 360 dragging for youtube videos ([9ad2104](https://github.com/agrc/plpco-access-map/commit/9ad21042e9e52b019599e376defb4372a2f9f9b4)), refs [#271](https://github.com/agrc/plpco-access-map/issues/271)
+* fix video popups ([a0ab7bd](https://github.com/agrc/plpco-access-map/commit/a0ab7bd9774059d8ff50583db4db2abfba4c42a3))
+
+
+### Dependencies
+
+* @arcgis/core v4 - v5 ([8f54667](https://github.com/agrc/plpco-access-map/commit/8f54667f21a42886fbb981b9aeffa2bcd4d7fa40))
+* bump NPM dependencies 🌲 ([5033527](https://github.com/agrc/plpco-access-map/commit/50335275f040a6b5059f68236a473693bcc5ac48))
+
 ## [1.14.0-rc.5](https://github.com/agrc/plpco-access-map/compare/v1.14.0-rc.4...v1.14.0-rc.5) (2026-08-20)
 
 
