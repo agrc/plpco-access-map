@@ -42,10 +42,13 @@ const PORTAL_URL = 'https://maps.publiclands.utah.gov/portal';
 const showLayerListItem = (item: { layer?: { title?: string | null } | null }) =>
   Boolean(item.layer?.title) && item.layer?.title !== 'Untitled layer';
 
-const getRdIdFromUrl = () => {
+const getRdIdFromUrl = (): string | null => {
   const parameters = queryString.parse(document.location.hash);
+  const raw = parameters[URL_PARAM];
 
-  return parameters[URL_PARAM];
+  if (typeof raw !== 'string' || raw.length === 0) return null;
+
+  return raw.replace(/'/g, "''");
 };
 
 const authenticateInternalUser = async () => {
