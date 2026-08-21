@@ -1,7 +1,8 @@
 import react from '@vitejs/plugin-react';
+import { fileURLToPath } from 'node:url';
 import { defineConfig } from 'vitest/config';
 
-const arcgisCorePath = new URL('./node_modules/@arcgis/core', import.meta.url).pathname;
+const arcgisCorePath = fileURLToPath(new URL('./node_modules/@arcgis/core', import.meta.url));
 
 // https://vitejs.dev/config/
 export default defineConfig({
