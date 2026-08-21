@@ -416,7 +416,7 @@ function App() {
   }, [selectedEndPointFeature]);
 
   const toggleSidebar = () => {
-    setSidebarOpen(!sidebarOpen);
+    setSidebarOpen((open) => !open);
   };
 
   return (
