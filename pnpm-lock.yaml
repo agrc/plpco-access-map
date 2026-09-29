@@ -165,15 +165,18 @@ packages:
 
   '@arcgis/common-components@5.1.17':
     resolution: {integrity: sha512-fqEmix/77oS2nbvK1fFHaPtdzr+Z7VnkNkvvXaDluptXNrKG5jG65Ugt7KpJ47Lk2gS/OTV1tn3NG1QMHhCr9w==}
+    deprecated: This version is no longer supported. Upgrade to @latest
     peerDependencies:
       '@arcgis/core': ^5.1.0
       '@esri/calcite-components': ^5.1.1
 
   '@arcgis/core@5.1.17':
     resolution: {integrity: sha512-b94tEYiyq/ZNrsXKAMxRBCI2n8qGF18vHqh1l12hR9TAG8eHjP3RaoBhvDRfIgai8k07Gn818ae1TmWhJqy3Ag==}
+    deprecated: This version is no longer supported. Upgrade to @latest
 
   '@arcgis/lumina@5.1.17':
     resolution: {integrity: sha512-k0Gh44ZqaSmtQMWIjnVLK6WTiU81DnvhVKYLa8zRFVe1zZZ3yQtpv10wEg6x6gTl/lJcWMVUzJJaYhRc8RqmiA==}
+    deprecated: This version is no longer supported. Upgrade to @latest
     peerDependencies:
       '@lit/context': ^1.1.6
       lit: ^3.3.0
@@ -183,12 +186,14 @@ packages:
 
   '@arcgis/map-components@5.1.17':
     resolution: {integrity: sha512-WreJEfkU7VRTmsfzFw3fjxlktWNKOna2/aUfDUkIdzITmgy37AmV2hpkfBJpJ30MtWePntGq/kr7b/JQgj14Ug==}
+    deprecated: This version is no longer supported. Upgrade to @latest
     peerDependencies:
       '@arcgis/core': ^5.1.0
       '@esri/calcite-components': ^5.1.1
 
   '@arcgis/toolkit@5.1.17':
     resolution: {integrity: sha512-QRc13uWG0x7/foZH49KkN5lZTZPx8l0/fpL/rx0YkFq0c6+pIcXCh9YbP0zVJrkfkDKcW6FM3wCSdw2CaaPpMQ==}
+    deprecated: This version is no longer supported. Upgrade to @latest
 
   '@babel/code-frame@7.29.7':
     resolution: {integrity: sha512-Aup7aUOfpbAUg2ROOJN6Iw5f9DMBlzu0mIkm/malLQFN/YQgO48wCj0Kxa3sEHJvPVFg7siR+qRInwXd2qhQKw==}
@@ -3152,6 +3157,7 @@ packages:
   eslint@9.39.5:
     resolution: {integrity: sha512-DgZS62aPLXKlnxILS/AYCoRvHaZeXceIzlXPkkGGzJWSow1aEk0lbTlxUSlyjC8jcaKxAdOnTDz+o1JFSBsyjw==}
     engines: {node: ^18.18.0 || ^20.9.0 || >=21.1.0}
+    deprecated: This version is no longer supported. Please see https://eslint.org/version-support for other options.
     hasBin: true
     peerDependencies:
       jiti: '*'
@@ -4290,8 +4296,8 @@ packages:
   moo@0.5.3:
     resolution: {integrity: sha512-m2fmM2dDm7GZQsY7KK2cme8agi+AAljILjQnof7p1ZMDe6dQ4bdnSMx0cPppudoeNv5hEFQirN6u+O4fDE0IWA==}
 
-  morgan@1.11.0:
-    resolution: {integrity: sha512-zSkVu3t18r39pw4ixfBKvfZi3y2UOqr7d4WYwcj3m8nXpEQK4rPO6GLzs/CExoRgmX3y9EjmmcXqv6jq0SK46g==}
+  morgan@1.12.1:
+    resolution: {integrity: sha512-tljKC0ex20AjO58Ob/eZ53JloycbVswbVNCHx6V6VLGzqt/w8dIynVGL0G8qVjNKwiA7sYSogCrN6QtJ82IV+g==}
     engines: {node: '>= 0.8.0'}
 
   ms@2.0.0:
@@ -9192,7 +9198,7 @@ snapshots:
       marked-terminal: 7.3.0(marked@13.0.3)
       mime: 2.6.0
       minimatch: 3.1.5
-      morgan: 1.11.0(supports-color@7.2.0)
+      morgan: 1.12.1(supports-color@7.2.0)
       node-fetch: 2.7.0
       open: 6.4.0
       ora: 5.4.1
@@ -10219,7 +10225,7 @@ snapshots:
 
   moo@0.5.3: {}
 
-  morgan@1.11.0(supports-color@7.2.0):
+  morgan@1.12.1(supports-color@7.2.0):
     dependencies:
       basic-auth: 2.0.1
       debug: 2.6.9(supports-color@7.2.0)
@@ -11412,7 +11418,7 @@ snapshots:
       lodash: 4.18.1
       mime-types: 2.1.35
       minimatch: 6.2.3
-      morgan: 1.11.0(supports-color@7.2.0)
+      morgan: 1.12.1(supports-color@7.2.0)
       on-finished: 2.4.1
       on-headers: 1.1.0
       path-to-regexp: 1.9.0
