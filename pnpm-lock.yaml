@@ -165,15 +165,18 @@ packages:
 
   '@arcgis/common-components@5.1.17':
     resolution: {integrity: sha512-fqEmix/77oS2nbvK1fFHaPtdzr+Z7VnkNkvvXaDluptXNrKG5jG65Ugt7KpJ47Lk2gS/OTV1tn3NG1QMHhCr9w==}
+    deprecated: This version is no longer supported. Upgrade to @latest
     peerDependencies:
       '@arcgis/core': ^5.1.0
       '@esri/calcite-components': ^5.1.1
 
   '@arcgis/core@5.1.17':
     resolution: {integrity: sha512-b94tEYiyq/ZNrsXKAMxRBCI2n8qGF18vHqh1l12hR9TAG8eHjP3RaoBhvDRfIgai8k07Gn818ae1TmWhJqy3Ag==}
+    deprecated: This version is no longer supported. Upgrade to @latest
 
   '@arcgis/lumina@5.1.17':
     resolution: {integrity: sha512-k0Gh44ZqaSmtQMWIjnVLK6WTiU81DnvhVKYLa8zRFVe1zZZ3yQtpv10wEg6x6gTl/lJcWMVUzJJaYhRc8RqmiA==}
+    deprecated: This version is no longer supported. Upgrade to @latest
     peerDependencies:
       '@lit/context': ^1.1.6
       lit: ^3.3.0
@@ -183,12 +186,14 @@ packages:
 
   '@arcgis/map-components@5.1.17':
     resolution: {integrity: sha512-WreJEfkU7VRTmsfzFw3fjxlktWNKOna2/aUfDUkIdzITmgy37AmV2hpkfBJpJ30MtWePntGq/kr7b/JQgj14Ug==}
+    deprecated: This version is no longer supported. Upgrade to @latest
     peerDependencies:
       '@arcgis/core': ^5.1.0
       '@esri/calcite-components': ^5.1.1
 
   '@arcgis/toolkit@5.1.17':
     resolution: {integrity: sha512-QRc13uWG0x7/foZH49KkN5lZTZPx8l0/fpL/rx0YkFq0c6+pIcXCh9YbP0zVJrkfkDKcW6FM3wCSdw2CaaPpMQ==}
+    deprecated: This version is no longer supported. Upgrade to @latest
 
   '@babel/code-frame@7.29.7':
     resolution: {integrity: sha512-Aup7aUOfpbAUg2ROOJN6Iw5f9DMBlzu0mIkm/malLQFN/YQgO48wCj0Kxa3sEHJvPVFg7siR+qRInwXd2qhQKw==}
@@ -3152,6 +3157,7 @@ packages:
   eslint@9.39.5:
     resolution: {integrity: sha512-DgZS62aPLXKlnxILS/AYCoRvHaZeXceIzlXPkkGGzJWSow1aEk0lbTlxUSlyjC8jcaKxAdOnTDz+o1JFSBsyjw==}
     engines: {node: ^18.18.0 || ^20.9.0 || >=21.1.0}
+    deprecated: This version is no longer supported. Please see https://eslint.org/version-support for other options.
     hasBin: true
     peerDependencies:
       jiti: '*'
@@ -3260,8 +3266,8 @@ packages:
   fast-levenshtein@2.0.6:
     resolution: {integrity: sha512-DCXu6Ifhqcks7TZKY3Hxp3y6qphY5SJZmrWMDrKcERSOXWQdMhU9Ig/PYrzyw/ul9jOIyh0N4M0tbC5hodg8dw==}
 
-  fast-uri@3.1.5:
-    resolution: {integrity: sha512-gHwA1O9LDIcKunMKhObS/HimwtehO1nPUECKAu5TpKgaO19fcWEl4bliWe1jWxVFvIXztJjjQ4L8XQ1EU9f7Jw==}
+  fast-uri@3.1.8:
+    resolution: {integrity: sha512-GZMtZUTNRpOVIECoXwLNZS5xUGE+mVNbTB8h/7Rwh2TFWcBQiPzTgyZi05BF9UMZKkLJv8XBRJTlU7zg8+ZfMg==}
 
   fdir@6.5.0:
     resolution: {integrity: sha512-tIbYtZbucOs0BRGqPJkshJUYdL+SDH7dVM8gjy+ERp3WAUjLEFJE+02kanyHtwjWOnwrKYBiwAmM0p4kLJAnXg==}
@@ -7635,7 +7641,7 @@ snapshots:
   ajv@8.20.0:
     dependencies:
       fast-deep-equal: 3.1.3
-      fast-uri: 3.1.5
+      fast-uri: 3.1.8
       json-schema-traverse: 1.0.0
       require-from-string: 2.0.2
 
@@ -9085,7 +9091,7 @@ snapshots:
 
   fast-levenshtein@2.0.6: {}
 
-  fast-uri@3.1.5: {}
+  fast-uri@3.1.8: {}
 
   fdir@6.5.0(picomatch@4.0.5):
     optionalDependencies:
