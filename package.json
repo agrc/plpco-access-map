@@ -57,9 +57,9 @@
     "reactstrap": "^9.2.3"
   },
   "devDependencies": {
-    "@storybook/addon-docs": "10.5.7",
-    "@storybook/addon-links": "10.5.7",
-    "@storybook/react-vite": "10.5.7",
+    "@storybook/addon-docs": "10.6.2",
+    "@storybook/addon-links": "10.6.2",
+    "@storybook/react-vite": "10.6.2",
     "@types/lodash.escaperegexp": "^4.1.9",
     "@types/lodash.sortby": "^4.7.9",
     "@types/lodash.uniqwith": "^4.5.9",
@@ -72,7 +72,7 @@
     "@vitejs/plugin-basic-ssl": "^2.3.0",
     "@vitejs/plugin-react": "^6.0.5",
     "eslint": "^9.39.5",
-    "eslint-plugin-storybook": "10.5.7",
+    "eslint-plugin-storybook": "10.6.2",
     "firebase-tools": "^15.26.0",
     "happy-dom": "^20.11.2",
     "prettier": "^3.9.6",
@@ -80,7 +80,7 @@
     "prettier-plugin-packagejson": "^3.0.2",
     "prop-types": "^15.8.1",
     "sass": "^1.102.0",
-    "storybook": "10.5.7",
+    "storybook": "10.6.2",
     "typescript": "^6.0.3",
     "vite": "^8.2.1",
     "vitest": "^4.1.10"
