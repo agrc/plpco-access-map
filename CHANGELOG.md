@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.13.14](https://github.com/agrc/plpco-access-map/compare/v1.13.13...v1.13.14) (2026-10-30)
+
+
+### Bug Fixes
+
+* **deps:** bump decode-uri-component to 0.5.1 ([2c6b6cc](https://github.com/agrc/plpco-access-map/commit/2c6b6cc8777e6305b3f0ba563788604a6cea0bf1))
+
 ## [1.13.13](https://github.com/agrc/plpco-access-map/compare/v1.13.12...v1.13.13) (2026-08-21)
 
 
