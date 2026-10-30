@@ -1,23 +1,28 @@
-import EsriFeature from '@arcgis/core/widgets/Feature';
+import Graphic from '@arcgis/core/Graphic.js';
+import type FeatureLayer from '@arcgis/core/layers/FeatureLayer.js';
+import type MapView from '@arcgis/core/views/MapView.js';
+import '@arcgis/map-components/components/arcgis-feature';
+import type { ArcgisFeature } from '@arcgis/map-components/components/arcgis-feature/customElement';
 import PropTypes from 'prop-types';
 import React from 'react';
 import './Feature.scss';
 
-const RelatedRecord = ({ feature, table }) => {
-  const container = React.useRef();
+type RelatedRecordProps = {
+  feature: Graphic;
+  table: FeatureLayer;
+};
+
+const RelatedRecord = ({ feature, table }: RelatedRecordProps) => {
+  const featureElement = React.useRef<ArcgisFeature | null>(null);
 
   React.useEffect(() => {
-    const giddyUp = async () => {
+    if (feature && featureElement.current) {
       feature.popupTemplate = table.popupTemplate;
-
-      new EsriFeature({ container: container.current, graphic: feature });
-    };
-    if (feature) {
-      giddyUp();
+      featureElement.current.graphic = feature;
     }
   }, [feature, table]);
 
-  return feature ? <div ref={container}></div> : null;
+  return feature ? <arcgis-feature ref={featureElement} /> : null;
 };
 
 RelatedRecord.propTypes = {
@@ -27,10 +32,20 @@ RelatedRecord.propTypes = {
   }).isRequired,
 };
 
-const RelatedRecordContainer = ({ relatedRecordInfo }) => {
+type RelatedRecordInfo = {
+  name: string;
+  features: Graphic[];
+  table: FeatureLayer;
+};
+
+type RelatedRecordContainerProps = {
+  relatedRecordInfo: RelatedRecordInfo;
+};
+
+const RelatedRecordContainer = ({ relatedRecordInfo }: RelatedRecordContainerProps) => {
   const [isOpen, setIsOpen] = React.useState(false);
   const containerId = `#relatedRecordContainer_${relatedRecordInfo.name}`;
-  const container = React.useRef();
+  const container = React.useRef<HTMLDivElement | null>(null);
 
   const onClick = () => {
     setIsOpen((current) => !current);
@@ -95,47 +110,35 @@ RelatedRecordContainer.propTypes = {
   }).isRequired,
 };
 
-const emptyGraphic = {
+const emptyGraphic = new Graphic({
   popupTemplate: {
     content: 'Click on a road or end point for more information.',
   },
+});
+
+type FeatureProps = {
+  feature?: Graphic | null;
+  mapView?: MapView | null;
+  relatedRecords?: RelatedRecordInfo[] | null;
 };
 
-const Feature = ({ feature, mapView, relatedRecords }) => {
-  const node = React.useRef();
-  const featureWidget = React.useRef();
-  const relatedContainer = React.useRef();
+const Feature = ({ feature, mapView, relatedRecords }: FeatureProps) => {
+  const featureElement = React.useRef<ArcgisFeature | null>(null);
+  const relatedContainer = React.useRef<HTMLDivElement | null>(null);
 
   React.useEffect(() => {
-    const init = async () => {
-      console.log('Feature.init');
-
-      featureWidget.current = new EsriFeature({
-        container: node.current,
-        map: mapView.map,
-        graphic: emptyGraphic,
-        spatialReference: mapView.spatialReference,
-      });
-    };
-
-    if (mapView) {
-      init();
+    if (!mapView || !featureElement.current) {
+      return;
     }
-  }, [mapView]);
 
-  React.useEffect(() => {
-    if (featureWidget.current) {
-      if (feature) {
-        featureWidget.current.graphic = feature;
-      } else {
-        featureWidget.current.graphic = emptyGraphic;
-      }
-    }
-  }, [feature]);
+    featureElement.current.map = mapView.map;
+    featureElement.current.spatialReference = mapView.spatialReference;
+    featureElement.current.graphic = feature || emptyGraphic;
+  }, [feature, mapView]);
 
   return (
     <div className="feature">
-      <div ref={node}></div>
+      <arcgis-feature ref={featureElement} />
       {relatedRecords ? (
         <div ref={relatedContainer} className="accordion">
           {relatedRecords.map((relatedRecordInfo, index) => (

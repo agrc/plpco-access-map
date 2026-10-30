@@ -4,7 +4,12 @@ import { clsx } from 'clsx';
 import PropTypes from 'prop-types';
 import './SidebarToggler.scss';
 
-const SidebarToggler = ({ sidebarOpen, toggleSidebar }) => {
+type SidebarTogglerProps = {
+  sidebarOpen: boolean;
+  toggleSidebar: () => void;
+};
+
+const SidebarToggler = ({ sidebarOpen, toggleSidebar }: SidebarTogglerProps) => {
   return (
     <button
       type="button"

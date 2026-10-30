@@ -5,17 +5,23 @@ import PropTypes from 'prop-types';
 import * as React from 'react';
 import './WidgetToggle.scss';
 
-const WidgetToggle = ({ widget }) => {
-  const containerRef = React.useRef();
+type WidgetToggleProps = {
+  widget: {
+    container: Node;
+  };
+};
+
+const WidgetToggle = ({ widget }: WidgetToggleProps) => {
+  const containerRef = React.useRef<HTMLDivElement>(null);
   const [isOpen, setIsOpen] = React.useState(true);
 
   React.useEffect(() => {
     if (isOpen) {
       console.log('opening');
-      containerRef.current.appendChild(widget.container);
+      containerRef.current?.appendChild(widget.container);
     } else {
       console.log('closing');
-      containerRef.current.removeChild(widget.container);
+      containerRef.current?.removeChild(widget.container);
     }
   }, [isOpen, widget]);
 

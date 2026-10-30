@@ -1,0 +1,29 @@
+import react from '@vitejs/plugin-react';
+import { fileURLToPath } from 'node:url';
+import { defineConfig } from 'vitest/config';
+
+const arcgisCorePath = fileURLToPath(new URL('./node_modules/@arcgis/core', import.meta.url));
+
+// https://vitejs.dev/config/
+export default defineConfig({
+  plugins: [react()],
+  base: './',
+  resolve: {
+    alias: [
+      {
+        find: /^@arcgis\/core\/(.*)$/,
+        replacement: `${arcgisCorePath}/$1`,
+      },
+      {
+        find: '@arcgis/core',
+        replacement: arcgisCorePath,
+      },
+    ],
+  },
+  define: {
+    APP_VERSION: JSON.stringify(process.env.npm_package_version),
+  },
+  test: {
+    environment: 'happy-dom',
+  },
+});

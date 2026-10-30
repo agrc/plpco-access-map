@@ -1,6 +1,11 @@
 {
   "cSpell.words": [
+    "arcgis",
     "autoplay",
+    "basemap",
+    "Centerlines",
+    "enablejsapi",
+    "escaperegexp",
     "evenodd",
     "firebaserc",
     "fontawesome",
@@ -13,7 +18,11 @@
     "pluginutils",
     "RDID",
     "SAMEORIGIN",
+    "sortby",
+    "ugrc",
+    "uniqwith",
     "VITE",
+    "wkid",
     "wonkavision"
   ],
   "editor.formatOnSave": true

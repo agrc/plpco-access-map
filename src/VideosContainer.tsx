@@ -1,19 +1,33 @@
+import type FeatureLayer from '@arcgis/core/layers/FeatureLayer';
 import PropTypes from 'prop-types';
 import React from 'react';
 import config from './config';
-import Video from './Video';
+import Video, { type VideoMapView, type VideoPointsLayer } from './Video';
 import './VideosContainer.scss';
 
-const VideosContainer = ({ rdId, mapView, table, points }) => {
-  const [videos, setVideos] = React.useState([]);
+type VideoAttributes = {
+  GPS_Track_ID?: string;
+  Date_Time?: string | number;
+  URL?: string;
+};
+
+type VideosContainerProps = {
+  rdId?: string;
+  mapView?: VideoMapView;
+  table?: FeatureLayer;
+  points?: VideoPointsLayer;
+};
+
+const VideosContainer = ({ rdId, mapView, table, points }: VideosContainerProps) => {
+  const [videos, setVideos] = React.useState<VideoAttributes[]>([]);
   const [loading, setLoading] = React.useState(false);
 
   React.useEffect(() => {
-    const giddyUp = async () => {
+    const giddyUp = async (videoTable: NonNullable<VideosContainerProps['table']>) => {
       setLoading(true);
-      const results = await table.queryFeatures({
+      const results = await videoTable.queryFeatures({
         where: `UPPER(${config.fieldNames.videoReports.RD_ID}) = UPPER('${rdId}') AND URL IS NOT NULL`,
-        outFields: '*',
+        outFields: ['*'],
       });
 
       if (results.features.length) {
@@ -22,8 +36,8 @@ const VideosContainer = ({ rdId, mapView, table, points }) => {
       setLoading(false);
     };
 
-    if (rdId) {
-      giddyUp();
+    if (rdId && table) {
+      giddyUp(table);
     } else {
       setVideos([]);
     }

@@ -18,24 +18,27 @@ jobs:
 
     steps:
       - name: ⬇️ Set up code
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
 
       - name: 📦 Setup PNPM
-        uses: pnpm/action-setup@v4
+        uses: pnpm/action-setup@v6
         with:
-          version: latest
+          version: 11
 
       - name: ⎔ Setup Node.js
-        uses: actions/setup-node@v6
+        uses: actions/setup-node@v7
         with:
           node-version: lts/*
           cache: pnpm
 
       - name: 📥 Download dependencies
-        run: pnpm install
+        run: pnpm install --frozen-lockfile
 
       - name: 🧵 Lint
-        run: pnpm run lint
+        run: pnpm lint
+
+      - name: 🧹 Check Types
+        run: pnpm check
 
       - name: 🧪 Run tests
         run: pnpm test
@@ -50,7 +53,7 @@ jobs:
 
     steps:
       - name: ⬇️ Set up code
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
 
       - name: 🚀 Deploy
         uses: agrc/firebase-website-deploy-composite-action@v2

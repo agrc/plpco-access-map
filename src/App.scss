@@ -34,19 +34,19 @@ body,
       background-color: white;
     }
   }
-  .esri-view {
+  .map-container {
     flex: 1;
+    min-width: 0;
+    position: relative;
     @media (max-width: variables.$smallScreenWidth) {
       position: absolute;
       height: 100%;
       width: 100%;
       top: 0;
     }
-    .esri-widget {
-      background-color: #ffffffb0;
-    }
-    .esri-view-surface:focus::after {
-      outline: none;
+    arcgis-map {
+      height: 100%;
+      width: 100%;
     }
   }
   .sherlock button.disabled {
