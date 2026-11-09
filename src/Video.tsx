@@ -6,10 +6,12 @@ import GraphicsLayer from '@arcgis/core/layers/GraphicsLayer';
 import type MapView from '@arcgis/core/views/MapView';
 import PropTypes from 'prop-types';
 import React from 'react';
+import { createPortal } from 'react-dom';
 import config from './config';
 import markerUrl from './marker.svg';
 import useIsMobile from './useIsMobile';
 import './Video.scss';
+import VideoOrientationControls, { type OrientationPlayer } from './VideoOrientationControls';
 
 export const getIDFromUrl = (url: string) => {
   // check for valid URL
@@ -23,8 +25,7 @@ export const getIDFromUrl = (url: string) => {
 };
 
 type VideoPoint = { attributes: Record<string, string | number | null | undefined>; geometry?: Point | null };
-type YouTubePlayer = {
-  getSphericalProperties: () => { yaw: number };
+type YouTubePlayer = OrientationPlayer & {
   getCurrentTime: () => number;
   seekTo: (seconds: number, allowSeekAhead: boolean) => void;
   pauseVideo: () => void;
@@ -89,6 +90,12 @@ const Video = ({ GPS_Track_ID, Date_Time, URL, pointsLayer, mapView, testWarning
   const [videoAngle, setVideoAngle] = React.useState(0);
   const [angleOfSegment, setAngleOfSegment] = React.useState(0);
   const player = React.useRef<YouTubePlayer | null>(null);
+  const embeddedPlayer = React.useRef<YouTubePlayer | null>(null);
+  const popupCleanup = React.useRef<(() => void) | null>(null);
+  const [popupControls, setPopupControls] = React.useState<{
+    container: HTMLElement;
+    player: YouTubePlayer;
+  } | null>(null);
   const requestAnimationId = React.useRef<number | undefined>(undefined);
   const [errorMessage, setErrorMessage] = React.useState<string | undefined>();
   const [warningMessage, setWarningMessage] = React.useState(testWarningMessage);
@@ -102,7 +109,9 @@ const Video = ({ GPS_Track_ID, Date_Time, URL, pointsLayer, mapView, testWarning
     if (player.current && player.current.getSphericalProperties) {
       const properties = player.current.getSphericalProperties();
 
-      setVideoAngle(properties.yaw);
+      if (typeof properties.yaw === 'number' && Number.isFinite(properties.yaw)) {
+        setVideoAngle(properties.yaw);
+      }
     }
 
     requestAnimationId.current = window.requestAnimationFrame(updateVideoAngle);
@@ -160,6 +169,8 @@ const Video = ({ GPS_Track_ID, Date_Time, URL, pointsLayer, mapView, testWarning
   }, [videoAngle, angleOfSegment]);
 
   React.useEffect(() => {
+    let active = true;
+    let effectPlayer: YouTubePlayer | undefined;
     let graphicsLayer: GraphicsLayer | undefined;
     const giddyUp = async () => {
       if (!mapView?.map || !pointsLayer || !URL) return;
@@ -181,8 +192,7 @@ const Video = ({ GPS_Track_ID, Date_Time, URL, pointsLayer, mapView, testWarning
 
       if (isMobile) return;
 
-      // note that 360 video dragging to pan is no supported on localhost
-      new YT.Player(playerDiv.current, {
+      effectPlayer = new YT.Player(playerDiv.current, {
         height: '250',
         width: '100%',
         videoId,
@@ -193,7 +203,14 @@ const Video = ({ GPS_Track_ID, Date_Time, URL, pointsLayer, mapView, testWarning
           rel: 0,
         },
         events: {
-          onStateChange: onPlayerStateChange,
+          onReady: (event: { target: YouTubePlayer }) => {
+            if (!active) return;
+            embeddedPlayer.current = event.target;
+          },
+          onStateChange: (event: { data: number; target: YouTubePlayer }) => {
+            if (!active) return;
+            onPlayerStateChange(event);
+          },
         },
       });
 
@@ -220,6 +237,7 @@ const Video = ({ GPS_Track_ID, Date_Time, URL, pointsLayer, mapView, testWarning
       };
 
       const features = await queryForPoints(null);
+      if (!active) return;
 
       if (features.length) {
         pointsLookup.current = parsePoints(features);
@@ -231,6 +249,8 @@ const Video = ({ GPS_Track_ID, Date_Time, URL, pointsLayer, mapView, testWarning
     giddyUp();
 
     return () => {
+      active = false;
+      popupCleanup.current?.();
       if (graphicsLayer) {
         mapView?.map?.remove(graphicsLayer);
       }
@@ -243,9 +263,12 @@ const Video = ({ GPS_Track_ID, Date_Time, URL, pointsLayer, mapView, testWarning
         window.cancelAnimationFrame(requestAnimationId.current);
       }
 
-      if (player.current) {
+      if (player.current && player.current !== effectPlayer) {
         player.current.destroy();
       }
+      effectPlayer?.destroy();
+      embeddedPlayer.current = null;
+      player.current = null;
     };
   }, [
     URL,
@@ -259,25 +282,40 @@ const Video = ({ GPS_Track_ID, Date_Time, URL, pointsLayer, mapView, testWarning
     isMobile,
   ]);
 
+  React.useEffect(() => () => popupCleanup.current?.(), [URL]);
+
   const popOut = () => {
     console.log('popOut');
 
     if (!URL) return;
+
+    popupCleanup.current?.();
 
     if (player.current) {
       player.current.pauseVideo();
     }
 
     const popupUrl = new window.URL(`${import.meta.env.BASE_URL}video-popup.html`, window.location.href);
-    const popupWindow = window.open(popupUrl, 'roadsVideo', 'width=640,height=390,location=0');
+    const popupWindow = window.open(popupUrl, 'roadsVideo', 'width=640,height=540,location=0');
 
     if (!popupWindow) {
+      setWarningMessage('The video popup was blocked. Allow popups for this site and try again.');
+
       return;
     }
 
     const id = getIDFromUrl(URL);
     let popupPlayer: YouTubePlayer | undefined;
     const initializePopupPlayer = () => {
+      popupWindow.addEventListener('unload', dispose);
+      document.querySelectorAll('style, link[rel="stylesheet"]').forEach((stylesheet) => {
+        const clone = stylesheet.cloneNode(true);
+        if (clone instanceof HTMLLinkElement && stylesheet instanceof HTMLLinkElement) {
+          clone.href = stylesheet.href;
+        }
+        popupWindow.document.head.appendChild(clone);
+      });
+
       popupPlayer = new YT.Player(popupWindow.document.getElementById('player'), {
         height: '100%',
         width: '100%',
@@ -295,6 +333,13 @@ const Video = ({ GPS_Track_ID, Date_Time, URL, pointsLayer, mapView, testWarning
             if (player.current) {
               event.target.seekTo(player.current.getCurrentTime(), true);
             }
+            const container = popupWindow.document.getElementById('controls');
+            if (!container) {
+              setWarningMessage('The video popup could not load its look-around controls.');
+
+              return;
+            }
+            setPopupControls({ container, player: event.target });
           },
         },
       });
@@ -302,18 +347,28 @@ const Video = ({ GPS_Track_ID, Date_Time, URL, pointsLayer, mapView, testWarning
 
     popupWindow.addEventListener('load', initializePopupPlayer, { once: true });
 
-    popupWindow.addEventListener('unload', () => {
-      window.clearInterval(intervalId.current);
-      popupPlayer?.destroy();
-      if (requestAnimationId.current !== undefined) {
-        window.cancelAnimationFrame(requestAnimationId.current);
+    const dispose = () => {
+      popupWindow.removeEventListener('load', initializePopupPlayer);
+      popupWindow.removeEventListener('unload', dispose);
+      window.removeEventListener('unload', closePopup);
+      setPopupControls(null);
+      if (player.current === popupPlayer) {
+        window.clearInterval(intervalId.current);
+        if (requestAnimationId.current !== undefined) {
+          window.cancelAnimationFrame(requestAnimationId.current);
+        }
+        player.current = embeddedPlayer.current;
       }
-    });
-
-    // close popup window if the main window is closed or reloaded
-    window.addEventListener('unload', () => {
+      popupPlayer?.destroy();
+      popupCleanup.current = null;
+    };
+    const closePopup = () => {
+      dispose();
       popupWindow.close();
-    });
+    };
+    // close popup window if the main window is closed or reloaded
+    window.addEventListener('unload', closePopup);
+    popupCleanup.current = closePopup;
   };
 
   return (
@@ -351,9 +406,15 @@ const Video = ({ GPS_Track_ID, Date_Time, URL, pointsLayer, mapView, testWarning
           Watch Video on YouTube
         </a>
       ) : (
-        <div ref={playerDiv}></div>
+        <>
+          <div ref={playerDiv}></div>
+          <VideoOrientationControls key={URL} getPlayer={() => embeddedPlayer.current} />
+        </>
       )}
       {warningMessage ? <div className="alert alert-warning">{warningMessage}</div> : null}
+      {popupControls
+        ? createPortal(<VideoOrientationControls getPlayer={() => popupControls.player} />, popupControls.container)
+        : null}
     </div>
   );
 };

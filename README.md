@@ -35,6 +35,16 @@ The `RS2477 Centerlines` and `Video End Point` layers retain their additional ap
 - Example RDID for video: `RD110251`
 - Example RDID for end point photos: `RD110249`
 
+#### 360 look-around controls (#271)
+
+On desktop, play an embedded video and drag the **Look around** pad below the player
+to turn the view horizontally and vertically. Focus the pad and use the arrow keys
+to turn in 5-degree steps. **Reset view** restores yaw and pitch to zero.
+An unavailable spherical orientation is reported below the controls.
+The same controls are available below the video in the popout window.
+Each set of controls operates its own player. Mobile devices continue to open
+videos on YouTube.
+
 ## Releasing
 
 Releases are managed automatically via [release-composite-action](https://github.com/agrc/release-composite-action).
