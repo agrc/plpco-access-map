@@ -6,18 +6,34 @@
     <title>Video</title>
     <style>
       html,
-      body,
-      #player {
+      body {
         height: 100%;
         margin: 0;
       }
 
       body {
-        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+      }
+
+      #video {
+        flex: 1;
+        min-height: 200px;
+      }
+
+      #player {
+        display: block;
+        height: 100%;
+        width: 100%;
+      }
+
+      #controls {
+        flex: none;
       }
     </style>
   </head>
-  <body>
-    <div id="player"></div>
+  <body class="video">
+    <div id="video"><div id="player"></div></div>
+    <div id="controls"></div>
   </body>
 </html>

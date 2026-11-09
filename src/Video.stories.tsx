@@ -18,7 +18,7 @@ const mockProps = {
   Video_Status: 'Complete',
   Video_FileName: '402',
   Road_Condition: null,
-  URL: 'https://youtu.be/F6ONE_NnSRA',
+  URL: 'https://youtu.be/SPz3H5dPPTE',
   Notes: 'When this Redo uploaded, delete the report/data on 9/7/2017.',
   mapView: { map: { add: () => {}, remove: () => {} } },
   pointsLayer: { queryFeatures: async () => ({ exceededTransferLimit: false, features: [mockPoint] }) },
