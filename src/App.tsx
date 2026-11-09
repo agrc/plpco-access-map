@@ -22,8 +22,8 @@ import './App.scss';
 import config from './config';
 import EndPointPhoto from './EndPointPhoto';
 import Feature from './Feature';
-import logo from './PLPCO_Logo_2022.jpeg';
 import { isPopupEnabledGraphic } from './popupSelection';
+import logo from './public-lands-logo.png';
 import { MapServiceProvider, Sherlock } from './Sherlock';
 import SidebarToggler from './SidebarToggler';
 import useIsMobile from './useIsMobile';
@@ -440,7 +440,7 @@ function App() {
         <h1 className="visually-hidden">{config.appTitle}</h1>
         <div aria-label="Road details and media" className={clsx('side-bar', sidebarOpen && 'open')} id="app-sidebar">
           <a href="https://publiclands.utah.gov/public-lands/access-map-360/">
-            <img src={logo} alt="PLPCO logo" className="logo" style={{ width: 'calc(275px / 2)' }} />
+            <img src={logo} alt="PLPCO logo" className="logo" style={{ width: 'calc(275px / 2)', margin: '1rem' }} />
           </a>
           <VideosContainer rdId={rdId ?? undefined} mapView={mapView ?? undefined} {...videoDataSources} />
           <EndPointPhoto
