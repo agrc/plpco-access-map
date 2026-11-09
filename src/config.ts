@@ -6,9 +6,8 @@ type DeployConfig = {
   showRelatedRecords: boolean;
   showEndPointPhotos: boolean;
   fieldNames: {
-    roads: Record<'OBJECTID' | 'RD_ID' | 'S_Name' | 'County', string>;
+    roads: Record<'RD_ID' | 'S_Name' | 'County', string>;
     videoRoutePoints: Record<'Date_Time' | 'GPS_Track_ID', string>;
-    endPointPhotos: Record<'OBJECTID', string>;
     videoReports: Record<'RD_ID', string>;
   };
 };
@@ -20,7 +19,6 @@ const deployConfigs: Record<string, DeployConfig> = {
     showEndPointPhotos: false,
     fieldNames: {
       roads: {
-        OBJECTID: 'objectid',
         RD_ID: 'rd_id',
         S_Name: 's_name',
         County: 'county',
@@ -28,9 +26,6 @@ const deployConfigs: Record<string, DeployConfig> = {
       videoRoutePoints: {
         Date_Time: 'Date_Time',
         GPS_Track_ID: 'GPS_Track_ID',
-      },
-      endPointPhotos: {
-        OBJECTID: 'OBJECTID',
       },
       videoReports: {
         RD_ID: 'RD_ID',
@@ -46,7 +41,6 @@ const deployConfigs: Record<string, DeployConfig> = {
     showEndPointPhotos: true,
     fieldNames: {
       roads: {
-        OBJECTID: 'OBJECTID',
         RD_ID: 'RD_ID',
         S_Name: 'S_Name',
         County: 'County',
@@ -54,9 +48,6 @@ const deployConfigs: Record<string, DeployConfig> = {
       videoRoutePoints: {
         Date_Time: 'Date_Time',
         GPS_Track_ID: 'GPS_Track_ID',
-      },
-      endPointPhotos: {
-        OBJECTID: 'OBJECTID',
       },
       videoReports: {
         RD_ID: 'RD_ID',
@@ -69,7 +60,6 @@ const deployConfigs: Record<string, DeployConfig> = {
     showEndPointPhotos: false,
     fieldNames: {
       roads: {
-        OBJECTID: 'objectid',
         RD_ID: 'rd_id',
         S_Name: 's_name',
         County: 'county',
@@ -77,9 +67,6 @@ const deployConfigs: Record<string, DeployConfig> = {
       videoRoutePoints: {
         Date_Time: 'Date_Time',
         GPS_Track_ID: 'GPS_Track_ID',
-      },
-      endPointPhotos: {
-        OBJECTID: 'OBJECTID',
       },
       videoReports: {
         RD_ID: 'RD_ID',
