@@ -403,8 +403,8 @@ function App() {
       highlightedHandle.current.remove();
     }
 
-    if (selectedEndPointFeature) {
-      const oid = selectedEndPointFeature.attributes[config.fieldNames.endPointPhotos.OBJECTID];
+    if (selectedEndPointFeature && endPointsFeatureLayer.current) {
+      const oid = selectedEndPointFeature.attributes[endPointsFeatureLayer.current.objectIdField];
       console.log(`end point selected ${oid}`);
 
       if (endPointsLayerView.current) {
@@ -444,7 +444,11 @@ function App() {
           </a>
           <VideosContainer rdId={rdId ?? undefined} mapView={mapView ?? undefined} {...videoDataSources} />
           <EndPointPhoto
-            oid={selectedEndPointFeature?.attributes[config.fieldNames.endPointPhotos.OBJECTID]}
+            oid={
+              selectedEndPointFeature && endPointsFeatureLayer.current
+                ? selectedEndPointFeature.attributes[endPointsFeatureLayer.current.objectIdField]
+                : undefined
+            }
             featureLayer={endPointsFeatureLayer.current ?? undefined}
           />
           <Feature
