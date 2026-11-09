@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.13.15](https://github.com/agrc/plpco-access-map/compare/v1.13.14...v1.13.15) (2026-11-09)
+
+
+### Bug Fixes
+
+* provide better contrast for video location icon ([637b342](https://github.com/agrc/plpco-access-map/commit/637b342918dc13c85b220644645f272d48724cf0))
+* read objectid field directly from roads service ([a3f3db7](https://github.com/agrc/plpco-access-map/commit/a3f3db7035484d3bee4cfa54334196c7a9654732)), refs [#307](https://github.com/agrc/plpco-access-map/issues/307)
+* reimplement 360 video look around controls ([1fd462f](https://github.com/agrc/plpco-access-map/commit/1fd462fa2cbc0a3062cc12c1320ad94d2c7e3b07)), refs [#271](https://github.com/agrc/plpco-access-map/issues/271)
+* switch to new PLPCO logo ([1f4fa9b](https://github.com/agrc/plpco-access-map/commit/1f4fa9bbd5150219e5bd00f72e6182c204d78359))
+
 ## [1.13.14](https://github.com/agrc/plpco-access-map/compare/v1.13.13...v1.13.14) (2026-10-30)
 
 
