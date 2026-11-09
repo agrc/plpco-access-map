@@ -287,6 +287,8 @@ function App() {
     }
 
     const roadsLayer = roadsFeatureLayer.current;
+    const objectIdField = roadsLayer.objectIdField;
+    const objectId = selectedRoadFeature.attributes[objectIdField];
 
     const getRdId = async () => {
       if (selectedRoadFeature.attributes[config.fieldNames.roads.RD_ID]) {
@@ -299,9 +301,7 @@ function App() {
 
       // query for RD_ID for features that come from map click (they only include the OBJECTID)
       const featureSet = await roadsLayer.queryFeatures({
-        where: `${config.fieldNames.roads.OBJECTID} = ${
-          selectedRoadFeature.attributes[config.fieldNames.roads.OBJECTID]
-        }`,
+        where: `${objectIdField} = ${objectId}`,
         returnGeometry: false,
         outFields: ['*'],
       });
@@ -316,19 +316,18 @@ function App() {
 
     const getRelatedRecords = async () => {
       const records = [];
-      const oid = selectedRoadFeature.attributes[config.fieldNames.roads.OBJECTID];
 
       for (const relationship of roadsLayer.relationships ?? []) {
         const result = await roadsLayer.queryRelatedFeatures({
           outFields: ['*'],
           relationshipId: relationship.id,
-          objectIds: [oid],
+          objectIds: [objectId],
         });
 
-        if (result[oid]) {
+        if (result[objectId]) {
           records.push({
             name: relationship.name ?? '',
-            features: result[oid].features,
+            features: result[objectId].features,
             table: tableIdsLookup.current[relationship.relatedTableId],
           });
         }
