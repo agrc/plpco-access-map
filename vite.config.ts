@@ -1,6 +1,6 @@
 import react from '@vitejs/plugin-react';
 import { fileURLToPath } from 'node:url';
-import { defineConfig } from 'vitest/config';
+import { configDefaults, defineConfig } from 'vitest/config';
 
 const arcgisCorePath = fileURLToPath(new URL('./node_modules/@arcgis/core', import.meta.url));
 
@@ -25,5 +25,6 @@ export default defineConfig({
   },
   test: {
     environment: 'happy-dom',
+    exclude: [...configDefaults.exclude, 'e2e/**'],
   },
 });

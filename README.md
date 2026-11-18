@@ -21,7 +21,7 @@ Production URLs:
 | `Video End Point`            | point feature layer with photo attachments | `OBJECTID`                               |
 | `Video Report`               | table                                      | `RD_ID` `GPS_Track_ID` `Date_Time` `URL` |
 
-Note: Field names are configurable in `config.js`
+Note: Field names are configurable in `src/config.ts`.
 
 ### Sidebar Pop-ups
 
