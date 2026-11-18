@@ -20,8 +20,8 @@ const deployConfigs: Record<string, DeployConfig> = {
     fieldNames: {
       roads: {
         RD_ID: 'rd_id',
-        S_Name: 's_name',
-        County: 'county',
+        S_Name: 'S_Name',
+        County: 'County',
       },
       videoRoutePoints: {
         Date_Time: 'Date_Time',
