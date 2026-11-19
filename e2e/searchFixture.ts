@@ -2,6 +2,7 @@ import { test as base, expect } from '@playwright/test';
 import { fileURLToPath } from 'node:url';
 
 export const road = { OBJECTID: 1, rd_id: 'RD010015', S_Name: 'Elephant Canyon Road', CO_Unique: 'BEAVER-0015' };
+export const otherRoad = { OBJECTID: 2, rd_id: 'RD010016', S_Name: 'Other Canyon Road', CO_Unique: 'BEAVER-0016' };
 const layerId = '1a1c1e19065-layer-15';
 const layerUrl = 'https://search-test.invalid/arcgis/rest/services/Roads/FeatureServer/0';
 const fields = Object.keys(road).map((name) => ({
@@ -119,12 +120,16 @@ export const test = base.extend({
       const parameters = new URLSearchParams(route.request().postData() ?? url.search);
       if (url.pathname.endsWith('/query')) {
         const where = parameters.get('where') ?? '';
-        const matches = Object.entries(road).some(
-          ([field, value]) =>
-            where.toLowerCase().includes(field.toLowerCase()) &&
-            String(value)
-              .toLowerCase()
-              .includes((where.match(/'%?(.*?)%?'/)?.[1] ?? '').replace(/%$/, '').toLowerCase()),
+        const matches = [road, otherRoad].filter(
+          (attributes) =>
+            where === '1=1' ||
+            Object.entries(attributes).some(
+              ([field, value]) =>
+                where.toLowerCase().includes(field.toLowerCase()) &&
+                String(value)
+                  .toLowerCase()
+                  .includes((where.match(/'%?(.*?)%?'/)?.[1] ?? '').replace(/%$/, '').toLowerCase()),
+            ),
         );
         return route.fulfill({
           json: {
@@ -132,7 +137,7 @@ export const test = base.extend({
             geometryType: 'esriGeometryPolyline',
             spatialReference: { wkid: 3857 },
             fields,
-            features: matches ? [{ attributes: road, geometry }] : [],
+            features: matches.map((attributes) => ({ attributes, geometry })),
             exceededTransferLimit: false,
           },
         });
