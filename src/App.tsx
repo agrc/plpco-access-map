@@ -11,7 +11,7 @@ import type Map from '@arcgis/core/Map';
 import type FeatureLayerView from '@arcgis/core/views/layers/FeatureLayerView';
 import type MapView from '@arcgis/core/views/MapView';
 import LayerSearchSource from '@arcgis/core/widgets/Search/LayerSearchSource';
-import type { SearchResponse } from '@arcgis/core/widgets/Search/types';
+import type { SearchViewModelSelectResultEvent } from '@arcgis/core/widgets/Search/SearchViewModel';
 import '@arcgis/map-components/components/arcgis-basemap-gallery';
 import '@arcgis/map-components/components/arcgis-expand';
 import '@arcgis/map-components/components/arcgis-layer-list';
@@ -115,12 +115,14 @@ function App() {
   const [authenticationError, setAuthenticationError] = React.useState<Error | null>(null);
   const [mapConfigured, setMapConfigured] = React.useState(false);
 
-  const selectSearchResult = ({ results }: SearchResponse) => {
-    const sourceResults = results.find((source) => source.results?.length);
-    const result = sourceResults?.results?.[0];
-    if (!result || !sourceResults || !mapView) return;
+  const selectSearchResult = (search: ArcgisSearch, { result, source }: SearchViewModelSelectResultEvent) => {
+    if (!mapView) return;
 
-    const { source } = sourceResults;
+    // Remove the SDK highlight while preserving the user's search text.
+    const searchTerm = search.searchTerm;
+    search.clear();
+    search.searchTerm = searchTerm;
+
     const graphic = result.feature;
     const layer = 'layer' in source ? source.layer : null;
     setSelectedFeature(null);
@@ -497,11 +499,10 @@ function App() {
                 label="Search roads by name, road ID, or county unique number"
                 onarcgisReady={(event) => configureSearchSources(event.target)}
                 onarcgisPropertyChange={(event) => configureSearchSources(event.target)}
-                auto-select-disabled
                 auto-navigate-disabled
                 popup-disabled
                 result-graphic-disabled
-                onarcgisSearchComplete={(event) => selectSearchResult(event.detail)}
+                onarcgisSelectResult={(event) => selectSearchResult(event.target, event.detail)}
               />
               <arcgis-expand slot="top-left">
                 <arcgis-basemap-gallery />
