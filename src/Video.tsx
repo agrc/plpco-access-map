@@ -1,8 +1,10 @@
 /* global YT */
+import type { ResourceHandle } from '@arcgis/core/core/Handles';
 import type Point from '@arcgis/core/geometry/Point';
 import type { GraphicProperties } from '@arcgis/core/Graphic';
 import Graphic from '@arcgis/core/Graphic';
 import GraphicsLayer from '@arcgis/core/layers/GraphicsLayer';
+import Map from '@arcgis/core/Map';
 import type MapView from '@arcgis/core/views/MapView';
 import PropTypes from 'prop-types';
 import React from 'react';
@@ -59,6 +61,7 @@ const symbol = {
   height: 30,
   angle: 0,
 };
+const VIEWPOINT_LAYER_TITLE = 'Video viewpoint';
 
 export type VideoProps = {
   GPS_Track_ID?: string;
@@ -172,14 +175,27 @@ const Video = ({ GPS_Track_ID, Date_Time, URL, pointsLayer, mapView, testWarning
     let active = true;
     let effectPlayer: YouTubePlayer | undefined;
     let graphicsLayer: GraphicsLayer | undefined;
+    let layerOrderHandle: ResourceHandle | undefined;
     const giddyUp = async () => {
       if (!mapView?.map || !pointsLayer || !URL) return;
 
       graphic.current = new Graphic({ symbol: symbol as unknown as GraphicProperties['symbol'] });
-      graphicsLayer = new GraphicsLayer();
+      graphicsLayer = new GraphicsLayer({ title: VIEWPOINT_LAYER_TITLE, listMode: 'hide' });
       graphicsLayer.add(graphic.current);
 
-      mapView.map.add(graphicsLayer);
+      const map = mapView.map;
+      map.add(graphicsLayer);
+      if (map instanceof Map) {
+        const viewpointLayer = graphicsLayer;
+        layerOrderHandle = map.layers.on('change', () => {
+          const index = map.layers.indexOf(viewpointLayer);
+          const covered =
+            index >= 0 && map.layers.slice(index + 1).some((layer) => layer.title !== VIEWPOINT_LAYER_TITLE);
+          if (covered) {
+            map.reorder(viewpointLayer, map.layers.length - 1);
+          }
+        });
+      }
 
       let videoId;
       try {
@@ -251,6 +267,7 @@ const Video = ({ GPS_Track_ID, Date_Time, URL, pointsLayer, mapView, testWarning
     return () => {
       active = false;
       popupCleanup.current?.();
+      layerOrderHandle?.remove();
       if (graphicsLayer) {
         mapView?.map?.remove(graphicsLayer);
       }
@@ -431,6 +448,8 @@ Video.propTypes = {
     map: PropTypes.shape({
       add: PropTypes.func.isRequired,
       remove: PropTypes.func.isRequired,
+      layers: PropTypes.object,
+      reorder: PropTypes.func,
     }).isRequired,
     spatialReference: PropTypes.object.isRequired,
   }),

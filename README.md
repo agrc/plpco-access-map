@@ -23,6 +23,24 @@ Production URLs:
 
 Note: Field names are configurable in `src/config.ts`.
 
+### Search
+
+The ArcGIS Search component uses the search configuration in the web map selected by `VITE_APP_MAP_ID`.
+Searchable layers, fields, and matching rules are configured in the web map, not in application code.
+
+To change the search configuration:
+
+1. As the map owner or an administrator, open the web map's item page in the portal.
+2. Go to **Settings > Web Map > Enable Search** and enable **By Layer**. Add a layer/field entry for each
+   searchable field, choosing **Contains** for partial matching or **Equals** for exact matching.
+3. Save the settings and reload the app. No app rebuild or deployment is needed.
+
+The app excludes locator sources such as the ArcGIS World Geocoding Service. The all-sources placeholder
+and accessible search label are controlled separately in [src/App.tsx](./src/App.tsx).
+
+See Esri's [Configure feature and table search for maps](https://doc.esri.com/en/arcgis-enterprise/latest/create/configure-feature-search.html)
+for portal configuration details.
+
 ### Sidebar Pop-ups
 
 The sidebar displays feature details for any web map layer whose `popupEnabled` property is set to `true`. Use the layer's popup configuration to control which layers are selectable for sidebar details. A popup template is also needed to provide useful content.

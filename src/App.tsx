@@ -1,5 +1,6 @@
 import esriConfig from '@arcgis/core/config';
 import type { ResourceHandle as Handle } from '@arcgis/core/core/Handles';
+import { isAbortError } from '@arcgis/core/core/promiseUtils';
 import Graphic from '@arcgis/core/Graphic';
 import IdentityManager from '@arcgis/core/identity/IdentityManager';
 import OAuthInfo from '@arcgis/core/identity/OAuthInfo';
@@ -9,12 +10,16 @@ import type Layer from '@arcgis/core/layers/Layer';
 import type Map from '@arcgis/core/Map';
 import type FeatureLayerView from '@arcgis/core/views/layers/FeatureLayerView';
 import type MapView from '@arcgis/core/views/MapView';
+import LayerSearchSource from '@arcgis/core/widgets/Search/LayerSearchSource';
+import type { SearchResponse } from '@arcgis/core/widgets/Search/types';
 import '@arcgis/map-components/components/arcgis-basemap-gallery';
 import '@arcgis/map-components/components/arcgis-expand';
 import '@arcgis/map-components/components/arcgis-layer-list';
 import '@arcgis/map-components/components/arcgis-legend';
 import '@arcgis/map-components/components/arcgis-map';
 import type { ArcgisMap } from '@arcgis/map-components/components/arcgis-map';
+import '@arcgis/map-components/components/arcgis-search';
+import type { ArcgisSearch } from '@arcgis/map-components/components/arcgis-search';
 import { clsx } from 'clsx';
 import queryString from 'query-string';
 import React from 'react';
@@ -24,7 +29,6 @@ import EndPointPhoto from './EndPointPhoto';
 import Feature from './Feature';
 import { isPopupEnabledGraphic } from './popupSelection';
 import logo from './public-lands-logo.png';
-import { MapServiceProvider, Sherlock } from './Sherlock';
 import SidebarToggler from './SidebarToggler';
 import useIsMobile from './useIsMobile';
 import type { VideoPointsLayer } from './Video';
@@ -41,6 +45,13 @@ const PORTAL_URL = 'https://maps.publiclands.utah.gov/portal';
 
 const showLayerListItem = (item: { layer?: { title?: string | null } | null }) =>
   Boolean(item.layer?.title) && item.layer?.title !== 'Untitled layer';
+
+const configureSearchSources = (search: ArcgisSearch) => {
+  if (!search.view?.ready || search.state !== 'ready' || search.includeDefaultSourcesDisabled) return;
+
+  search.sources = search.defaultSources.filter((source) => source instanceof LayerSearchSource);
+  search.includeDefaultSourcesDisabled = true;
+};
 
 const getRdIdFromUrl = (): string | null => {
   const parameters = queryString.parse(document.location.hash);
@@ -88,11 +99,6 @@ function App() {
   const [rdId, setRdId] = React.useState<string | null>(null);
   const roadsFeatureLayer = React.useRef<FeatureLayer | null>(null);
   const endPointsFeatureLayer = React.useRef<FeatureLayer | null>(null);
-  const [sherlockConfig, setSherlockConfig] = React.useState<{
-    provider: MapServiceProvider;
-    placeHolder: string;
-    onSherlockMatch: (matches: Graphic[]) => void;
-  } | null>(null);
   const highlightedHandle = React.useRef<Handle | null>(null);
   const selectedFeatureHighlightHandle = React.useRef<Handle | null>(null);
   const roadsLayerView = React.useRef<FeatureLayerView | null>(null);
@@ -108,6 +114,38 @@ function App() {
   const [authenticationState, setAuthenticationState] = React.useState(config.authentication ? 'loading' : 'ready');
   const [authenticationError, setAuthenticationError] = React.useState<Error | null>(null);
   const [mapConfigured, setMapConfigured] = React.useState(false);
+
+  const selectSearchResult = ({ results }: SearchResponse) => {
+    const sourceResults = results.find((source) => source.results?.length);
+    const result = sourceResults?.results?.[0];
+    if (!result || !sourceResults || !mapView) return;
+
+    const { source } = sourceResults;
+    const graphic = result.feature;
+    const layer = 'layer' in source ? source.layer : null;
+    setSelectedFeature(null);
+    setSelectedRoadFeature(null);
+    setSelectedEndPointFeature(null);
+    setRelatedRecords(null);
+
+    if (!layer) return;
+
+    mapView.goTo(result.target ?? result.extent ?? graphic).catch((error: unknown) => {
+      if (!isAbortError(error)) {
+        console.error('Unable to navigate to the selected search result.', error);
+      }
+    });
+    graphic.popupTemplate = graphic.getEffectivePopupTemplate();
+    if (layer === roadsFeatureLayer.current) {
+      setSelectedRoadFeature(graphic);
+    } else if (layer === endPointsFeatureLayer.current) {
+      setSelectedEndPointFeature(graphic);
+      setSidebarOpen(true);
+    } else {
+      setSelectedFeature(graphic);
+      setSidebarOpen(true);
+    }
+  };
 
   React.useEffect(() => {
     if (rdId && getRdIdFromUrl() !== rdId) {
@@ -227,30 +265,16 @@ function App() {
         }
       });
 
-      const onSherlockMatch = async (matches: Graphic[]) => {
+      const selectRoad = (graphic: Graphic) => {
         setSelectedFeature(null);
         setSelectedRoadFeature(null);
-
-        if (matches.length) {
-          const graphic = matches[0];
-          if (!graphic) return;
-          view.goTo(graphic);
-
-          if (roadsLayerView.current) {
-            graphic.popupTemplate = roadsLayerView.current.layer.popupTemplate;
-          }
-          setSelectedRoadFeature(graphic);
+        setSelectedEndPointFeature(null);
+        view.goTo(graphic);
+        if (roadsLayerView.current) {
+          graphic.popupTemplate = roadsLayerView.current.layer.popupTemplate;
         }
+        setSelectedRoadFeature(graphic);
       };
-
-      setSherlockConfig({
-        provider: new MapServiceProvider(`${roadsFeatureLayer.current.url}/0`, config.fieldNames.roads.S_Name, {
-          outFields: ['*'],
-          contextField: config.fieldNames.roads.County,
-        }),
-        placeHolder: 'search by street name...',
-        onSherlockMatch,
-      });
 
       const rdIdFromUrl = getRdIdFromUrl();
       if (rdIdFromUrl) {
@@ -261,8 +285,9 @@ function App() {
           outSpatialReference: view.spatialReference,
         });
 
-        if (featureSet.features.length) {
-          onSherlockMatch(featureSet.features);
+        const feature = featureSet.features[0];
+        if (feature) {
+          selectRoad(feature);
         } else {
           console.error(`No feature found for RD_ID: ${rdIdFromUrl}`);
         }
@@ -466,6 +491,18 @@ function App() {
               ref={mapElement}
               role="region"
             >
+              <arcgis-search
+                slot="top-right"
+                all-placeholder="Road name, road ID, or county unique number"
+                label="Search roads by name, road ID, or county unique number"
+                onarcgisReady={(event) => configureSearchSources(event.target)}
+                onarcgisPropertyChange={(event) => configureSearchSources(event.target)}
+                auto-select-disabled
+                auto-navigate-disabled
+                popup-disabled
+                result-graphic-disabled
+                onarcgisSearchComplete={(event) => selectSearchResult(event.detail)}
+              />
               <arcgis-expand slot="top-left">
                 <arcgis-basemap-gallery />
               </arcgis-expand>
@@ -478,7 +515,6 @@ function App() {
             </arcgis-map>
           ) : null}
           <SidebarToggler sidebarOpen={sidebarOpen} toggleSidebar={toggleSidebar} />
-          {sherlockConfig ? <Sherlock {...sherlockConfig} /> : null}
         </div>
       </main>
     </>

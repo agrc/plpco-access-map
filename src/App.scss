@@ -48,10 +48,9 @@ body,
       height: 100%;
       width: 100%;
     }
-  }
-  .sherlock button.disabled {
-    background-color: variables.$primaryColor;
-    border-color: variables.$primaryColor;
+    arcgis-search {
+      width: min(440px, calc(100vw - 90px));
+    }
   }
 }
 

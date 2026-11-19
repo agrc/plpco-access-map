@@ -1,12 +1,17 @@
 import type { ArcgisFeature } from '@arcgis/map-components/components/arcgis-feature/customElement';
 import type { ArcgisMap } from '@arcgis/map-components/components/arcgis-map';
-import { expect, test } from '@playwright/test';
+import type { ArcgisSearch } from '@arcgis/map-components/components/arcgis-search';
+import { expect, test } from './searchFixture';
 
-test('searching for a street displays matches and selects the road on the map and in the sidebar', async ({ page }) => {
+test('native search displays street matches and selects the road on the map and in the sidebar', async ({ page }) => {
   await page.goto('/');
 
-  const search = page.getByPlaceholder('search by street name...');
+  const searchElement = page.locator('arcgis-search');
+  const search = searchElement.getByRole('combobox');
   await expect(search).toBeVisible({ timeout: 60_000 });
+  await expect
+    .poll(() => searchElement.evaluate((element: ArcgisSearch) => element.state))
+    .toBe('ready');
 
   const initialScale = await page.locator('arcgis-map').evaluate((element: ArcgisMap) => element.view.scale);
 
@@ -21,7 +26,7 @@ test('searching for a street displays matches and selects the road on the map an
   expect((await response.json()).features.length).toBeGreaterThan(0);
 
   const streetName = 'Elephant Canyon Road';
-  const match = page.getByRole('option').filter({ hasText: streetName }).filter({ hasText: 'Beaver' });
+  const match = searchElement.getByRole('option').filter({ hasText: streetName }).first();
   await expect(match).toBeVisible();
   await match.click();
 
