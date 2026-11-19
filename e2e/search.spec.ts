@@ -13,9 +13,9 @@ test('uses only web map layer sources and explains the searchable road fields', 
   await expect
     .poll(() =>
       search.evaluate((element: ArcgisSearch) =>
-        element.allSources.toArray().flatMap((source) =>
-          'displayField' in source && source.displayField ? [source.displayField] : [],
-        ),
+        element.allSources
+          .toArray()
+          .flatMap((source) => ('displayField' in source && source.displayField ? [source.displayField] : [])),
       ),
     )
     .toEqual(['CO_Unique', 'S_Name', 'rd_id']);
@@ -28,6 +28,44 @@ test('uses only web map layer sources and explains the searchable road fields', 
     'placeholder',
     'Road name, road ID, or county unique number',
   );
+});
+
+test('county labels distinguish same-named roads and select the chosen county', async ({ page }) => {
+  await page.goto('/');
+  const search = page.locator('arcgis-search');
+  await expect.poll(() => search.evaluate((element: ArcgisSearch) => element.state), { timeout: 60_000 }).toBe('ready');
+
+  await search.getByRole('searchbox').fill('elephant canyon');
+  await expect(search.getByRole('option', { name: `${road.S_Name} (${road.County})`, exact: true })).toBeVisible();
+  const otherCounty = search.getByRole('option', {
+    name: `${otherRoad.S_Name} (${otherRoad.County})`,
+    exact: true,
+  });
+  await expect(otherCounty).toBeVisible();
+  const resultLabels = search.evaluate(
+    (element: ArcgisSearch) =>
+      new Promise<string[]>((resolve) => {
+        element.addEventListener(
+          'arcgisSearchComplete',
+          (event) => resolve(event.detail.results.flatMap(({ results }) => results?.map(({ name }) => name) ?? [])),
+          { once: true },
+        );
+      }),
+  );
+  await search
+    .locator('calcite-autocomplete-item')
+    .filter({ hasText: `${otherRoad.S_Name} (${otherRoad.County})` })
+    .click();
+  await expect(resultLabels).resolves.toEqual([`${otherRoad.S_Name} (${otherRoad.County})`]);
+
+  await expect(page).toHaveURL(new RegExp(`#rdid=${otherRoad.rd_id}$`));
+  await expect
+    .poll(() =>
+      page
+        .locator('.feature > arcgis-feature')
+        .evaluate((element: ArcgisFeature) => element.graphic?.attributes.County),
+    )
+    .toBe(otherRoad.County);
 });
 
 test('selecting a later search result uses that road rather than the first query result', async ({ page }) => {
@@ -93,9 +131,17 @@ for (const field of ['rd_id', 'CO_Unique'] as const) {
     await page.getByRole('button', { name: 'Hide road details panel' }).click();
     const input = search.getByRole('searchbox');
     await input.fill(road[field]);
+    await expect(search.getByRole('option', { name: `${road[field]} (${road.County})`, exact: true })).toBeVisible();
     await input.press('Enter');
     await expect(page).toHaveURL(/#rdid=RD010015$/);
     await expect(page.locator('#app-sidebar')).toHaveClass(/\bopen\b/);
     await expect(page.locator('.feature')).toContainText(road.S_Name);
+    await expect
+      .poll(() =>
+        page
+          .locator('.feature > arcgis-feature')
+          .evaluate((element: ArcgisFeature) => element.graphic?.attributes.County),
+      )
+      .toBe(road.County);
   });
 }

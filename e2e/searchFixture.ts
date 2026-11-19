@@ -1,8 +1,20 @@
 import { test as base, expect } from '@playwright/test';
 import { fileURLToPath } from 'node:url';
 
-export const road = { OBJECTID: 1, rd_id: 'RD010015', S_Name: 'Elephant Canyon Road', CO_Unique: 'BEAVER-0015' };
-export const otherRoad = { OBJECTID: 2, rd_id: 'RD010016', S_Name: 'Other Canyon Road', CO_Unique: 'BEAVER-0016' };
+export const road = {
+  OBJECTID: 1,
+  rd_id: 'RD010015',
+  S_Name: 'Elephant Canyon Road',
+  CO_Unique: 'BEAVER-0015',
+  County: 'Beaver',
+};
+export const otherRoad = {
+  OBJECTID: 2,
+  rd_id: 'RD010016',
+  S_Name: road.S_Name,
+  CO_Unique: 'KANE-0016',
+  County: 'Kane',
+};
 const layerId = '1a1c1e19065-layer-15';
 const layerUrl = 'https://search-test.invalid/arcgis/rest/services/Roads/FeatureServer/0';
 const fields = Object.keys(road).map((name) => ({
@@ -52,7 +64,7 @@ export const test = base.extend({
           maxMobileWidth: 600,
           showRelatedRecords: false,
           showEndPointPhotos: false,
-          fieldNames: { roads: { RD_ID: 'rd_id' } },
+          fieldNames: { roads: { RD_ID: 'rd_id', S_Name: 'S_Name', County: 'County' } },
         })}`,
       }),
     );
@@ -71,7 +83,9 @@ export const test = base.extend({
                 url: layerUrl,
                 popupInfo: {
                   title: '{S_Name}',
-                  fieldInfos: fields.map(({ name }) => ({ fieldName: name, label: name, visible: true })),
+                  fieldInfos: fields
+                    .filter(({ name }) => name !== 'County')
+                    .map(({ name }) => ({ fieldName: name, label: name, visible: true })),
                 },
               },
             ],
@@ -120,16 +134,19 @@ export const test = base.extend({
       const parameters = new URLSearchParams(route.request().postData() ?? url.search);
       if (url.pathname.endsWith('/query')) {
         const where = parameters.get('where') ?? '';
-        const matches = [road, otherRoad].filter(
-          (attributes) =>
-            where === '1=1' ||
-            Object.entries(attributes).some(
-              ([field, value]) =>
-                where.toLowerCase().includes(field.toLowerCase()) &&
-                String(value)
-                  .toLowerCase()
-                  .includes((where.match(/'%?(.*?)%?'/)?.[1] ?? '').replace(/%$/, '').toLowerCase()),
-            ),
+        const objectIds = parameters.get('objectIds')?.split(',').map(Number);
+        const outFields = parameters.get('outFields')?.split(',') ?? ['*'];
+        const matches = [road, otherRoad].filter((attributes) =>
+          objectIds
+            ? objectIds.includes(attributes.OBJECTID)
+            : where === '1=1' ||
+              Object.entries(attributes).some(
+                ([field, value]) =>
+                  where.toLowerCase().includes(field.toLowerCase()) &&
+                  String(value)
+                    .toLowerCase()
+                    .includes((where.match(/'%?(.*?)%?'/)?.[1] ?? '').replace(/%$/, '').toLowerCase()),
+              ),
         );
         return route.fulfill({
           json: {
@@ -137,7 +154,12 @@ export const test = base.extend({
             geometryType: 'esriGeometryPolyline',
             spatialReference: { wkid: 3857 },
             fields,
-            features: matches.map((attributes) => ({ attributes, geometry })),
+            features: matches.map((attributes) => ({
+              attributes: Object.fromEntries(
+                Object.entries(attributes).filter(([field]) => outFields.includes('*') || outFields.includes(field)),
+              ),
+              geometry,
+            })),
             exceededTransferLimit: false,
           },
         });

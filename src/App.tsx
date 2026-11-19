@@ -1,6 +1,7 @@
 import esriConfig from '@arcgis/core/config';
 import type { ResourceHandle as Handle } from '@arcgis/core/core/Handles';
 import { isAbortError } from '@arcgis/core/core/promiseUtils';
+import { when } from '@arcgis/core/core/reactiveUtils';
 import Graphic from '@arcgis/core/Graphic';
 import IdentityManager from '@arcgis/core/identity/IdentityManager';
 import OAuthInfo from '@arcgis/core/identity/OAuthInfo';
@@ -49,7 +50,32 @@ const showLayerListItem = (item: { layer?: { title?: string | null } | null }) =
 const configureSearchSources = (search: ArcgisSearch) => {
   if (!search.view?.ready || search.state !== 'ready' || search.includeDefaultSourcesDisabled) return;
 
-  search.sources = search.defaultSources.filter((source) => source instanceof LayerSearchSource);
+  const sources = search.defaultSources.filter((source) => source instanceof LayerSearchSource);
+  sources.forEach((source) => {
+    if (!(source instanceof LayerSearchSource)) return;
+
+    // Web map sources can be ready before their layers are assigned.
+    source.addHandles(
+      when(
+        () => source.layer,
+        (layer) => {
+          if (layer.title !== ROADS_LAYER_NAME) return;
+
+          const displayField = source.displayField ?? config.fieldNames.roads.S_Name;
+          const countyField = config.fieldNames.roads.County;
+          const template = `{${displayField}} ({${countyField}})`;
+          const outFields = source.outFields ?? ['*'];
+          source.outFields = outFields.includes('*')
+            ? outFields
+            : [...new Set([...outFields, displayField, countyField])];
+          source.suggestionTemplate = template;
+          source.searchTemplate = template;
+        },
+        { initial: true, once: true },
+      ),
+    );
+  });
+  search.sources = sources;
   search.includeDefaultSourcesDisabled = true;
 };
 
