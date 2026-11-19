@@ -133,7 +133,7 @@ const VideoOrientationControls = ({ getPlayer }: { getPlayer: () => OrientationP
       <button
         type="button"
         className="look-around-pad"
-        aria-label="Look around: drag or use the arrow keys"
+        aria-label="Use this box to pan around: drag or use the arrow keys"
         onPointerDown={onPointerDown}
         onPointerMove={onPointerMove}
         onPointerUp={onPointerUp}
@@ -144,7 +144,7 @@ const VideoOrientationControls = ({ getPlayer }: { getPlayer: () => OrientationP
         onBlur={cancel}
         onKeyDown={onKeyDown}
       >
-        Look around
+        <strong>Use this box to pan around</strong>
         <span>Drag here or use arrow keys</span>
       </button>
       <button type="button" className="btn btn-secondary btn-sm" onClick={reset}>
