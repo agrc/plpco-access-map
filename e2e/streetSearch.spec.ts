@@ -7,7 +7,7 @@ test('native search displays street matches and selects the road on the map and 
   await page.goto('/');
 
   const searchElement = page.locator('arcgis-search');
-  const search = searchElement.getByRole('combobox');
+  const search = searchElement.getByRole('searchbox');
   await expect(search).toBeVisible({ timeout: 60_000 });
   await expect
     .poll(() => searchElement.evaluate((element: ArcgisSearch) => element.state))
@@ -18,7 +18,9 @@ test('native search displays street matches and selects the road on the map and 
   await page.getByRole('button', { name: 'Hide road details panel' }).click();
   const searchResponse = page.waitForResponse((response) => {
     const url = new URL(response.url());
-    return url.pathname.endsWith('/query') && (url.searchParams.get('where') ?? '').includes('%elephant canyon%');
+    const parameters = new URLSearchParams(response.request().postData() ?? url.search);
+    const where = parameters.get('where') ?? '';
+    return url.pathname.endsWith('/query') && where.toLowerCase().includes('s_name') && where.includes('elephant canyon');
   });
   await search.fill('elephant canyon');
   const response = await searchResponse;
@@ -28,7 +30,7 @@ test('native search displays street matches and selects the road on the map and 
   const streetName = 'Elephant Canyon Road';
   const match = searchElement.getByRole('option').filter({ hasText: streetName }).first();
   await expect(match).toBeVisible();
-  await match.click();
+  await search.press('Enter');
 
   await expect(page.locator('#app-sidebar')).toHaveClass(/\bopen\b/);
   await expect(page).toHaveURL(/#rdid=RD010015$/);
