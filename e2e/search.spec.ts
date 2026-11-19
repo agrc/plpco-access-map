@@ -9,7 +9,9 @@ test('uses only web map layer sources and explains the searchable road fields', 
   await expect
     .poll(() =>
       search.evaluate((element: ArcgisSearch) =>
-        element.allSources.toArray().flatMap((source) => ('searchFields' in source ? (source.searchFields ?? []) : [])),
+        element.allSources.toArray().flatMap((source) =>
+          'displayField' in source && source.displayField ? [source.displayField] : [],
+        ),
       ),
     )
     .toEqual(['CO_Unique', 'S_Name', 'rd_id']);
