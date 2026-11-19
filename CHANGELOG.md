@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.13.16](https://github.com/agrc/plpco-access-map/compare/v1.13.15...v1.13.16) (2026-11-19)
+
+
+### Features
+
+* enable searching in more fields ([2f59398](https://github.com/agrc/plpco-access-map/commit/2f59398876ede6bedc149b222e08c53587eb7a2e))
+
+
+### Bug Fixes
+
+* add county to search results ([ccb2a65](https://github.com/agrc/plpco-access-map/commit/ccb2a65c367429a63876dfeeb72f4ec9f9ae0fe0))
+* fix search component ([4577b6b](https://github.com/agrc/plpco-access-map/commit/4577b6b5464ff3899fa2745cc59ca7bdc1ee5cfd))
+* update pan box help text ([76935d8](https://github.com/agrc/plpco-access-map/commit/76935d85e5a8bf9b34c2396324b4d985c283bc4d))
+
 ## [1.13.15](https://github.com/agrc/plpco-access-map/compare/v1.13.14...v1.13.15) (2026-11-09)
 
 
