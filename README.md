@@ -16,7 +16,7 @@ Production URLs:
 
 | name                         | type                                       | required fields                          |
 | ---------------------------- | ------------------------------------------ | ---------------------------------------- |
-| `RS2477 Centerlines`         | polyline feature layer                     | `OBJECTID` `RD_ID` `S_Name`              |
+| `RS2477 Centerlines`         | polyline feature layer                     | `OBJECTID` `RD_ID` `S_Name` `County`     |
 | `Video_Routes - Video Route` | points feature layer                       | `Date_Time` `GPS_Track_ID`               |
 | `Video End Point`            | point feature layer with photo attachments | `OBJECTID`                               |
 | `Video Report`               | table                                      | `RD_ID` `GPS_Track_ID` `Date_Time` `URL` |
@@ -37,6 +37,10 @@ To change the search configuration:
 
 The app excludes locator sources such as the ArcGIS World Geocoding Service. The all-sources placeholder
 and accessible search label are controlled separately in [src/App.tsx](./src/App.tsx).
+
+Road suggestion and result labels append the county to the displayed value, such as `Road name (County)`,
+to distinguish roads with the same name. The county field is mapped per deployment in [src/config.ts](./src/config.ts).
+This display formatting does not change the web map's searchable fields or matching rules.
 
 See Esri's [Configure feature and table search for maps](https://doc.esri.com/en/arcgis-enterprise/latest/create/configure-feature-search.html)
 for portal configuration details.
